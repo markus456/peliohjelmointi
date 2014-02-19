@@ -18,6 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+
     <ClCompile Include="ui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
