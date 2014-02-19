@@ -1,18 +1,81 @@
-﻿Build started 19.2.2014 11:10:16.
-     1>Project "Z:\Peliohjelmointi\Projekti\defenceSolution\defence\defence.vcxproj" on node 2 (Build target(s)).
+﻿Build started 19.2.2014 13:01:18.
+     1>Project "C:\Users\markusjm\Documents\GitHub\peliohjelmointi\defenceSolution\defence\defence.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IZ:\Peliohjelmointi\Projekti\defenceSolution\defence\\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp ui.cpp
+         C:\Program Files\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IC:\Users\markusjm\Documents\GitHub\peliohjelmointi\defenceSolution\defence\\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt System.cpp main.cpp ui.cpp
+         System.cpp
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(23): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(24): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(25): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(26): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(31): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(32): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(33): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(34): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(42): warning C4244: 'argument' : conversion from 'float' to 'Uint32', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(49): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(50): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(51): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(52): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(60): warning C4244: 'argument' : conversion from 'float' to 'Uint32', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(69): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(70): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(71): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(72): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(80): warning C4244: 'argument' : conversion from 'float' to 'Uint32', possible loss of data
+         Generating Code...
+         Compiling...
          ui.cpp
-     1>z:\peliohjelmointi\projekti\defencesolution\defence\ui.cpp(7): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(23): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(24): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(25): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(26): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(31): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(32): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(33): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(34): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(42): warning C4244: 'argument' : conversion from 'float' to 'Uint32', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(49): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(50): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(51): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(52): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(60): warning C4244: 'argument' : conversion from 'float' to 'Uint32', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(69): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(70): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(71): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(72): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(80): warning C4244: 'argument' : conversion from 'float' to 'Uint32', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.cpp(9): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
          main.cpp
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(23): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(24): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(25): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(26): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(31): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(32): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(33): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(34): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(42): warning C4244: 'argument' : conversion from 'float' to 'Uint32', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(49): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(50): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(51): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(52): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(60): warning C4244: 'argument' : conversion from 'float' to 'Uint32', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(69): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(70): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(71): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(72): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\markusjm\documents\github\peliohjelmointi\defencesolution\defence\ui.h(80): warning C4244: 'argument' : conversion from 'float' to 'Uint32', possible loss of data
          Generating Code...
        Link:
-         C:\Program Files\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Z:\Peliohjelmointi\Projekti\defenceSolution\Debug\defence.exe" /INCREMENTAL /NOLOGO /LIBPATH:Z:\Peliohjelmointi\Projekti\defenceSolution\defence\\lib SDL2.lib SDL2main.lib SDL2_ttf.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"Z:\Peliohjelmointi\Projekti\defenceSolution\Debug\defence.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Z:\Peliohjelmointi\Projekti\defenceSolution\Debug\defence.lib" /MACHINE:X86 Debug\main.obj
+         C:\Program Files\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\markusjm\Documents\GitHub\peliohjelmointi\defenceSolution\Debug\defence.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\markusjm\Documents\GitHub\peliohjelmointi\defenceSolution\defence\\lib SDL2.lib SDL2main.lib SDL2_ttf.lib SDL2.lib SDL2main.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\markusjm\Documents\GitHub\peliohjelmointi\defenceSolution\Debug\defence.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\markusjm\Documents\GitHub\peliohjelmointi\defenceSolution\Debug\defence.lib" /MACHINE:X86 Debug\main.obj
+         Debug\System.obj
          Debug\ui.obj
-         LINK : Z:\Peliohjelmointi\Projekti\defenceSolution\Debug\defence.exe not found or not built by the last incremental link; performing full link
-         defence.vcxproj -> Z:\Peliohjelmointi\Projekti\defenceSolution\Debug\defence.exe
-     1>Done Building Project "Z:\Peliohjelmointi\Projekti\defenceSolution\defence\defence.vcxproj" (Build target(s)).
+     1>System.obj : error LNK2019: unresolved external symbol _TTF_Init referenced in function "public: bool __thiscall System::init(void)" (?init@System@@QAE_NXZ)
+     1>System.obj : error LNK2019: unresolved external symbol _TTF_OpenFont referenced in function "public: __thiscall Button::Button(float,float,float,float,char const *,void (__cdecl*)(void),char const *)" (??0Button@@QAE@MMMMPBDP6AXXZ0@Z)
+     1>System.obj : error LNK2019: unresolved external symbol _TTF_RenderText_Blended_Wrapped referenced in function "public: __thiscall Button::Button(float,float,float,float,char const *,void (__cdecl*)(void),char const *)" (??0Button@@QAE@MMMMPBDP6AXXZ0@Z)
+     1>C:\Users\markusjm\Documents\GitHub\peliohjelmointi\defenceSolution\Debug\defence.exe : fatal error LNK1120: 3 unresolved externals
+     1>Done Building Project "C:\Users\markusjm\Documents\GitHub\peliohjelmointi\defenceSolution\defence\defence.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:06.58
+Time Elapsed 00:00:02.95

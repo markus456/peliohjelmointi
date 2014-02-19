@@ -2,7 +2,7 @@
 #define SYSTEM_H
 
 #include "SDL.h"
-
+#include "ui.h"
 class System {
 private:
 	SDL_Event event;
@@ -10,6 +10,7 @@ private:
 	SDL_Renderer *rndr;
 	SDL_Texture *texture;
 	bool running;
+	Button* testbutton;
 public:
 	System(void);
 	~System(void);

@@ -1,7 +1,5 @@
 #include "System.h"
-
 #include <iostream>
-
 using namespace std;
 
 System::System(void) {
@@ -17,6 +15,10 @@ bool System::init() {
 		cout << "SDL init failed." << endl;
 		return false;
 	}
+	if (TTF_Init() < 0){
+		cout << "SDL_ttf init failed." << endl;
+		return false;
+	}
 
 	wnd = SDL_CreateWindow("Testi", SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,800,600,SDL_WINDOW_SHOWN);
 	if (wnd == NULL) {
@@ -30,11 +32,14 @@ bool System::init() {
     }
 
 	texture = SDL_CreateTexture(rndr, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 640, 480);
-
+	
+	testbutton = new Button(100,100,50,100,"Testinappula",0,"test.bmp");
+	testbutton->setRenderer(rndr);
 	return true;
 }
 
 void System::exit() {
+	delete testbutton;
 	SDL_DestroyTexture(texture);
 	SDL_DestroyRenderer(rndr);
 	SDL_DestroyWindow(wnd);
@@ -94,9 +99,12 @@ void System::mouseButtonUp(Uint8 button, Sint32 x, Sint32 y) {
 }
 
 void System::mouseMove(Sint32 x, Sint32 y) {
-
+	SDL_Rect tmp = testbutton->getRectangle();
+	tmp.x = x;
+	tmp.y = y;
+	testbutton->setRectangle(tmp);
 }
 
 void System::draw() {
-
+	testbutton->render();
 }
