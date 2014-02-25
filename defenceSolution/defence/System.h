@@ -3,6 +3,7 @@
 #include "SDL.h"
 #include "ui.h"
 #include "Sprite.h"
+#include "Bullet.h"
 #include <memory>
 #include <vector>
 class System {
@@ -13,6 +14,8 @@ private:
 	SDL_Texture *texture;
 	bool running,mousedown;
 	std::vector<std::unique_ptr<Sprite>> sprites;
+	Sprite *t;
+	Bullet *b;
 public:
 	static const int SCREEN_WIDTH = 800;
 	static const int SCREEN_HEIGHT = 600;

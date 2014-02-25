@@ -30,9 +30,15 @@ bool System::init() {
 	texture = SDL_CreateTexture(rndr, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 640, 480);
 	
 	sprites.push_back(std::unique_ptr<Sprite>(new Tile()));
-	SDL_Point tmp = {50,50};
+	SDL_Point tmp = {300, 500};
 	sprites.back()->setLocation(tmp);
 	sprites.back()->setTexture("test.bmp",rndr);
+	t = sprites.back().get();
+	sprites.push_back(std::unique_ptr<Sprite>(new Bullet()));
+	sprites.back()->setTexture("test.bmp",rndr);
+	b = (Bullet *)sprites.back().get();
+	b->dirTo(tmp, 5);
+
 	mousedown = false;
 }
 
@@ -117,6 +123,9 @@ void System::draw() {
 	}
 }
 void System::update(){
+	if (b->collideTest(*t)) {
+		cout << "osuu " << b->getLocation().x << " " << b->getLocation().y << endl;
+	}
 	for(auto& a: sprites){
 		a->update();
 	}
