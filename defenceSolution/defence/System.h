@@ -1,6 +1,7 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 #include "SDL.h"
+#include "include\SDL_image.h"
 #include "ui.h"
 #include "Sprite.h"
 #include <memory>

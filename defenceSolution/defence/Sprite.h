@@ -1,6 +1,7 @@
 #ifndef SPRITE_HEADER_GUARD
 #define SPRITE_HEADER_GUARD
 #include "SDL.h"
+#include "include\SDL_image.h"
 #include <iostream>
 class Sprite{
 protected:
@@ -21,9 +22,10 @@ public:
 		_location.h = rect.h;
 	}
 	void setTexture(std::string filename, SDL_Renderer* rndr){
-		SDL_Surface* tmp = SDL_LoadBMP(filename.c_str());
+		SDL_Surface* tmp = IMG_Load(filename.c_str());
 		if(tmp==0){
 			std::cout << "Error loading file: " << filename << std::endl;
+			return;
 		}
 		_location.w = tmp->w;
 		_location.h = tmp->h;

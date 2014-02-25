@@ -15,7 +15,9 @@ bool System::init() {
 		cout << "SDL init failed." << endl;
 		return false;
 	}
-
+	if(IMG_Init(IMG_INIT_PNG)==0){
+		std::cout << "IMG_Init: " << IMG_GetError();
+	}
 	wnd = SDL_CreateWindow("Testi", SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,SCREEN_WIDTH,SCREEN_HEIGHT,SDL_WINDOW_SHOWN);
 	if (wnd == NULL) {
 		cout << "Window creation failed." << endl;
@@ -27,17 +29,17 @@ bool System::init() {
             cout << "render creation failed." << endl;
     }
 
-	texture = SDL_CreateTexture(rndr, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 640, 480);
-	
+
 	sprites.push_back(std::unique_ptr<Sprite>(new Tile()));
 	SDL_Point tmp = {50,50};
 	sprites.back()->setLocation(tmp);
-	sprites.back()->setTexture("test.bmp",rndr);
+	sprites.back()->setTexture("test.png",rndr);
 	mousedown = false;
 }
 
 void System::exit() {
 	sprites.clear();
+	IMG_Quit();
 	SDL_DestroyTexture(texture);
 	SDL_DestroyRenderer(rndr);
 	SDL_DestroyWindow(wnd);
