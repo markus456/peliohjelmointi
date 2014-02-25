@@ -1,7 +1,7 @@
 #ifndef UI_HEADER_GUARD
 #define UI_HEADER_GUARD
-#include "include\SDL_ttf.h"
 #include <string>
+#include "include\SDL.h"
 class Button{
 protected:
 	std::string _text;
@@ -9,7 +9,7 @@ protected:
 	SDL_Renderer* _surface;
 	SDL_Texture* _texture;
 	SDL_Rect _rect;
-	TTF_Font* _font;
+	//TTF_Font* _font;
 public:
 	Button():_text(nullptr),_f_ptr(nullptr),_surface(nullptr){
 		_rect.x = 0;
@@ -32,14 +32,14 @@ public:
 		_rect.y = y;
 		_rect.w = w;
 		_rect.h = h;
-		_font = TTF_OpenFont("FreeMonoBold.ttf",20);
+		//_font = TTF_OpenFont("FreeMonoBold.ttf",20);
 		SDL_Surface* tmp;
 		SDL_Color color;
 		color.r = 255;
 		color.g = 255;
 		color.b= 255;
 		color.a = 255;
-		SDL_BlitSurface(TTF_RenderText_Blended_Wrapped(_font,_text.c_str(),color,w),nullptr,tmp,nullptr);
+		//SDL_BlitSurface(TTF_RenderText_Blended_Wrapped(_font,_text.c_str(),color,w),nullptr,tmp,nullptr);
 		_texture = SDL_CreateTextureFromSurface(_surface,tmp);
 		SDL_FreeSurface(tmp);
 	}
@@ -50,14 +50,14 @@ public:
 		_rect.y = y;
 		_rect.w = w;
 		_rect.h = h;
-		_font = TTF_OpenFont("FreeMonoBold.ttf",20);
+		//_font = TTF_OpenFont("FreeMonoBold.ttf",20);
 		SDL_Surface* tmp;
 		SDL_Color color;
 		color.r = 255;
 		color.g = 255;
 		color.b= 255;
 		color.a = 255;
-		SDL_BlitSurface(TTF_RenderText_Blended_Wrapped(_font,_text.c_str(),color,w),nullptr,tmp,nullptr);
+		//SDL_BlitSurface(TTF_RenderText_Blended_Wrapped(_font,_text.c_str(),color,w),nullptr,tmp,nullptr);
 		_texture = SDL_CreateTextureFromSurface(_surface,tmp);
 		SDL_FreeSurface(tmp);
 	}
@@ -71,13 +71,13 @@ public:
 		_rect.w = w;
 		_rect.h = h;
 		SDL_Surface* tmp = SDL_LoadBMP(image);
-		_font = TTF_OpenFont("FreeMonoBold.ttf",20);
+		//_font = TTF_OpenFont("FreeMonoBold.ttf",20);
 		SDL_Color color;
 		color.r = 255;
 		color.g = 255;
 		color.b= 255;
 		color.a = 255;
-		SDL_BlitSurface(TTF_RenderText_Blended_Wrapped(_font,_text.c_str(),color,w),nullptr,tmp,nullptr);
+		//SDL_BlitSurface(TTF_RenderText_Blended_Wrapped(_font,_text.c_str(),color,w),nullptr,tmp,nullptr);
 		_texture = SDL_CreateTextureFromSurface(_surface,tmp);
 		SDL_FreeSurface(tmp);
 	}

@@ -15,12 +15,8 @@ bool System::init() {
 		cout << "SDL init failed." << endl;
 		return false;
 	}
-	if (TTF_Init() < 0){
-		cout << "SDL_ttf init failed." << endl;
-		return false;
-	}
 
-	wnd = SDL_CreateWindow("Testi", SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,800,600,SDL_WINDOW_SHOWN);
+	wnd = SDL_CreateWindow("Testi", SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,SCREEN_WIDTH,SCREEN_HEIGHT,SDL_WINDOW_SHOWN);
 	if (wnd == NULL) {
 		cout << "Window creation failed." << endl;
 		return false;
@@ -33,13 +29,15 @@ bool System::init() {
 
 	texture = SDL_CreateTexture(rndr, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 640, 480);
 	
-	testbutton = new Button(100,100,50,100,"Testinappula",0,"test.bmp");
-	testbutton->setRenderer(rndr);
-	return true;
+	sprites.push_back(std::unique_ptr<Sprite>(new Tile()));
+	SDL_Point tmp = {50,50};
+	sprites.back()->setLocation(tmp);
+	sprites.back()->setTexture("test.bmp",rndr);
+	mousedown = false;
 }
 
 void System::exit() {
-	delete testbutton;
+	sprites.clear();
 	SDL_DestroyTexture(texture);
 	SDL_DestroyRenderer(rndr);
 	SDL_DestroyWindow(wnd);
@@ -73,12 +71,18 @@ void System::enterMainLoop() {
 			}
 		}
 
+		long frame_start = SDL_GetTicks();
+		update();
+		
 		SDL_RenderClear(rndr);
 
 		draw();
-
-        SDL_RenderCopy(rndr, texture, NULL, NULL);
-        SDL_RenderPresent(rndr);
+        
+		SDL_RenderPresent(rndr);
+		long frame_end = SDL_GetTicks();
+		if(frame_end-frame_start<1000.f/FRAMERATE){
+			SDL_Delay(1000.f/FRAMERATE-(frame_end-frame_start));
+		}
 	}
 }
 
@@ -91,20 +95,29 @@ void System::eventKeyUp(SDL_Keycode sym) {
 }
 
 void System::mouseButtonDown(Uint8 button, Sint32 x, Sint32 y) {
-
+	mousedown = true;
 }
 
 void System::mouseButtonUp(Uint8 button, Sint32 x, Sint32 y) {
-
+	mousedown = false;
 }
 
 void System::mouseMove(Sint32 x, Sint32 y) {
-	SDL_Rect tmp = testbutton->getRectangle();
-	tmp.x = x;
-	tmp.y = y;
-	testbutton->setRectangle(tmp);
+		for(auto& a: sprites){
+			if(a->isInside(x,y)&&mousedown){
+				SDL_Point tmp = {x,y};
+				a->setLocation(tmp);
+			}
+		}
 }
 
 void System::draw() {
-	testbutton->render();
+	for(auto& a: sprites){
+		a->draw(rndr);
+	}
+}
+void System::update(){
+	for(auto& a: sprites){
+		a->update();
+	}
 }

@@ -1,17 +1,22 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
-
 #include "SDL.h"
 #include "ui.h"
+#include "Sprite.h"
+#include <memory>
+#include <vector>
 class System {
 private:
 	SDL_Event event;
 	SDL_Window* wnd;
 	SDL_Renderer *rndr;
 	SDL_Texture *texture;
-	bool running;
-	Button* testbutton;
+	bool running,mousedown;
+	std::vector<std::unique_ptr<Sprite>> sprites;
 public:
+	static const int SCREEN_WIDTH = 800;
+	static const int SCREEN_HEIGHT = 600;
+	static const int FRAMERATE =60;
 	System(void);
 	~System(void);
 	bool init();
@@ -23,6 +28,6 @@ public:
 	void mouseButtonUp(Uint8 button, Sint32 x, Sint32 y);
 	void mouseMove(Sint32 x, Sint32 y);
 	void draw();
+	void update();
 };
-
 #endif
