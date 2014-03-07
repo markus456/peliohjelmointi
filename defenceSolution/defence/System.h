@@ -13,6 +13,7 @@ private:
 	SDL_Renderer *rndr;
 	SDL_Texture *texture;
 	bool running,mousedown;
+	int enemyX,enemyY;
 	std::vector<std::unique_ptr<Sprite>> sprites;
 public:
 	static const int SCREEN_WIDTH = 800;

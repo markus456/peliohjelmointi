@@ -31,9 +31,11 @@ bool System::init() {
 
 
 	sprites.push_back(std::unique_ptr<Sprite>(new Tile()));
-	SDL_Point tmp = {50,50};
+	enemyX=0;
+	enemyY=250;
+	SDL_Point tmp = {enemyX,enemyY};
 	sprites.back()->setLocation(tmp);
-	sprites.back()->setTexture("test.png",rndr);
+	sprites.back()->setTexture("test.bmp",rndr);
 	mousedown = false;
 }
 
@@ -72,7 +74,15 @@ void System::enterMainLoop() {
 				break;
 			}
 		}
-
+		for(auto& a: sprites){
+			SDL_Point tmp = {enemyX,enemyY};
+			sprites.back()->setLocation(tmp);
+			enemyX=enemyX+10;
+			if(enemyX>=800){
+				enemyX=-60;
+			}
+			SDL_Delay(300);
+		}
 		long frame_start = SDL_GetTicks();
 		update();
 		
@@ -89,11 +99,9 @@ void System::enterMainLoop() {
 }
 
 void System::eventKeyDown(SDL_Keycode sym) {
-
 }
 
 void System::eventKeyUp(SDL_Keycode sym) {
-
 }
 
 void System::mouseButtonDown(Uint8 button, Sint32 x, Sint32 y) {
