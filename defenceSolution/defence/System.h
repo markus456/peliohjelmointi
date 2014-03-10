@@ -13,7 +13,8 @@ private:
 	SDL_Renderer *rndr;
 	SDL_Texture *texture;
 	bool running,mousedown;
-	std::vector<std::unique_ptr<Sprite>> sprites;
+	std::vector<std::shared_ptr<Sprite>> sprites;
+	std::vector<std::shared_ptr<Button>> uiElements;
 public:
 	static const int SCREEN_WIDTH = 800;
 	static const int SCREEN_HEIGHT = 600;

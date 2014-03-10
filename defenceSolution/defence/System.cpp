@@ -30,11 +30,17 @@ bool System::init() {
     }
 
 
-	sprites.push_back(std::unique_ptr<Sprite>(new Tile()));
+	sprites.push_back(std::shared_ptr<Sprite>(new Tile()));
 	SDL_Point tmp = {50,50};
 	sprites.back()->setLocation(tmp);
 	sprites.back()->setTexture("test.png",rndr);
+	uiElements.push_back(std::shared_ptr<Button>(new TextButton<Tile>("Testinappula", rndr, (Tile*)sprites.back().get(), &Tile::update)));
+	tmp.y += 100;
+	uiElements.back()->setLocation(tmp);
+	uiElements.back()->setTexture("button_background.png", rndr);
+	sprites.push_back(uiElements.back());
 	mousedown = false;
+	return true;
 }
 
 void System::exit() {
@@ -101,14 +107,19 @@ void System::mouseButtonDown(Uint8 button, Sint32 x, Sint32 y) {
 }
 
 void System::mouseButtonUp(Uint8 button, Sint32 x, Sint32 y) {
+	for (auto& a : uiElements){
+		if (a->isInside(x, y)){
+			a->onClick();
+			break;
+		}
+	}
 	mousedown = false;
 }
 
 void System::mouseMove(Sint32 x, Sint32 y) {
 		for(auto& a: sprites){
 			if(a->isInside(x,y)&&mousedown){
-				SDL_Point tmp = {x,y};
-				a->setLocation(tmp);
+				//Toiminnallisuus puuttuu
 			}
 		}
 }
@@ -120,6 +131,6 @@ void System::draw() {
 }
 void System::update(){
 	for(auto& a: sprites){
-		a->update();
+		//a->update();
 	}
 }
