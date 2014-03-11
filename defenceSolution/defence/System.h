@@ -6,6 +6,8 @@
 #include "ui.h"
 #include "Bullet.h"
 #include "Tower.h"
+#include "Tiili.h"
+#include "TileMap.h"
 #include <memory>
 #include <vector>
 class System {
@@ -18,6 +20,7 @@ private:
 	Sprite *t;
 	Bullet *b;
 	int enemyX, enemyY;
+	TileMap* map;
 	Tower *tower;
 	std::vector<std::shared_ptr<Sprite>> sprites;
 	std::vector<std::shared_ptr<Button>> uiElements;

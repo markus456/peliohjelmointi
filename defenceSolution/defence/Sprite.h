@@ -56,7 +56,7 @@ public:
 		SDL_RenderCopy(rndr,_texture,nullptr,&_location);
 	}
 	virtual void update(){
-		_location.x += 10;
+
 	}
 };
 #endif
