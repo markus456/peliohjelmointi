@@ -29,40 +29,34 @@ bool System::init() {
     if (rndr == NULL) {
             cout << "render creation failed." << endl;
     }
-
-
-<<<<<<< HEAD
-	sprites.push_back(std::unique_ptr<Sprite>(new Tile()));
+	enemyX = 0;
+	enemyY = 0;
+	sprites.push_back(std::shared_ptr<Sprite>(new TestTile()));
 	SDL_Point tmp = {300, 500};
 	SDL_Point tmpTower = {400,10};
 	sprites.back()->setLocation(tmp);
 	sprites.back()->setTexture("test.png",rndr);
 	t = sprites.back().get();
 	
-	sprites.push_back(std::unique_ptr<Sprite>(new Tower()));
+	sprites.push_back(std::shared_ptr<Sprite>(new Tower()));
 	sprites.back()->setLocation(tmpTower);
 	sprites.back()->setTexture("test.bmp",rndr);
 
-	sprites.push_back(std::unique_ptr<Sprite>(new Bullet()));
+	sprites.push_back(std::shared_ptr<Sprite>(new Bullet()));
 	sprites.back()->setTexture("test.bmp",rndr);
 	tower = (Tower *)sprites.back().get();
 	tower->setLocation(tmpTower);
 	b = (Bullet *)sprites.back().get();
 	tower->loadProjectile(tmp,0,b);
-	
-	//b->dirTo(tmp, 5);
 
-=======
-	sprites.push_back(std::shared_ptr<Sprite>(new Tile()));
-	SDL_Point tmp = {50,50};
+	sprites.push_back(std::shared_ptr<Sprite>(new TestTile()));
 	sprites.back()->setLocation(tmp);
 	sprites.back()->setTexture("test.bmp",rndr);
-	uiElements.push_back(std::shared_ptr<Button>(new TextButton<Tile>("Testinappula", rndr, (Tile*)sprites.back().get(), &Tile::update)));
+	uiElements.push_back(std::shared_ptr<Button>(new TextButton<TestTile>("Testinappula", "button_background.png", rndr, (TestTile*)sprites.back().get(), &TestTile::update)));
 	tmp.y += 100;
 	uiElements.back()->setLocation(tmp);
 	uiElements.back()->setTexture("button_background.png", rndr);
 	sprites.push_back(uiElements.back());
->>>>>>> uiproto2
 	mousedown = false;
 	return true;
 }

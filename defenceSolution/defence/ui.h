@@ -12,6 +12,7 @@ public:
 	virtual void update(){}
 	virtual void onClick(){}
 };
+
 template <class T> class ImageButton :public Button{
 protected:
 	void (T::*_fnc)(void);
@@ -22,6 +23,7 @@ public:
 	virtual void setCallbackFunction(void(T::*fptr)(void)){ _fnc = fptr; }
 	virtual void setCallbackObject(T* t){ _t = t; }
 };
+
 template <class T> class TextButton :public ImageButton<T>{
 protected:
 	std::string _text;
@@ -99,4 +101,5 @@ public:
 
 	}
 };
+
 #endif

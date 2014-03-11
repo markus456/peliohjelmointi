@@ -2,8 +2,8 @@
 #define SYSTEM_H
 #include "SDL.h"
 #include "include\SDL_image.h"
-#include "ui.h"
 #include "Sprite.h"
+#include "ui.h"
 #include "Bullet.h"
 #include "Tower.h"
 #include <memory>
@@ -15,15 +15,12 @@ private:
 	SDL_Renderer *rndr;
 	SDL_Texture *texture;
 	bool running,mousedown;
-<<<<<<< HEAD
-	std::vector<std::unique_ptr<Sprite>> sprites;
 	Sprite *t;
 	Bullet *b;
+	int enemyX, enemyY;
 	Tower *tower;
-=======
 	std::vector<std::shared_ptr<Sprite>> sprites;
 	std::vector<std::shared_ptr<Button>> uiElements;
->>>>>>> uiproto2
 public:
 	static const int SCREEN_WIDTH = 800;
 	static const int SCREEN_HEIGHT = 600;
