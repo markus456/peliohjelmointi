@@ -36,6 +36,9 @@ public:
 		if(x<_location.x||x>_location.x+_location.w||y<_location.y||y>_location.y+_location.h)return false;
 		return true;
 	}
+	virtual ~Sprite(){
+		SDL_DestroyTexture(_texture);
+	}
 };
 class Tile:public Sprite{
 protected:
