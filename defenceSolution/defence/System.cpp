@@ -15,6 +15,7 @@ bool System::init() {
 		cout << "SDL init failed." << endl;
 		return false;
 	}
+
 	if(IMG_Init(IMG_INIT_PNG)==0){
 		std::cout << "IMG_Init: " << IMG_GetError();
 	}
@@ -28,15 +29,56 @@ bool System::init() {
     if (rndr == NULL) {
             cout << "render creation failed." << endl;
     }
+<<<<<<< HEAD
+	map = new TileMap();
+	map->setMap("Level1temp.txt");
+	map->setRenderer(rndr);
+	map->addTiles();
+	map->setTexture("terrain.png",rndr);
+=======
+>>>>>>> 60f67e2111e285630583a45c4af913676404097e
+	enemyX = 0;
+	enemyY = 0;
+	sprites.push_back(std::shared_ptr<Sprite>(new TestTile()));
+	SDL_Point tmp = {300, 500};
+	SDL_Point tmpTower = {400,10};
+	sprites.back()->setLocation(tmp);
+	sprites.back()->setTexture("test.png",rndr);
+	t = sprites.back().get();
+	
+	sprites.push_back(std::shared_ptr<Sprite>(new Tower()));
+	sprites.back()->setLocation(tmpTower);
+	sprites.back()->setTexture("tower.png",rndr);
+	SDL_Rect loc = {0,0,64,64};
+	sprites.back()->setSize(loc);
 
+	sprites.push_back(std::shared_ptr<Sprite>(new Bullet()));
+<<<<<<< HEAD
+	sprites.back()->setTexture("button_background.png",rndr);
+=======
+	sprites.back()->setTexture("test.bmp",rndr);
+>>>>>>> 60f67e2111e285630583a45c4af913676404097e
+	tower = (Tower *)sprites.back().get();
+	tower->setLocation(tmpTower);
+	b = (Bullet *)sprites.back().get();
+	tower->loadProjectile(tmp,0,b);
+<<<<<<< HEAD
+	loc.w = 32;
+	loc.h = 32;
+	sprites.back()->setSize(loc);
+=======
+>>>>>>> 60f67e2111e285630583a45c4af913676404097e
 
-	sprites.push_back(std::unique_ptr<Sprite>(new Tile()));
-	enemyX=0;
-	enemyY=250;
-	SDL_Point tmp = {enemyX,enemyY};
+	sprites.push_back(std::shared_ptr<Sprite>(new TestTile()));
 	sprites.back()->setLocation(tmp);
 	sprites.back()->setTexture("test.bmp",rndr);
+	uiElements.push_back(std::shared_ptr<Button>(new TextButton<TestTile>("Testinappula", "button_background.png", rndr, (TestTile*)sprites.back().get(), &TestTile::update)));
+	tmp.y += 100;
+	uiElements.back()->setLocation(tmp);
+	uiElements.back()->setTexture("button_background.png", rndr);
+	sprites.push_back(uiElements.back());
 	mousedown = false;
+	return true;
 }
 
 void System::exit() {
@@ -49,6 +91,7 @@ void System::exit() {
 }
 
 void System::enterMainLoop() {
+	
 	while (running)
 	{
 		while(SDL_PollEvent(&event)){
@@ -64,7 +107,7 @@ void System::enterMainLoop() {
 				mouseButtonDown(event.button.button, event.motion.x, event.motion.y);
 				break;
 			case SDL_MOUSEBUTTONUP:
-				mouseButtonUp(event.button.button, event.motion.x, event.motion.y);
+				
 				break;
 			case SDL_MOUSEMOTION:
 				mouseMove(event.motion.x, event.motion.y);
@@ -73,15 +116,6 @@ void System::enterMainLoop() {
 				running = false;
 				break;
 			}
-		}
-		for(auto& a: sprites){
-			SDL_Point tmp = {enemyX,enemyY};
-			sprites.back()->setLocation(tmp);
-			enemyX=enemyX+10;
-			if(enemyX>=800){
-				enemyX=-60;
-			}
-			SDL_Delay(300);
 		}
 		long frame_start = SDL_GetTicks();
 		update();
@@ -109,24 +143,50 @@ void System::mouseButtonDown(Uint8 button, Sint32 x, Sint32 y) {
 }
 
 void System::mouseButtonUp(Uint8 button, Sint32 x, Sint32 y) {
+	for (auto& a : uiElements){
+		if (a->isInside(x, y)){
+			a->onClick();
+			break;
+		}
+	}
 	mousedown = false;
 }
 
 void System::mouseMove(Sint32 x, Sint32 y) {
 		for(auto& a: sprites){
 			if(a->isInside(x,y)&&mousedown){
-				SDL_Point tmp = {x,y};
-				a->setLocation(tmp);
+				//Toiminnallisuus puuttuu
 			}
 		}
 }
 
 void System::draw() {
+	map->drawMap();
 	for(auto& a: sprites){
 		a->draw(rndr);
 	}
 }
 void System::update(){
+	if(mousedown){
+		SDL_Rect loc = {0,0,32,32};
+	SDL_Point tmpTower = {400,10};
+	SDL_Point tmp = {300, 500};
+	//tower->setLocation(tmpTower);
+				tmp.x = event.button.x;
+				tmp.y = event.button.y;
+				sprites.push_back(std::shared_ptr<Sprite>(new Bullet()));
+				
+				b = (Bullet *)sprites.back().get();
+				b->setTexture("button_background.png",rndr);
+				tower->loadProjectile(tmp,5,b);
+				tower->shoot();
+				mouseButtonUp(event.button.button, event.motion.x, event.motion.y);
+	}
+	if (b->collideTest(*t)) {
+		cout << "osuu " << b->getLocation().x << " " << b->getLocation().y << endl;
+		SDL_Point tmppoint;
+		b->setSpeed(0);
+	}
 	for(auto& a: sprites){
 		a->update();
 	}

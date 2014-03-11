@@ -2,8 +2,12 @@
 #define SYSTEM_H
 #include "SDL.h"
 #include "include\SDL_image.h"
-#include "ui.h"
 #include "Sprite.h"
+#include "ui.h"
+#include "Bullet.h"
+#include "Tower.h"
+#include "Tiili.h"
+#include "TileMap.h"
 #include <memory>
 #include <vector>
 class System {
@@ -13,8 +17,16 @@ private:
 	SDL_Renderer *rndr;
 	SDL_Texture *texture;
 	bool running,mousedown;
-	int enemyX,enemyY;
-	std::vector<std::unique_ptr<Sprite>> sprites;
+	Sprite *t;
+	Bullet *b;
+	int enemyX, enemyY;
+<<<<<<< HEAD
+	TileMap* map;
+=======
+>>>>>>> 60f67e2111e285630583a45c4af913676404097e
+	Tower *tower;
+	std::vector<std::shared_ptr<Sprite>> sprites;
+	std::vector<std::shared_ptr<Button>> uiElements;
 public:
 	static const int SCREEN_WIDTH = 800;
 	static const int SCREEN_HEIGHT = 600;
