@@ -15,6 +15,7 @@ bool System::init() {
 		cout << "SDL init failed." << endl;
 		return false;
 	}
+
 	if(IMG_Init(IMG_INIT_PNG)==0){
 		std::cout << "IMG_Init: " << IMG_GetError();
 	}
@@ -30,14 +31,13 @@ bool System::init() {
     }
 
 
+<<<<<<< HEAD
 	sprites.push_back(std::unique_ptr<Sprite>(new Tile()));
+<<<<<<< HEAD
 	SDL_Point tmp = {300, 500};
 	SDL_Point tmpTower = {400,10};
 	sprites.back()->setLocation(tmp);
-<<<<<<< HEAD
 	sprites.back()->setTexture("test.png",rndr);
-=======
-	sprites.back()->setTexture("test.bmp",rndr);
 	t = sprites.back().get();
 	
 	sprites.push_back(std::unique_ptr<Sprite>(new Tower()));
@@ -53,8 +53,26 @@ bool System::init() {
 	
 	//b->dirTo(tmp, 5);
 
->>>>>>> 223c58204ae2ca0d61b6d2b68cdc5dc294007292
+=======
+	sprites.push_back(std::shared_ptr<Sprite>(new Tile()));
+	SDL_Point tmp = {50,50};
+	sprites.back()->setLocation(tmp);
+	sprites.back()->setTexture("test.png",rndr);
+	uiElements.push_back(std::shared_ptr<Button>(new TextButton<Tile>("Testinappula", rndr, (Tile*)sprites.back().get(), &Tile::update)));
+	tmp.y += 100;
+	uiElements.back()->setLocation(tmp);
+	uiElements.back()->setTexture("button_background.png", rndr);
+	sprites.push_back(uiElements.back());
+>>>>>>> uiproto2
+=======
+	enemyX=0;
+	enemyY=250;
+	SDL_Point tmp = {enemyX,enemyY};
+	sprites.back()->setLocation(tmp);
+	sprites.back()->setTexture("test.bmp",rndr);
+>>>>>>> origin/enemy
 	mousedown = false;
+	return true;
 }
 
 void System::exit() {
@@ -100,7 +118,15 @@ void System::enterMainLoop() {
 				break;
 			}
 		}
-
+		for(auto& a: sprites){
+			SDL_Point tmp = {enemyX,enemyY};
+			sprites.back()->setLocation(tmp);
+			enemyX=enemyX+10;
+			if(enemyX>=800){
+				enemyX=-60;
+			}
+			SDL_Delay(300);
+		}
 		long frame_start = SDL_GetTicks();
 		update();
 		
@@ -117,11 +143,9 @@ void System::enterMainLoop() {
 }
 
 void System::eventKeyDown(SDL_Keycode sym) {
-
 }
 
 void System::eventKeyUp(SDL_Keycode sym) {
-
 }
 
 void System::mouseButtonDown(Uint8 button, Sint32 x, Sint32 y) {
@@ -129,14 +153,19 @@ void System::mouseButtonDown(Uint8 button, Sint32 x, Sint32 y) {
 }
 
 void System::mouseButtonUp(Uint8 button, Sint32 x, Sint32 y) {
+	for (auto& a : uiElements){
+		if (a->isInside(x, y)){
+			a->onClick();
+			break;
+		}
+	}
 	mousedown = false;
 }
 
 void System::mouseMove(Sint32 x, Sint32 y) {
 		for(auto& a: sprites){
 			if(a->isInside(x,y)&&mousedown){
-				SDL_Point tmp = {x,y};
-				a->setLocation(tmp);
+				//Toiminnallisuus puuttuu
 			}
 		}
 }
@@ -151,6 +180,6 @@ void System::update(){
 		cout << "osuu " << b->getLocation().x << " " << b->getLocation().y << endl;
 	}
 	for(auto& a: sprites){
-		a->update();
+		//a->update();
 	}
 }

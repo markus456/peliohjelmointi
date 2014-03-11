@@ -3,7 +3,7 @@
 
 #include "SDL.h"
 #include "Bullet.h"
-#include "sprite.h"
+#include "Sprite.h"
 
 class Tower : public Sprite {
 private:
@@ -17,7 +17,6 @@ public:
 	void shoot();
 	virtual void draw(SDL_Renderer* rndr);
 	virtual void update();
-
 };
 
 #endif
