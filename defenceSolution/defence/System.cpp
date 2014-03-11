@@ -56,7 +56,7 @@ bool System::init() {
 	sprites.push_back(std::shared_ptr<Sprite>(new Tile()));
 	SDL_Point tmp = {50,50};
 	sprites.back()->setLocation(tmp);
-	sprites.back()->setTexture("test.png",rndr);
+	sprites.back()->setTexture("test.bmp",rndr);
 	uiElements.push_back(std::shared_ptr<Button>(new TextButton<Tile>("Testinappula", rndr, (Tile*)sprites.back().get(), &Tile::update)));
 	tmp.y += 100;
 	uiElements.back()->setLocation(tmp);
@@ -110,7 +110,15 @@ void System::enterMainLoop() {
 				break;
 			}
 		}
-
+		for(auto& a: sprites){
+			SDL_Point tmp = {enemyX,enemyY};
+			sprites.back()->setLocation(tmp);
+			enemyX=enemyX+10;
+			if(enemyX>=800){
+				enemyX=-60;
+			}
+			SDL_Delay(300);
+		}
 		long frame_start = SDL_GetTicks();
 		update();
 		
@@ -127,11 +135,9 @@ void System::enterMainLoop() {
 }
 
 void System::eventKeyDown(SDL_Keycode sym) {
-
 }
 
 void System::eventKeyUp(SDL_Keycode sym) {
-
 }
 
 void System::mouseButtonDown(Uint8 button, Sint32 x, Sint32 y) {

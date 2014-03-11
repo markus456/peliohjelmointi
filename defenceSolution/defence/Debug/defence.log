@@ -1,4 +1,6 @@
-﻿Build started 10.3.2014 21:09:16.
+﻿Build started 25.2.2014 11:26:50.
+     1>Project "Z:\Peliohjelmointi\Projekti\defenceSolution\defence\defence.vcxproj" on node 2 (Build target(s)).
+Build started 10.3.2014 21:09:16.
      1>Project "C:\Users\Jarkko\Documents\GitHub\peliohjelmointi\defenceSolution\defence\defence.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IC:\Users\Jarkko\Documents\GitHub\peliohjelmointi\defenceSolution\defence\\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt System.cpp
@@ -27,9 +29,11 @@
          Debug\System.obj
          Debug\Tower.obj
          Debug\ui.obj
-         defence.vcxproj -> C:\Users\Jarkko\Documents\GitHub\peliohjelmointi\defenceSolution\Debug\defence.exe
+<<<<<<< .mine         defence.vcxproj -> C:\Users\Jarkko\Documents\GitHub\peliohjelmointi\defenceSolution\Debug\defence.exe
      1>Done Building Project "C:\Users\Jarkko\Documents\GitHub\peliohjelmointi\defenceSolution\defence\defence.vcxproj" (Build target(s)).
-
+=======         defence.vcxproj -> C:\Users\ristoau\Documents\GitHub\peliohjelmointi\defenceSolution\Debug\defence.exe
+     1>Done Building Project "C:\Users\ristoau\Documents\GitHub\peliohjelmointi\defenceSolution\defence\defence.vcxproj" (Build target(s)).
+>>>>>>> .theirs
 Build succeeded.
 
 Time Elapsed 00:00:01.69
