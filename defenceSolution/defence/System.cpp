@@ -29,11 +29,14 @@ bool System::init() {
     if (rndr == NULL) {
             cout << "render creation failed." << endl;
     }
+<<<<<<< HEAD
 	map = new TileMap();
 	map->setMap("Level1temp.txt");
 	map->setRenderer(rndr);
 	map->addTiles();
 	map->setTexture("terrain.png",rndr);
+=======
+>>>>>>> 60f67e2111e285630583a45c4af913676404097e
 	enemyX = 0;
 	enemyY = 0;
 	sprites.push_back(std::shared_ptr<Sprite>(new TestTile()));
@@ -50,14 +53,21 @@ bool System::init() {
 	sprites.back()->setSize(loc);
 
 	sprites.push_back(std::shared_ptr<Sprite>(new Bullet()));
+<<<<<<< HEAD
 	sprites.back()->setTexture("button_background.png",rndr);
+=======
+	sprites.back()->setTexture("test.bmp",rndr);
+>>>>>>> 60f67e2111e285630583a45c4af913676404097e
 	tower = (Tower *)sprites.back().get();
 	tower->setLocation(tmpTower);
 	b = (Bullet *)sprites.back().get();
 	tower->loadProjectile(tmp,0,b);
+<<<<<<< HEAD
 	loc.w = 32;
 	loc.h = 32;
 	sprites.back()->setSize(loc);
+=======
+>>>>>>> 60f67e2111e285630583a45c4af913676404097e
 
 	sprites.push_back(std::shared_ptr<Sprite>(new TestTile()));
 	sprites.back()->setLocation(tmp);

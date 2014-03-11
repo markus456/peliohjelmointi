@@ -20,7 +20,10 @@ private:
 	Sprite *t;
 	Bullet *b;
 	int enemyX, enemyY;
+<<<<<<< HEAD
 	TileMap* map;
+=======
+>>>>>>> 60f67e2111e285630583a45c4af913676404097e
 	Tower *tower;
 	std::vector<std::shared_ptr<Sprite>> sprites;
 	std::vector<std::shared_ptr<Button>> uiElements;

@@ -49,12 +49,15 @@
     </ClInclude>
     <ClInclude Include="Tower.h">
       <Filter>Source Files</Filter>
+<<<<<<< HEAD
     </ClInclude>
     <ClInclude Include="Tiili.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="TileMap.h">
       <Filter>Source Files</Filter>
+=======
+>>>>>>> 60f67e2111e285630583a45c4af913676404097e
     </ClInclude>
   </ItemGroup>
 </Project>
