@@ -35,3 +35,12 @@ void Bullet::dirTo(SDL_Point point, double speed) {
 	double dir = atan2(point.y - _location.y, point.x - _location.x);
 	setDirection(dir, speed);
 }
+
+void Bullet::setStartLocation(SDL_Point point){
+	_location.x=point.x;
+	_location.y=point.y;
+}
+
+void Bullet::setSpeed(double speed){
+	this->speed = speed;
+}

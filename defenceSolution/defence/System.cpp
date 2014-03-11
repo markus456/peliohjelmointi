@@ -31,13 +31,23 @@ bool System::init() {
 	
 	sprites.push_back(std::unique_ptr<Sprite>(new Tile()));
 	SDL_Point tmp = {300, 500};
+	SDL_Point tmpTower = {400,10};
 	sprites.back()->setLocation(tmp);
 	sprites.back()->setTexture("test.bmp",rndr);
 	t = sprites.back().get();
+	
+	sprites.push_back(std::unique_ptr<Sprite>(new Tower()));
+	sprites.back()->setLocation(tmpTower);
+	sprites.back()->setTexture("test.bmp",rndr);
+
 	sprites.push_back(std::unique_ptr<Sprite>(new Bullet()));
 	sprites.back()->setTexture("test.bmp",rndr);
+	tower = (Tower *)sprites.back().get();
+	tower->setLocation(tmpTower);
 	b = (Bullet *)sprites.back().get();
-	b->dirTo(tmp, 5);
+	tower->loadProjectile(tmp,0,b);
+	
+	//b->dirTo(tmp, 5);
 
 	mousedown = false;
 }
@@ -51,6 +61,8 @@ void System::exit() {
 }
 
 void System::enterMainLoop() {
+	SDL_Point tmpTower = {400,10};
+	SDL_Point tmp = {300, 500};
 	while (running)
 	{
 		while(SDL_PollEvent(&event)){
@@ -66,6 +78,12 @@ void System::enterMainLoop() {
 				mouseButtonDown(event.button.button, event.motion.x, event.motion.y);
 				break;
 			case SDL_MOUSEBUTTONUP:
+				
+				tower->setLocation(tmpTower);
+				tmp.x = event.button.x;
+				tmp.y = event.button.y;
+				tower->loadProjectile(tmp,0,b);
+				tower->shoot();
 				mouseButtonUp(event.button.button, event.motion.x, event.motion.y);
 				break;
 			case SDL_MOUSEMOTION:

@@ -15,6 +15,8 @@ public:
 	virtual void update();
 	void setDirection(double direction, double speed);
 	void dirTo(SDL_Point point, double speed);
+	void setStartLocation(SDL_Point point);
+	void setSpeed(double speed);
 };
 
 #endif
