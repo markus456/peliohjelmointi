@@ -35,6 +35,11 @@ bool System::init() {
 	sprites.back()->setLocation(tmp);
 	sprites.back()->setTexture("test.png",rndr);
 	mousedown = false;
+
+	map.setMap("Level1.txt");
+	map.setRenderer(rndr);
+	map.addTiles();
+	map.setTexture("terrain.png", rndr);
 }
 
 void System::exit() {
@@ -117,6 +122,7 @@ void System::draw() {
 	for(auto& a: sprites){
 		a->draw(rndr);
 	}
+	map.drawMap();
 }
 void System::update(){
 	for(auto& a: sprites){

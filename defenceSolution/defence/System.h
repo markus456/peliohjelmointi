@@ -4,6 +4,7 @@
 #include "include\SDL_image.h"
 #include "ui.h"
 #include "Sprite.h"
+#include "TileMap.h"
 #include <memory>
 #include <vector>
 class System {
@@ -14,6 +15,7 @@ private:
 	SDL_Texture *texture;
 	bool running,mousedown;
 	std::vector<std::unique_ptr<Sprite>> sprites;
+	TileMap map;
 public:
 	static const int SCREEN_WIDTH = 800;
 	static const int SCREEN_HEIGHT = 600;
