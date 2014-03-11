@@ -15,10 +15,15 @@ private:
 	SDL_Renderer *rndr;
 	SDL_Texture *texture;
 	bool running,mousedown;
+<<<<<<< HEAD
 	std::vector<std::unique_ptr<Sprite>> sprites;
 	Sprite *t;
 	Bullet *b;
 	Tower *tower;
+=======
+	std::vector<std::shared_ptr<Sprite>> sprites;
+	std::vector<std::shared_ptr<Button>> uiElements;
+>>>>>>> uiproto2
 public:
 	static const int SCREEN_WIDTH = 800;
 	static const int SCREEN_HEIGHT = 600;

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #ifndef BULLET_H
 #define BULLET_H
 
@@ -19,4 +20,25 @@ public:
 	void setSpeed(double speed);
 };
 
+=======
+#ifndef BULLET_H
+#define BULLET_H
+
+#include "SDL.h"
+
+#include "sprite.h"
+
+class Bullet : public Sprite {
+private:
+	double dir, speed;
+public:
+	Bullet(void);
+	~Bullet(void);
+	virtual void draw(SDL_Renderer* rndr);
+	virtual void update();
+	void setDirection(double direction, double speed);
+	void dirTo(SDL_Point point, double speed);
+};
+
+>>>>>>> uiproto2
 #endif

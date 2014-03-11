@@ -37,6 +37,7 @@ public:
 		if(x<_location.x||x>_location.x+_location.w||y<_location.y||y>_location.y+_location.h)return false;
 		return true;
 	}
+<<<<<<< HEAD
 
 	bool collideTest(Sprite &other) {
 		SDL_Rect other_loc = other.getLocation();
@@ -45,6 +46,10 @@ public:
 			return false;
 		}
 		return true;
+=======
+	virtual ~Sprite(){
+		SDL_DestroyTexture(_texture);
+>>>>>>> uiproto2
 	}
 };
 class Tile:public Sprite{
@@ -54,7 +59,7 @@ public:
 		SDL_RenderCopy(rndr,_texture,nullptr,&_location);
 	}
 	virtual void update(){
-
+		_location.x += 10;
 	}
 };
 #endif
