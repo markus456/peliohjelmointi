@@ -1,6 +1,8 @@
 #ifndef UI_HEADER_GUARD
 #define UI_HEADER_GUARD
 #include <string>
+#include <vector>
+#include <memory>
 #include "include\SDL.h"
 #include "include\SDL_ttf.h"
 #include "Sprite.h"
@@ -11,6 +13,7 @@ public:
 	}
 	virtual void update(){}
 	virtual void onClick(){}
+	virtual void onClick(int x, int y){}
 };
 
 template <class T> class ImageButton :public Button{
@@ -101,5 +104,46 @@ public:
 
 	}
 };
-
+class Menu :public Button{
+protected:
+	std::vector<std::shared_ptr<Button>> _buttons;
+public:
+	Menu(){}
+	virtual void addButton(Button* b){
+		if (_buttons.size() > 0){
+			SDL_Rect l = _buttons.back()->getLocation();
+			SDL_Point p = { l.x, l.y + l.h };
+			b->setLocation(p);
+		}
+		else{
+			SDL_Rect l = getLocation();
+			SDL_Point p = { l.x, l.y + l.h };
+		}
+		_buttons.push_back(std::shared_ptr<Button>(b));
+	}
+	virtual Button* getButton(unsigned int i){
+		if (i < _buttons.size()){
+			return _buttons[i].get();
+		}
+		return nullptr;
+	}
+	virtual void draw(SDL_Renderer* rndr){
+		SDL_RenderCopy(rndr, _texture, nullptr, &_location);
+		for (auto& a : _buttons){
+			a->draw(rndr);
+		}
+	}
+	virtual void onClick(int x, int y){
+		for (auto& a : _buttons){
+			if (a->isInside(x,y)){
+				a->onClick();
+				return;
+			}
+		}
+	}
+	virtual void update(){}
+	virtual ~Menu(){
+		_buttons.clear();
+	}
+};
 #endif

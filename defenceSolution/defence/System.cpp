@@ -29,14 +29,11 @@ bool System::init() {
     if (rndr == NULL) {
             cout << "render creation failed." << endl;
     }
-<<<<<<< HEAD
 	map = new TileMap();
 	map->setMap("Level1temp.txt");
 	map->setRenderer(rndr);
 	map->addTiles();
 	map->setTexture("terrain.png",rndr);
-=======
->>>>>>> 60f67e2111e285630583a45c4af913676404097e
 	enemyX = 0;
 	enemyY = 0;
 	sprites.push_back(std::shared_ptr<Sprite>(new TestTile()));
@@ -53,29 +50,22 @@ bool System::init() {
 	sprites.back()->setSize(loc);
 
 	sprites.push_back(std::shared_ptr<Sprite>(new Bullet()));
-<<<<<<< HEAD
 	sprites.back()->setTexture("button_background.png",rndr);
-=======
-	sprites.back()->setTexture("test.bmp",rndr);
->>>>>>> 60f67e2111e285630583a45c4af913676404097e
 	tower = (Tower *)sprites.back().get();
 	tower->setLocation(tmpTower);
 	b = (Bullet *)sprites.back().get();
 	tower->loadProjectile(tmp,0,b);
-<<<<<<< HEAD
 	loc.w = 32;
 	loc.h = 32;
 	sprites.back()->setSize(loc);
-=======
->>>>>>> 60f67e2111e285630583a45c4af913676404097e
-
 	sprites.push_back(std::shared_ptr<Sprite>(new TestTile()));
 	sprites.back()->setLocation(tmp);
 	sprites.back()->setTexture("test.bmp",rndr);
-	uiElements.push_back(std::shared_ptr<Button>(new TextButton<TestTile>("Testinappula", "button_background.png", rndr, (TestTile*)sprites.back().get(), &TestTile::update)));
-	tmp.y += 100;
-	uiElements.back()->setLocation(tmp);
-	uiElements.back()->setTexture("button_background.png", rndr);
+	Menu* menu = new Menu();
+	TextButton<TestTile>* b = new TextButton<TestTile>("Testinappula", "button_background.png", rndr, (TestTile*)sprites.back().get(), &TestTile::update);
+	menu->setLocation(tmp);
+	menu->addButton(b);
+	uiElements.push_back(std::shared_ptr<Button>(menu));
 	sprites.push_back(uiElements.back());
 	mousedown = false;
 	return true;
@@ -83,10 +73,12 @@ bool System::init() {
 
 void System::exit() {
 	sprites.clear();
-	IMG_Quit();
+	uiElements.clear();
 	SDL_DestroyTexture(texture);
 	SDL_DestroyRenderer(rndr);
 	SDL_DestroyWindow(wnd);
+	TTF_Quit();
+	IMG_Quit();
 	SDL_Quit();
 }
 
@@ -133,6 +125,14 @@ void System::enterMainLoop() {
 }
 
 void System::eventKeyDown(SDL_Keycode sym) {
+	SDL_Keymod modstate;
+	switch (sym){
+	case SDLK_F4:
+			if (SDL_GetModState() == KMOD_LALT){
+				running = false;
+			}
+		break;
+	}
 }
 
 void System::eventKeyUp(SDL_Keycode sym) {
@@ -144,20 +144,15 @@ void System::mouseButtonDown(Uint8 button, Sint32 x, Sint32 y) {
 
 void System::mouseButtonUp(Uint8 button, Sint32 x, Sint32 y) {
 	for (auto& a : uiElements){
-		if (a->isInside(x, y)){
-			a->onClick();
-			break;
-		}
+		a->onClick(x, y);
 	}
 	mousedown = false;
 }
 
 void System::mouseMove(Sint32 x, Sint32 y) {
-		for(auto& a: sprites){
-			if(a->isInside(x,y)&&mousedown){
-				//Toiminnallisuus puuttuu
-			}
-		}
+		/*for(auto& a: uiElements){
+			
+		}*/
 }
 
 void System::draw() {

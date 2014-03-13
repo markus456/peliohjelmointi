@@ -1,30 +1,25 @@
-<<<<<<< HEAD
-﻿Build started 11.3.2014 11:31:43.
-     1>Project "Z:\Peliohjelmointi\Projekti\defenceSolution\defence\defence.vcxproj" on node 2 (Build target(s)).
+﻿Build started 13.3.2014 9:28:50.
+     1>Project "C:\peliohjelmointi\defenceSolution\defence\defence.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IZ:\Peliohjelmointi\Projekti\defenceSolution\defence\\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt System.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\peliohjelmointi\defenceSolution\defence\\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt System.cpp main.cpp
          System.cpp
-     1>z:\peliohjelmointi\projekti\defencesolution\defence\system.cpp(120): warning C4244: 'argument' : conversion from 'float' to 'Uint32', possible loss of data
-     1>z:\peliohjelmointi\projekti\defencesolution\defence\system.cpp(177): warning C4101: 'tmppoint' : unreferenced local variable
+     1>c:\peliohjelmointi\defencesolution\defence\system.cpp(124): warning C4244: 'argument' : conversion from 'float' to 'Uint32', possible loss of data
+     1>c:\peliohjelmointi\defencesolution\defence\system.cpp(130): warning C4101: 'modstate' : unreferenced local variable
+     1>c:\peliohjelmointi\defencesolution\defence\system.cpp(184): warning C4101: 'tmppoint' : unreferenced local variable
+         Generating Code...
+         Compiling...
+         main.cpp
+         Generating Code...
        Link:
-=======
-﻿Build started 11.3.2014 10:44:44.
-     1>Project "Z:\Peliohjelmointi\Projekti\defenceSolution\defence\defence.vcxproj" on node 2 (Build target(s)).
-     1>Link:
->>>>>>> 60f67e2111e285630583a45c4af913676404097e
-         C:\Program Files\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Z:\Peliohjelmointi\Projekti\defenceSolution\Debug\defence.exe" /INCREMENTAL /NOLOGO /LIBPATH:Z:\Peliohjelmointi\Projekti\defenceSolution\defence\\lib SDL2.lib SDL2main.lib SDL2_image.lib SDL2_ttf.lib SDL2.lib SDL2main.lib SDL2.lib SDL2main.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"Z:\Peliohjelmointi\Projekti\defenceSolution\Debug\defence.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Z:\Peliohjelmointi\Projekti\defenceSolution\Debug\defence.lib" /MACHINE:X86 Debug\Bullet.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\peliohjelmointi\defenceSolution\Debug\defence.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\peliohjelmointi\defenceSolution\defence\\lib SDL2.lib SDL2main.lib SDL2_image.lib SDL2_ttf.lib SDL2.lib SDL2main.lib SDL2.lib SDL2main.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\peliohjelmointi\defenceSolution\Debug\defence.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\peliohjelmointi\defenceSolution\Debug\defence.lib" /MACHINE:X86 Debug\Bullet.obj
          Debug\main.obj
          Debug\System.obj
          Debug\Tiili.obj
          Debug\TileMap.obj
          Debug\Tower.obj
-         defence.vcxproj -> Z:\Peliohjelmointi\Projekti\defenceSolution\Debug\defence.exe
-     1>Done Building Project "Z:\Peliohjelmointi\Projekti\defenceSolution\defence\defence.vcxproj" (Build target(s)).
+         defence.vcxproj -> C:\peliohjelmointi\defenceSolution\Debug\defence.exe
+     1>Done Building Project "C:\peliohjelmointi\defenceSolution\defence\defence.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-<<<<<<< HEAD
-Time Elapsed 00:00:02.76
-=======
-Time Elapsed 00:00:01.02
->>>>>>> 60f67e2111e285630583a45c4af913676404097e
+Time Elapsed 00:00:04.72
