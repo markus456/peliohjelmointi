@@ -62,9 +62,13 @@ bool System::init() {
 	sprites.back()->setLocation(tmp);
 	sprites.back()->setTexture("test.bmp",rndr);
 	Menu* menu = new Menu();
-	TextButton<TestTile>* b = new TextButton<TestTile>("Testinappula", "button_background.png", rndr, (TestTile*)sprites.back().get(), &TestTile::update);
+	Button* b = new TextButton<TestTile>("Testinappula", "button_background.png", rndr, (TestTile*)sprites.back().get(), &TestTile::update);
 	menu->setLocation(tmp);
 	menu->addButton(b);
+	b = new TextButton<System>("Exit", "button_background.png", rndr, this, &System::exit);
+	menu->addButton(b);
+	menu->standardize(true);
+	menu->setLocation(SDL_Point{ 200, 100 });
 	uiElements.push_back(std::shared_ptr<Button>(menu));
 	sprites.push_back(uiElements.back());
 	mousedown = false;

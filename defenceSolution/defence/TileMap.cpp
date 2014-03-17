@@ -88,5 +88,4 @@ void TileMap::setMap(std::string filename)
 		typeMap.push_back(temp);		//lisäys vektoriin
     }
 	mappi.close();
-	std::cout << "Tiedosto suljettu";
 }
