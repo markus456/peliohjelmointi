@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <functional>
 #include "include\SDL.h"
 #include "include\SDL_ttf.h"
 #include "Sprite.h"
@@ -18,13 +19,11 @@ public:
 
 template <class T> class ImageButton :public Button{
 protected:
-	void (T::*_fnc)(void);
-	T* _t;
+	std::function<void ()> _fnc;
 public:
-	ImageButton<T>(T* t, void(T::*fnc)(void)):_t(t),_fnc(fnc){}
-	virtual void onClick(){ (_t->*_fnc)(); }
-	virtual void setCallbackFunction(void(T::*fptr)(void)){ _fnc = fptr; }
-	virtual void setCallbackObject(T* t){ _t = t; }
+	ImageButton<T>(std::function<void()> fnc):_fnc(fnc){}
+	virtual void onClick(){ if(_fnc!=nullptr)_fnc(); }
+	virtual void setCallback(std::function<void ()> f){_fnc = f;}
 };
 
 template <class T> class TextButton :public ImageButton<T>{
@@ -47,8 +46,11 @@ public:
 	*Luo TextButton olion, jolla on teksti.
 	*/
 	TextButton<T>(std::string string,std::string texture, SDL_Renderer* rndr) : _text(string), _text_wrap(20),
-		_text_size(20), _centered(false), _center(false), renderer(rndr), ImageButton(nullptr, nullptr){
-		color = {255,255,255,255};
+		_text_size(20), _centered(false), _center(false), renderer(rndr), ImageButton(nullptr){
+		_color.r = 255;
+		_color.g = 255;
+		_color.b = 255;
+		_color.a = 255;
 		Button::setTexture(texture,rndr);
 		if (TTF_Init() != 0){
 			std::cout << "Error initializing SDL_ttf.\n";
@@ -59,9 +61,12 @@ public:
 	/**
 	*Luo TextButton olion, jolla on teksti ja funktio, jota se kutsuu onClick() metodissa.
 	*/
-	TextButton<T>(std::string string,std::string texture, SDL_Renderer* rndr, T* t, void(T::*fnc)(void)) : _text(string), _text_wrap(20),
-		_text_size(20), _centered(false), _center(false), renderer(rndr), ImageButton(t, fnc){
-		_color = { 255, 255, 255, 255 };
+	TextButton<T>(std::string string,std::string texture, SDL_Renderer* rndr, std::function<void ()> fnc ): _text(string), _text_wrap(20),
+		_text_size(20), _centered(false), _center(false), renderer(rndr), ImageButton(fnc){
+			_color.r = 255;
+			_color.g = 255;
+			_color.b = 255;
+			_color.a = 255;
 		Button::setTexture(texture,rndr);
 		if (TTF_Init() != 0){
 			std::cout << "Error initializing SDL_ttf.\n";
@@ -83,6 +88,7 @@ public:
 		setSize(loc);
 		_text_location.w = tmp->w;
 		_text_location.h = tmp->h;
+		_location.w = _text_location.w;
 		_text_texture = SDL_CreateTextureFromSurface(renderer, tmp);
 		SDL_FreeSurface(tmp);
 	}
@@ -101,6 +107,7 @@ public:
 		setSize(loc);
 		_text_location.w = tmp->w;
 		_text_location.h = tmp->h;
+		_location.w = _text_location.w;
 		_text_texture = SDL_CreateTextureFromSurface(renderer, tmp);
 		SDL_FreeSurface(tmp);
 	}
@@ -143,6 +150,9 @@ public:
 		_text_location.y = p.y;
 	}
 	void setSize(SDL_Rect r){
+		if(_location.w<_text_location.w){
+		_location.w = _text_location.w;
+		}
 		ImageButton::setSize(r);
 		_text_location.x = _location.x + (_location.w - _text_location.w) / 2;
 		_text_location.y = _location.y + (_location.h - _text_location.h) / 2;
@@ -162,9 +172,19 @@ public:
 		}
 		else{
 			SDL_Rect l = getLocation();
-			SDL_Point p = { l.x, l.y + l.h };
+			SDL_Point p = { l.x, l.y};
+			b->setLocation(p);
 		}
 		_buttons.push_back(std::shared_ptr<Button>(b));
+		SDL_Rect newsize = {0,0,0,0};
+		for(auto& a:_buttons){
+			if(a->getLocation().w>newsize.w){
+				newsize.w = a->getLocation().w;
+			}
+			newsize.h += a->getLocation().h;
+		}
+		setSize(newsize);
+		
 	}
 	virtual Button* getButton(unsigned int i){
 		if (i < _buttons.size()){
@@ -188,6 +208,7 @@ public:
 	}
 	void standardize(bool b){
 		_standardize = b;
+		_resized = false;
 	}
 	void setLocation(SDL_Point p){
 		SDL_Point pt = p;
@@ -220,3 +241,4 @@ public:
 	}
 };
 #endif
+
