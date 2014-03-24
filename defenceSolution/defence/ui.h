@@ -22,8 +22,8 @@ public:
 		}
 	}
 	void setSpriteSheetSize(int columns, int rows){
-	_columns = columns;
-	_rows = rows;
+		_columns = columns;
+		_rows = rows;
 	}
 	void addFrames(std::vector<SDL_Rect> args){
 		_frames = std::move(args);
@@ -88,16 +88,16 @@ public:
 	*/
 	TextButton(std::string string,std::string texture, SDL_Renderer* rndr) : _text(string), _text_wrap(20),
 		_text_size(20), _centered(false), _center(false), renderer(rndr), ImageButton(nullptr){
-		_color.r = 255;
-		_color.g = 255;
-		_color.b = 255;
-		_color.a = 255;
-		Button::setTexture(texture,rndr);
-		if (TTF_Init() != 0){
-			std::cout << "Error initializing SDL_ttf.\n";
-		}
-		setTextSize(_text_size);
-		setText(string);
+			_color.r = 255;
+			_color.g = 255;
+			_color.b = 255;
+			_color.a = 255;
+			Button::setTexture(texture,rndr);
+			if (TTF_Init() != 0){
+				std::cout << "Error initializing SDL_ttf.\n";
+			}
+			setTextSize(_text_size);
+			setText(string);
 	}
 	/**
 	*Luo TextButton olion, jolla on teksti ja funktio, jota se kutsuu onClick() metodissa.
@@ -108,12 +108,12 @@ public:
 			_color.g = 255;
 			_color.b = 255;
 			_color.a = 255;
-		Button::setTexture(texture,rndr);
-		if (TTF_Init() != 0){
-			std::cout << "Error initializing SDL_ttf.\n";
-		}
-		setTextSize(_text_size);
-		setText(string);
+			Button::setTexture(texture,rndr);
+			if (TTF_Init() != 0){
+				std::cout << "Error initializing SDL_ttf.\n";
+			}
+			setTextSize(_text_size);
+			setText(string);
 	}
 	/*Asettaa TextButton olion tekstin parametrin tekstiksi ja luo SDL_Texture:n*/
 	virtual void setText(std::string s){
@@ -172,7 +172,7 @@ public:
 		}else{
 			setText(_text);
 		}
-		
+
 	}
 	virtual std::string getText(){ return _text; }	
 	virtual void draw(SDL_Renderer* rndr){
@@ -192,7 +192,7 @@ public:
 	}
 	void setSize(SDL_Rect r){
 		if(_location.w<_text_location.w){
-		_location.w = _text_location.w;
+			_location.w = _text_location.w;
 		}
 		ImageButton::setSize(r);
 		_text_location.x = _location.x + (_location.w - _text_location.w) / 2;
@@ -224,8 +224,8 @@ public:
 			}
 			newsize.h += a->getLocation().h;
 		}
-		setSize(newsize);
-		
+		//setSize(newsize);
+
 	}
 	virtual Button* getButton(unsigned int i){
 		if (i < _buttons.size()){
@@ -247,12 +247,19 @@ public:
 			}
 		}
 	}
+
+	/**
+	Elementtien koon standardointi.
+
+	Tasaa kaikki elementit leveimmän elementin kokoiseksi.
+	*/
 	void standardize(bool b){
 		_standardize = b;
 		_resized = false;
 	}
 	void setLocation(SDL_Point p){
 		SDL_Point pt = p;
+		Sprite::setLocation(pt);
 		for (auto it = _buttons.begin(); it != _buttons.end();it++){
 			(*it)->setLocation(p);
 			p.y += (*it)->getLocation().h;

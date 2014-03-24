@@ -7,7 +7,8 @@ class System;
 #include "ui.h"
 class Controller{
 protected:
-	std::vector<std::shared_ptr<Sprite>> _render_targets;
+	std::vector<std::shared_ptr<Sprite>> _render_targets_game;
+	std::vector<std::shared_ptr<Sprite>> _render_targets_others;
 	std::vector<std::shared_ptr<Sprite>> _update_targets;
 	std::vector<std::shared_ptr<Button>> _ui_targets;
 	System* _parent;
@@ -16,9 +17,6 @@ protected:
 	std::unique_ptr<Menu> _menu;
 	SDL_Renderer* _renderer;
 	SDL_Rect _window_size;
-	void addRenderTarget(Sprite* s);
-	void addUpdateTarget(Sprite* s);
-	void addUiTarget(Button* b);
 	void buildMenu();
 public:
 	const static unsigned int MAIN_MENU = 1;
@@ -31,6 +29,7 @@ public:
 	void onClick(int,int);
 	void loadMap(std::string);
 	void add(Button* b);
+	void add(ImageSprite* b);
 	void add(Bullet* b);
 	void add(Enemy* b);
 	void add(Tower* b);

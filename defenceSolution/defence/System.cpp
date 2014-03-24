@@ -52,9 +52,9 @@ bool System::init() {
 	loc.w = 32;
 	loc.h = 32;
 	blt->setSize(loc);	
-	//controller->add(map);
+	controller->add(map);
 	controller->add(twr);
-	controller->add(blt);
+	//controller->add(blt);
 	controller->initGame();
 	mousedown = false;
 	return true;
@@ -130,6 +130,7 @@ void System::eventKeyUp(SDL_Keycode sym) {
 
 void System::mouseButtonDown(Uint8 button, Sint32 x, Sint32 y) {
 	mousedown = true;
+	controller->onClick(x,y);
 }
 
 void System::mouseButtonUp(Uint8 button, Sint32 x, Sint32 y) {
