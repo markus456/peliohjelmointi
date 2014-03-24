@@ -7,6 +7,8 @@
     <ClCompile Include="Tiili.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="Tower.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Controller.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
@@ -16,5 +18,7 @@
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="ui.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Controller.h" />
   </ItemGroup>
 </Project>

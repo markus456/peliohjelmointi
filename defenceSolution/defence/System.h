@@ -1,5 +1,8 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
+class Controller;
+#include <memory>
+#include <vector>
 #include "SDL.h"
 #include "include\SDL_image.h"
 #include "Sprite.h"
@@ -8,8 +11,8 @@
 #include "Tower.h"
 #include "Tiili.h"
 #include "TileMap.h"
-#include <memory>
-#include <vector>
+#include "Enemy.h"
+#include "Controller.h"
 class System {
 private:
 	SDL_Event event;
@@ -19,6 +22,7 @@ private:
 	bool running,mousedown;
 	Sprite *t;
 	Bullet *b;
+	Controller* controller;
 	int enemyX, enemyY;
 	TileMap* map;
 	Tower *tower;

@@ -3,10 +3,51 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <utility>
 #include <functional>
 #include "include\SDL.h"
 #include "include\SDL_ttf.h"
 #include "Sprite.h"
+class ImageSprite:public Sprite{
+protected:
+	std::vector<SDL_Rect> _frames;
+	std::vector<SDL_Rect>::iterator _frame_iterator;
+	bool _loop;
+	unsigned int _columns, _rows,_animation_delay,_delay;
+public:
+	ImageSprite():_loop(false),_columns(0),_rows(0),_animation_delay(0),_delay(0){}
+	virtual void draw(SDL_Renderer* rndr){
+		if(_frame_iterator!=_frames.end()){
+			SDL_RenderCopy(rndr,_texture,&(*_frame_iterator),&_location);
+		}
+	}
+	void setSpriteSheetSize(int columns, int rows){
+	_columns = columns;
+	_rows = rows;
+	}
+	void addFrames(std::vector<SDL_Rect> args){
+		_frames = std::move(args);
+		_frame_iterator = _frames.begin();
+	}
+
+	void setLoop(bool b){_loop = b;}
+	void setAnimationDelay(unsigned int i){_animation_delay = i;}
+	virtual void update(){
+		if(_delay>0){
+			_delay--;
+		}else{
+			_delay = _animation_delay;
+			if(_frames.size()>0){
+				_frame_iterator++;
+				if(_frame_iterator==_frames.end()){
+					if(_loop){
+						_frame_iterator = _frames.begin();
+					}
+				}
+			}
+		}
+	}
+};
 class Button:public Sprite{
 public:
 	virtual void draw(SDL_Renderer* rndr){
@@ -17,16 +58,16 @@ public:
 	virtual void onClick(int x, int y){}
 };
 
-template <class T> class ImageButton :public Button{
+class ImageButton :public Button{
 protected:
 	std::function<void ()> _fnc;
 public:
-	ImageButton<T>(std::function<void()> fnc):_fnc(fnc){}
+	ImageButton(std::function<void()> fnc):_fnc(fnc){}
 	virtual void onClick(){ if(_fnc!=nullptr)_fnc(); }
 	virtual void setCallback(std::function<void ()> f){_fnc = f;}
 };
 
-template <class T> class TextButton :public ImageButton<T>{
+class TextButton :public ImageButton{
 protected:
 	std::string _text;
 	int _text_wrap,_text_size;
@@ -45,7 +86,7 @@ public:
 	/**
 	*Luo TextButton olion, jolla on teksti.
 	*/
-	TextButton<T>(std::string string,std::string texture, SDL_Renderer* rndr) : _text(string), _text_wrap(20),
+	TextButton(std::string string,std::string texture, SDL_Renderer* rndr) : _text(string), _text_wrap(20),
 		_text_size(20), _centered(false), _center(false), renderer(rndr), ImageButton(nullptr){
 		_color.r = 255;
 		_color.g = 255;
@@ -61,7 +102,7 @@ public:
 	/**
 	*Luo TextButton olion, jolla on teksti ja funktio, jota se kutsuu onClick() metodissa.
 	*/
-	TextButton<T>(std::string string,std::string texture, SDL_Renderer* rndr, std::function<void ()> fnc ): _text(string), _text_wrap(20),
+	TextButton(std::string string,std::string texture, SDL_Renderer* rndr, std::function<void ()> fnc ): _text(string), _text_wrap(20),
 		_text_size(20), _centered(false), _center(false), renderer(rndr), ImageButton(fnc){
 			_color.r = 255;
 			_color.g = 255;

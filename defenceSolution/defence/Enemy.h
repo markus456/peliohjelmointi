@@ -8,7 +8,7 @@ class Enemy : public Sprite
 public:
 	Enemy(void);
 	~Enemy(void);
-	//void attack();
+	void attack();
 	virtual void draw(SDL_Renderer* rndr);
 	virtual void update();
 private:
