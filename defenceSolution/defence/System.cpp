@@ -105,10 +105,36 @@ void System::eventKeyDown(SDL_Keycode sym) {
 		}
 		controller->initGame();
 		break;
+	case SDLK_w:
+		controller->playerMoveUp(true);
+		break;
+	case SDLK_s:
+		controller->playerMoveDown(true);
+		break;
+	case SDLK_a:
+		controller->playerMoveLeft(true);
+		break;
+	case SDLK_d:
+		controller->playerMoveRight(true);
+		break;
 	}
 }
 
 void System::eventKeyUp(SDL_Keycode sym) {
+	switch (sym) {
+	case SDLK_w:
+		controller->playerMoveUp(false);
+		break;
+	case SDLK_s:
+		controller->playerMoveDown(false);
+		break;
+	case SDLK_a:
+		controller->playerMoveLeft(false);
+		break;
+	case SDLK_d:
+		controller->playerMoveRight(false);
+		break;
+	}
 }
 
 void System::mouseButtonDown(Uint8 button, Sint32 x, Sint32 y) {

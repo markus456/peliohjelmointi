@@ -225,3 +225,19 @@ void Controller::setEnemyCap(int i){
 void Controller::setTowerCap(int i){
 	_tower_cap = i;
 }
+
+void Controller::playerMoveUp(bool move) {
+	_player->setMoveUp(move);
+}
+
+void Controller::playerMoveDown(bool move) {
+	_player->setMoveDown(move);
+}
+
+void Controller::playerMoveLeft(bool move) {
+	_player->setMoveLeft(move);
+}
+
+void Controller::playerMoveRight(bool move) {
+	_player->setMoveRight(move);
+}

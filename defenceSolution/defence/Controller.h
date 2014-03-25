@@ -5,6 +5,7 @@
 class System;
 #include "System.h"
 #include "ui.h"
+#include "Player.h"
 class Controller{
 protected:
 	std::vector<std::shared_ptr<Enemy>> _enemies;
@@ -41,6 +42,9 @@ public:
 	void setEnemyCap(int);
 	void setTowerCap(int);
 	void initGame();
-	
+	void playerMoveUp(bool move);
+	void playerMoveDown(bool move);
+	void playerMoveLeft(bool move);
+	void playerMoveRight(bool move);
 };
 #endif
