@@ -10,7 +10,7 @@ private:
 	bool isBuildable;	//voiko tornin rakentaa t‰h‰n
 	int tileType;
 	//int type;
-	SDL_Rect source;	//mik‰ osa sprite sheetist‰ piirret‰‰n
+	Location source;	//mik‰ osa sprite sheetist‰ piirret‰‰n
 	
 public:
 	Tiili(void);

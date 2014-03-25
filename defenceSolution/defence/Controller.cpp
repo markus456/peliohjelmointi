@@ -17,7 +17,7 @@ void Controller::update(){
 	auto a = _bullets.begin();
 	while(a!=_bullets.end()){
 		(*a)->update();
-		SDL_Rect tmp =  (*a)->getLocation();
+		Location tmp =  (*a)->getLocation();
 		if(tmp.x>System::SCREEN_WIDTH+100||tmp.x<-100||tmp.y<-100||tmp.y>System::SCREEN_HEIGHT+100){
 			a = _bullets.erase(a);
 		}else{
@@ -118,13 +118,13 @@ void Controller::setGameState(unsigned int i){
 	_game_state = i;
 }
 void Controller::buildMenu(){
-	SDL_Rect size;
-	SDL_Rect first = {0,0,200,200};
-	SDL_Rect second = {200,0,200,200};
-	SDL_Rect third = {0,200,200,200};
-	SDL_Rect fourth = {200,200,200,200};
-	std::vector<SDL_Rect> frames;
-	SDL_Point position;
+	Location size;
+	Location first(0,0,200,200);
+	Location second(200,0,200,200);
+	Location third (0,200,200,200);
+	Location fourth (200,200,200,200);
+	std::vector<Location> frames;
+	Location position;
 	std::shared_ptr<ImageSprite> sprt;
 	ImageSprite* s = nullptr;
 	switch(_game_state){

@@ -33,9 +33,9 @@ void Tower::loadProjectile(std::shared_ptr<Bullet> projectile){
 	readyToShoot = true;
 }
 
-void Tower::shoot(SDL_Point target, double speed){
+void Tower::shoot(Location target, double speed){
 	//loadedProjectile->setVisible(true);
-	SDL_Point tempPoint = {(getLocation().x+(getLocation().x+getLocation().w))/2,(getLocation().y+(getLocation().y+getLocation().h))/2};
+	Location tempPoint((getLocation().x+(getLocation().x+getLocation().w))/2,(getLocation().y+(getLocation().y+getLocation().h))/2);
 	loadedProjectile->setLocation(tempPoint);
 	loadedProjectile->dirTo(target, speed);
 	loadedProjectile->setSpeed(towerProjectileSpeed);
@@ -43,7 +43,7 @@ void Tower::shoot(SDL_Point target, double speed){
 	readyToShoot = false;
 }
 
-void Tower::placeAt(SDL_Point location){
+void Tower::placeAt(Location location){
 
 }
 
@@ -70,7 +70,7 @@ void Tower::addEnemies(std::vector<std::shared_ptr<Enemy>> spriteList){
 //laskee pythagoralla tornin ja kohteen etäisyyden
 //ATM: laskee kummankin kohteen vasemmasta yläkulmasta
 //TODO: laskee kummankin osapuolen toisiaan lähimmät pisteet.
-double Tower::getTargetDistance(SDL_Rect enemyLocation){
+double Tower::getTargetDistance(Location enemyLocation){
 
 	int thisX = this->_location.x;
 	int thisY = this->_location.y;
@@ -81,8 +81,8 @@ double Tower::getTargetDistance(SDL_Rect enemyLocation){
 
 
 void Tower::draw(SDL_Renderer* rndr){
-	SDL_Point p = {_location.w / 2, _location.h / 2};
-	SDL_RenderCopyEx(rndr, _texture, nullptr, &_location, 0, &p, SDL_FLIP_NONE);
+	Location p(_location.w / 2, _location.h / 2);
+	SDL_RenderCopyEx(rndr, _texture, nullptr, &_location.toSDL_Rect(), 0, &p.toSDL_Point(), SDL_FLIP_NONE);
 }
 void Tower::update(){
 	if(cooldown>0){
@@ -93,8 +93,7 @@ void Tower::update(){
 				return this->getTargetDistance(a->getLocation())<this->getTargetDistance(b->getLocation());
 			});
 			if(getTargetDistance(enemies.front()->getLocation())<towerRange){
-				SDL_Point tmppoint = {enemies.front()->getLocation().x,enemies.front()->getLocation().y};
-				shoot(tmppoint,towerProjectileSpeed);
+				shoot(enemies.front()->getLocation(),towerProjectileSpeed);
 			}
 		}
 	}

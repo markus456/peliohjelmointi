@@ -15,8 +15,8 @@ TileMap::~TileMap(void)
 void TileMap::addTiles()
 {
 	Tiili tile;
-	SDL_Point location;
-	SDL_Rect size;
+	Location location;
+	Location size;
 	size.h = TILE_HEIGHT;
 	size.w = TILE_WIDTH;
 

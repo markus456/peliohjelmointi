@@ -6,6 +6,7 @@ class System;
 #include "System.h"
 #include "ui.h"
 #include "Player.h"
+#include "Sprite.h"
 class Controller{
 protected:
 	std::vector<std::shared_ptr<Enemy>> _enemies;
@@ -19,15 +20,14 @@ protected:
 	std::unique_ptr<Player> _player;
 	std::unique_ptr<Menu> _menu;
 	SDL_Renderer* _renderer;
-	SDL_Rect _window_size,_tile_size;
+	Location _window_size,_tile_size;
 	void buildMenu();
 public:
 	const static unsigned int MAIN_MENU = 1;
 	const static unsigned int GAME = 2;
 	const static unsigned int PAUSED = 3;
 	Controller(System* parent, SDL_Renderer* rndr, SDL_Rect wndw):_parent(parent),_game_state(MAIN_MENU),_map(nullptr),_renderer(rndr), _window_size(wndw),_enemy_cap(5),_tower_cap(5){
-		SDL_Rect tmp = {0,0,32,32};
-		_tile_size = tmp;
+		_tile_size = Location(0,0,32,32);
 	}
 	~Controller();
 	void update();

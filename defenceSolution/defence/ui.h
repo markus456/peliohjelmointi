@@ -10,22 +10,22 @@
 #include "Sprite.h"
 class ImageSprite:public Sprite{
 protected:
-	std::vector<SDL_Rect> _frames;
-	std::vector<SDL_Rect>::iterator _frame_iterator;
+	std::vector<Location> _frames;
+	std::vector<Location>::iterator _frame_iterator;
 	bool _loop;
 	unsigned int _columns, _rows,_animation_delay,_delay;
 public:
 	ImageSprite():_loop(false),_columns(0),_rows(0),_animation_delay(0),_delay(0){}
 	virtual void draw(SDL_Renderer* rndr){
 		if(_frame_iterator!=_frames.end()){
-			SDL_RenderCopy(rndr,_texture,&(*_frame_iterator),&_location);
+			SDL_RenderCopy(rndr,_texture,&(*_frame_iterator).toSDL_Rect(),&_location.toSDL_Rect());
 		}
 	}
 	void setSpriteSheetSize(int columns, int rows){
 		_columns = columns;
 		_rows = rows;
 	}
-	void addFrames(std::vector<SDL_Rect> args){
+	void addFrames(std::vector<Location> args){
 		_frames = std::move(args);
 		_frame_iterator = _frames.begin();
 	}
@@ -51,7 +51,7 @@ public:
 class Button:public Sprite{
 public:
 	virtual void draw(SDL_Renderer* rndr){
-		SDL_RenderCopy(rndr,_texture,nullptr,&_location);
+		SDL_RenderCopy(rndr,_texture,nullptr,&_location.toSDL_Rect());
 	}
 	virtual void update(){}
 	virtual void onClick(){}
@@ -71,7 +71,7 @@ class TextButton :public ImageButton{
 protected:
 	std::string _text;
 	int _text_wrap,_text_size;
-	SDL_Rect _text_location;
+	Location _text_location;
 	SDL_Color _color;
 	bool _centered, _center;
 	SDL_Texture* _text_texture;
@@ -118,7 +118,7 @@ public:
 	/*Asettaa TextButton olion tekstin parametrin tekstiksi ja luo SDL_Texture:n*/
 	virtual void setText(std::string s){
 		_text = s;
-		SDL_Rect loc = getLocation();
+		Location loc = getLocation();
 		SDL_Surface* tmp = TTF_RenderText_Blended_Wrapped(font, s.c_str(), _color, _text_wrap);
 		if (loc.w > tmp->w){
 			loc.w = tmp->w;
@@ -137,7 +137,7 @@ public:
 	virtual void setText(std::string s, SDL_Color color){
 		_text = s;
 		_color = color;
-		SDL_Rect loc = getLocation();
+		Location loc = getLocation();
 		SDL_Surface* tmp = TTF_RenderText_Blended_Wrapped(font, s.c_str(), color, _text_wrap);
 		if (loc.w > tmp->w){
 			loc.w = tmp->w;
@@ -179,18 +179,18 @@ public:
 		if (_center&&!_centered){
 			alignText();
 		}
-		SDL_RenderCopy(rndr, _texture, nullptr, &_location);
-		SDL_RenderCopy(rndr, _text_texture, nullptr, &_text_location);
+		SDL_RenderCopy(rndr, _texture, nullptr, &_location.toSDL_Rect());
+		SDL_RenderCopy(rndr, _text_texture, nullptr, &_text_location.toSDL_Rect());
 	}
 	virtual ~TextButton(){
 		SDL_DestroyTexture(_text_texture);
 	}
-	void setLocation(SDL_Point p){
+	void setLocation(Location p){
 		ImageButton::setLocation(p);
 		_text_location.x = p.x;
 		_text_location.y = p.y;
 	}
-	void setSize(SDL_Rect r){
+	void setSize(Location r){
 		if(_location.w<_text_location.w){
 			_location.w = _text_location.w;
 		}
@@ -203,22 +203,19 @@ class Menu :public Button{
 protected:
 	bool _standardize, _resized;
 	std::vector<std::shared_ptr<Button>> _buttons;
-	SDL_Rect largest;
+	Location largest;
 public:
 	Menu():_standardize(false), _resized(false){
-		SDL_Rect l = {0,0,0,0};
-		largest = l;
+		largest = Location(0,0,0,0);
 	}
 	virtual void addButton(Button* b){
 		if (_buttons.size() > 0){
-			SDL_Rect l = _buttons.back()->getLocation();
-			SDL_Point p = { l.x, l.y + l.h };
-			b->setLocation(p);
+			Location l = _buttons.back()->getLocation();
+			l.y += l.h;
+			b->setLocation(l);
 		}
 		else{
-			SDL_Rect l = getLocation();
-			SDL_Point p = { l.x, l.y};
-			b->setLocation(p);
+			b->setLocation(getLocation());
 		}
 		_buttons.push_back(std::shared_ptr<Button>(b));
 		if(!_standardize)return;
@@ -241,7 +238,7 @@ public:
 		return nullptr;
 	}
 	virtual void draw(SDL_Renderer* rndr){
-		SDL_RenderCopy(rndr, _texture, nullptr, &_location);
+		SDL_RenderCopy(rndr, _texture, nullptr, &_location.toSDL_Rect());
 		for (auto& a : _buttons){
 			a->draw(rndr);
 		}
@@ -264,9 +261,8 @@ public:
 		_standardize = b;
 		_resized = false;
 	}
-	void setLocation(SDL_Point p){
-		SDL_Point pt = p;
-		Sprite::setLocation(pt);
+	void setLocation(Location p){
+		Sprite::setLocation(p);
 		for (auto it = _buttons.begin(); it != _buttons.end();it++){
 			(*it)->setLocation(p);
 			p.y += (*it)->getLocation().h;
@@ -274,7 +270,7 @@ public:
 	}
 	virtual void update(){
 		if (!_resized&&_standardize){
-			SDL_Rect center = this->getLocation();
+			Location center = this->getLocation();
 			center.x += center.w/2;
 			center.y += center.h/2;
 			int maxw = 0;
@@ -288,12 +284,11 @@ public:
 					maxh = b->getLocation().h;
 				}
 			}
-			SDL_Rect loc = {0,0,maxw,maxh};
-			SDL_Point npos = {center.x-maxw/2,center.y};
+			Location loc (center.x-maxw/2,center.y,maxw,maxh);
 			for (auto& b : _buttons){
-				b->setLocation(npos);
+				b->setLocation(loc);
 				b->setSize(loc);
-				npos.y += b->getLocation().h;
+				loc.y += b->getLocation().h;
 			}
 			_resized = true;
 		}
