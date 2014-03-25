@@ -1,11 +1,10 @@
 #include "Enemy.h"
 
 
-Enemy::Enemy(void)
+Enemy::Enemy(void):HP(1),ATK(1),speed(1)
 {
 	_location.x=0;
 	_location.y=0;
-	speed=1;
 }
 
 
@@ -13,9 +12,9 @@ Enemy::~Enemy(void)
 {
 }
 
-/*void Enemy::attack()
+void Enemy::attack()
 {
-}*/
+}
 
 void Enemy::draw(SDL_Renderer* rndr)
 {

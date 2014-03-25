@@ -14,6 +14,7 @@ Bullet::Bullet(void) {
 
 
 Bullet::~Bullet(void) {
+
 }
 
 void Bullet::draw(SDL_Renderer* rndr){

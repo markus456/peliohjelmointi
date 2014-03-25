@@ -29,66 +29,15 @@ bool System::init() {
     if (rndr == NULL) {
             cout << "render creation failed." << endl;
     }
-	map = new TileMap();
-	map->setMap("Level1temp.txt");
-	map->setRenderer(rndr);
-	map->addTiles();
-	map->setTexture("terrain.png",rndr);
-	enemyX = 0;
-	enemyY = 0;
-	sprites.push_back(std::shared_ptr<Sprite>(new TestTile()));
-	SDL_Point tmp = {300, 500};
-	SDL_Point tmpTower = {400,10};
-	SDL_Point tmpEnemy = {0,115};
-	sprites.back()->setLocation(tmp);
-	sprites.back()->setTexture("test.png",rndr);
-	t = sprites.back().get();
-	
-	sprites.push_back(std::shared_ptr<Sprite>(new Enemy()));
-	sprites.back()->setLocation(tmpEnemy);
-	sprites.back()->setTexture("test.png",rndr);
-
-	sprites.push_back(std::shared_ptr<Sprite>(new Tower()));
-	sprites.back()->setLocation(tmpTower);
-	sprites.back()->setTexture("tower.png",rndr);
-	SDL_Rect loc = {0,0,64,64};
-	sprites.back()->setSize(loc);
-
-	sprites.push_back(std::shared_ptr<Sprite>(new Bullet()));
-
-	sprites.back()->setTexture("button_background.png",rndr);
-
-	sprites.back()->setTexture("test.bmp",rndr);
-
-	tower = (Tower *)sprites.back().get();
-	tower->setLocation(tmpTower);
-	b = (Bullet *)sprites.back().get();
-	tower->loadProjectile(tmp,0,b);
-
-	loc.w = 32;
-	loc.h = 32;
-	sprites.back()->setSize(loc);
-
-
-	sprites.push_back(std::shared_ptr<Sprite>(new TestTile()));
-	sprites.back()->setLocation(tmp);
-	sprites.back()->setTexture("test.bmp",rndr);
-	uiElements.push_back(std::shared_ptr<Button>(new TextButton<TestTile>("Testinappula", "button_background.png", rndr, (TestTile*)sprites.back().get(), &TestTile::update)));
-	tmp.y += 100;
-	uiElements.back()->setLocation(tmp);
-	uiElements.back()->setTexture("button_background.png", rndr);
-	sprites.push_back(uiElements.back());
+	SDL_Rect wndw = {0,0,SCREEN_WIDTH,SCREEN_HEIGHT};
+	controller = new Controller(this,rndr,wndw);
+	controller->initGame();
 	mousedown = false;
 	return true;
 }
 
 void System::exit() {
-	sprites.clear();
-	IMG_Quit();
-	SDL_DestroyTexture(texture);
-	SDL_DestroyRenderer(rndr);
-	SDL_DestroyWindow(wnd);
-	SDL_Quit();
+	running = false;
 }
 
 void System::enterMainLoop() {
@@ -108,7 +57,7 @@ void System::enterMainLoop() {
 				mouseButtonDown(event.button.button, event.motion.x, event.motion.y);
 				break;
 			case SDL_MOUSEBUTTONUP:
-				
+				mouseButtonUp(event.button.button, event.motion.x, event.motion.y);
 				break;
 			case SDL_MOUSEMOTION:
 				mouseMove(event.motion.x, event.motion.y);
@@ -131,9 +80,32 @@ void System::enterMainLoop() {
 			SDL_Delay(1000.f/FRAMERATE-(frame_end-frame_start));
 		}
 	}
+	delete controller;
+	SDL_DestroyTexture(texture);
+	SDL_DestroyRenderer(rndr);
+	SDL_DestroyWindow(wnd);
+	TTF_Quit();
+	IMG_Quit();
+	SDL_Quit();
 }
 
 void System::eventKeyDown(SDL_Keycode sym) {
+	SDL_Keymod modstate;
+	switch (sym){
+	case SDLK_F4:
+			if (SDL_GetModState() == KMOD_LALT){
+				running = false;
+			}
+		break;
+	case SDLK_F1:
+		if(controller->getGameState()!=Controller::PAUSED){
+			controller->setGameState(Controller::PAUSED);
+		}else{
+			controller->setGameState(Controller::GAME);
+		}
+		controller->initGame();
+		break;
+	}
 }
 
 void System::eventKeyUp(SDL_Keycode sym) {
@@ -141,54 +113,21 @@ void System::eventKeyUp(SDL_Keycode sym) {
 
 void System::mouseButtonDown(Uint8 button, Sint32 x, Sint32 y) {
 	mousedown = true;
+
 }
 
 void System::mouseButtonUp(Uint8 button, Sint32 x, Sint32 y) {
-	for (auto& a : uiElements){
-		if (a->isInside(x, y)){
-			a->onClick();
-			break;
-		}
-	}
+	controller->onClick(x,y);
 	mousedown = false;
 }
 
 void System::mouseMove(Sint32 x, Sint32 y) {
-		for(auto& a: sprites){
-			if(a->isInside(x,y)&&mousedown){
-				//Toiminnallisuus puuttuu
-			}
-		}
+		
 }
 
 void System::draw() {
-	map->drawMap();
-	for(auto& a: sprites){
-		a->draw(rndr);
-	}
+	controller->draw();
 }
 void System::update(){
-	if(mousedown){
-		SDL_Rect loc = {0,0,32,32};
-	SDL_Point tmpTower = {400,10};
-	SDL_Point tmp = {300, 500};
-	//tower->setLocation(tmpTower);
-				tmp.x = event.button.x;
-				tmp.y = event.button.y;
-				sprites.push_back(std::shared_ptr<Sprite>(new Bullet()));
-				
-				b = (Bullet *)sprites.back().get();
-				b->setTexture("button_background.png",rndr);
-				tower->loadProjectile(tmp,5,b);
-				tower->shoot();
-				mouseButtonUp(event.button.button, event.motion.x, event.motion.y);
-	}
-	if (b->collideTest(*t)) {
-		cout << "osuu " << b->getLocation().x << " " << b->getLocation().y << endl;
-		SDL_Point tmppoint;
-		b->setSpeed(0);
-	}
-	for(auto& a: sprites){
-		a->update();
-	}
+	controller->update();
 }

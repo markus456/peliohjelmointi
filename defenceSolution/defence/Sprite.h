@@ -11,14 +11,14 @@ protected:
 public:
 	virtual void draw(SDL_Renderer*) = 0;
 	virtual void update() = 0;
-	void setLocation(SDL_Point point){
+	virtual void setLocation(SDL_Point point){
 		_location.x = point.x;
 		_location.y = point.y;
 	}
 	SDL_Rect getLocation()const{
 		return _location;
 	}
-	void setSize(SDL_Rect rect){
+	virtual void setSize(SDL_Rect rect){
 		_location.w = rect.w;
 		_location.h = rect.h;
 	}
