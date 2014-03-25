@@ -31,45 +31,13 @@ bool System::init() {
     }
 	SDL_Rect wndw = {0,0,SCREEN_WIDTH,SCREEN_HEIGHT};
 	controller = new Controller(this,rndr,wndw);
-	map = new TileMap();
-	map->setMap("Level1temp.txt");
-	map->setRenderer(rndr);
-	map->addTiles();
-	map->setTexture("terrain.png",rndr);
-	enemyX = 0;
-	enemyY = 0;
-	SDL_Point tmp = {300, 500};
-	SDL_Point tmpTower = {400,10};
-	Tower* twr = new Tower();
-	twr->setLocation(tmpTower);
-	twr->setTexture("tower.png",rndr);
-	SDL_Rect loc = {0,0,64,64};
-	twr->setSize(loc);
-
-	Bullet* blt = new Bullet();
-	blt->setTexture("button_background.png",rndr);
-	twr->loadProjectile(tmp,0,blt);
-	loc.w = 32;
-	loc.h = 32;
-	blt->setSize(loc);	
-	controller->add(map);
-	controller->add(twr);
-	//controller->add(blt);
 	controller->initGame();
 	mousedown = false;
 	return true;
 }
 
 void System::exit() {
-	sprites.clear();
-	uiElements.clear();
-	delete controller;
-	SDL_DestroyTexture(texture);
-	SDL_DestroyRenderer(rndr);
-	SDL_DestroyWindow(wnd);
-	TTF_Quit();
-	IMG_Quit();
-	SDL_Quit();
+	running = false;
 }
 
 void System::enterMainLoop() {
@@ -89,7 +57,7 @@ void System::enterMainLoop() {
 				mouseButtonDown(event.button.button, event.motion.x, event.motion.y);
 				break;
 			case SDL_MOUSEBUTTONUP:
-				
+				mouseButtonUp(event.button.button, event.motion.x, event.motion.y);
 				break;
 			case SDL_MOUSEMOTION:
 				mouseMove(event.motion.x, event.motion.y);
@@ -112,6 +80,13 @@ void System::enterMainLoop() {
 			SDL_Delay(1000.f/FRAMERATE-(frame_end-frame_start));
 		}
 	}
+	delete controller;
+	SDL_DestroyTexture(texture);
+	SDL_DestroyRenderer(rndr);
+	SDL_DestroyWindow(wnd);
+	TTF_Quit();
+	IMG_Quit();
+	SDL_Quit();
 }
 
 void System::eventKeyDown(SDL_Keycode sym) {
@@ -122,6 +97,14 @@ void System::eventKeyDown(SDL_Keycode sym) {
 				running = false;
 			}
 		break;
+	case SDLK_F1:
+		if(controller->getGameState()!=Controller::PAUSED){
+			controller->setGameState(Controller::PAUSED);
+		}else{
+			controller->setGameState(Controller::GAME);
+		}
+		controller->initGame();
+		break;
 	}
 }
 
@@ -130,7 +113,7 @@ void System::eventKeyUp(SDL_Keycode sym) {
 
 void System::mouseButtonDown(Uint8 button, Sint32 x, Sint32 y) {
 	mousedown = true;
-	controller->onClick(x,y);
+
 }
 
 void System::mouseButtonUp(Uint8 button, Sint32 x, Sint32 y) {

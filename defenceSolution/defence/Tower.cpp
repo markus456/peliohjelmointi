@@ -13,7 +13,6 @@ Tower::Tower(int tX, int tY){
 }
 
 Tower::~Tower(){
-	delete loadedProjectile;
 }
 
 /*

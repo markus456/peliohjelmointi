@@ -86,7 +86,7 @@ public:
 	/**
 	*Luo TextButton olion, jolla on teksti.
 	*/
-	TextButton(std::string string,std::string texture, SDL_Renderer* rndr) : _text(string), _text_wrap(20),
+	TextButton(std::string string,std::string texture, SDL_Renderer* rndr) : _text(string), _text_wrap(150),
 		_text_size(20), _centered(false), _center(false), renderer(rndr), ImageButton(nullptr){
 			_color.r = 255;
 			_color.g = 255;
@@ -102,7 +102,7 @@ public:
 	/**
 	*Luo TextButton olion, jolla on teksti ja funktio, jota se kutsuu onClick() metodissa.
 	*/
-	TextButton(std::string string,std::string texture, SDL_Renderer* rndr, std::function<void ()> fnc ): _text(string), _text_wrap(20),
+	TextButton(std::string string,std::string texture, SDL_Renderer* rndr, std::function<void ()> fnc ): _text(string), _text_wrap(150),
 		_text_size(20), _centered(false), _center(false), renderer(rndr), ImageButton(fnc){
 			_color.r = 255;
 			_color.g = 255;
@@ -183,7 +183,7 @@ public:
 		SDL_RenderCopy(rndr, _text_texture, nullptr, &_text_location);
 	}
 	virtual ~TextButton(){
-
+		SDL_DestroyTexture(_text_texture);
 	}
 	void setLocation(SDL_Point p){
 		ImageButton::setLocation(p);
@@ -203,8 +203,12 @@ class Menu :public Button{
 protected:
 	bool _standardize, _resized;
 	std::vector<std::shared_ptr<Button>> _buttons;
+	SDL_Rect largest;
 public:
-	Menu():_standardize(false), _resized(false){}
+	Menu():_standardize(false), _resized(false){
+		SDL_Rect l = {0,0,0,0};
+		largest = l;
+	}
 	virtual void addButton(Button* b){
 		if (_buttons.size() > 0){
 			SDL_Rect l = _buttons.back()->getLocation();
@@ -217,15 +221,18 @@ public:
 			b->setLocation(p);
 		}
 		_buttons.push_back(std::shared_ptr<Button>(b));
-		SDL_Rect newsize = {0,0,0,0};
+		if(!_standardize)return;
 		for(auto& a:_buttons){
-			if(a->getLocation().w>newsize.w){
-				newsize.w = a->getLocation().w;
+			if(a->getLocation().w>largest.w){
+				largest.w = a->getLocation().w;
 			}
-			newsize.h += a->getLocation().h;
+			if(a->getLocation().h>largest.h){
+				largest.h = a->getLocation().h;
+			}
 		}
-		//setSize(newsize);
-
+		for(auto& a:_buttons){
+			a->setSize(largest);
+		}
 	}
 	virtual Button* getButton(unsigned int i){
 		if (i < _buttons.size()){
@@ -267,9 +274,13 @@ public:
 	}
 	virtual void update(){
 		if (!_resized&&_standardize){
+			SDL_Rect center = this->getLocation();
+			center.x += center.w/2;
+			center.y += center.h/2;
 			int maxw = 0;
 			int maxh = 0;
 			for (auto& b : _buttons){
+				center.y -= b->getLocation().h/2;
 				if (b->getLocation().w > maxw){
 					maxw = b->getLocation().w;
 				}
@@ -278,8 +289,11 @@ public:
 				}
 			}
 			SDL_Rect loc = {0,0,maxw,maxh};
+			SDL_Point npos = {center.x-maxw/2,center.y};
 			for (auto& b : _buttons){
+				b->setLocation(npos);
 				b->setSize(loc);
+				npos.y += b->getLocation().h;
 			}
 			_resized = true;
 		}
