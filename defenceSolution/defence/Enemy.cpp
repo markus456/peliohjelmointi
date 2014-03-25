@@ -36,16 +36,16 @@ void Enemy::update()
 {
 	if(!polku.empty()){
 		if(_location.x<polku.front().x && _location.x!=polku.front().x){
-			_location.x++;
+			_location.x+=speed;
 		}
 		else if(_location.x>polku.front().x && _location.x!=polku.front().x){
-			_location.x--;
+			_location.x-=speed;
 		}
 		if(_location.y<polku.front().y && _location.y!=polku.front().y){
-			_location.y++;
+			_location.y+=speed;
 		}
 		else if(_location.y>polku.front().y && _location.x!=polku.front().y){
-			_location.y--;
+			_location.y-=speed;
 		}
 		if(_location.x==polku.front().x && _location.y==polku.front().y){
 			if(!polku.empty()){
