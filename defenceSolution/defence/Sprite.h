@@ -4,6 +4,17 @@
 #include "include\SDL_image.h"
 #include <iostream>
 #include <string>
+class Location{
+public:
+	double x,y,w,h;
+	Location():x(0),y(0),w(0),h(0){}
+	Location(double x_, double y_):x(x_),y(y_),w(0),h(0){}
+	Location(double x_, double y_,double w_, double h_):x(x_),y(y_),w(w_),h(h_){}
+	SDL_Rect toSDL_Rect(){
+		SDL_Rect tmp = {x,y,w,h};
+		return tmp;
+	}
+};
 class Sprite{
 protected:
 	SDL_Texture* _texture;
