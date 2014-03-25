@@ -29,14 +29,11 @@ bool System::init() {
     if (rndr == NULL) {
             cout << "render creation failed." << endl;
     }
-<<<<<<< HEAD
 	map = new TileMap();
 	map->setMap("Level1temp.txt");
 	map->setRenderer(rndr);
 	map->addTiles();
 	map->setTexture("terrain.png",rndr);
-=======
->>>>>>> 60f67e2111e285630583a45c4af913676404097e
 	enemyX = 0;
 	enemyY = 0;
 	sprites.push_back(std::shared_ptr<Sprite>(new TestTile()));
@@ -51,23 +48,20 @@ bool System::init() {
 	sprites.back()->setTexture("tower.png",rndr);
 	SDL_Rect loc = {0,0,64,64};
 	sprites.back()->setSize(loc);
-
-	sprites.push_back(std::shared_ptr<Sprite>(new Bullet()));
-<<<<<<< HEAD
 	sprites.back()->setTexture("button_background.png",rndr);
-=======
 	sprites.back()->setTexture("test.bmp",rndr);
->>>>>>> 60f67e2111e285630583a45c4af913676404097e
 	tower = (Tower *)sprites.back().get();
 	tower->setLocation(tmpTower);
+	tower->setTowerRange(300);
+	tower->setTowerProjSpeed(4);
+
+	sprites.push_back(std::shared_ptr<Sprite>(new Bullet()));
+	
 	b = (Bullet *)sprites.back().get();
 	tower->loadProjectile(tmp,0,b);
-<<<<<<< HEAD
 	loc.w = 32;
 	loc.h = 32;
 	sprites.back()->setSize(loc);
-=======
->>>>>>> 60f67e2111e285630583a45c4af913676404097e
 
 	sprites.push_back(std::shared_ptr<Sprite>(new TestTile()));
 	sprites.back()->setLocation(tmp);
@@ -169,25 +163,39 @@ void System::draw() {
 void System::update(){
 	if(mousedown){
 		SDL_Rect loc = {0,0,32,32};
-	SDL_Point tmpTower = {400,10};
-	SDL_Point tmp = {300, 500};
-	//tower->setLocation(tmpTower);
-				tmp.x = event.button.x;
-				tmp.y = event.button.y;
-				sprites.push_back(std::shared_ptr<Sprite>(new Bullet()));
-				
-				b = (Bullet *)sprites.back().get();
-				b->setTexture("button_background.png",rndr);
-				tower->loadProjectile(tmp,5,b);
-				tower->shoot();
-				mouseButtonUp(event.button.button, event.motion.x, event.motion.y);
+		SDL_Point tmpTower;
+		//tower->setLocation(tmpTower);
+		tmpTower.x = event.button.x;
+		tmpTower.y = event.button.y;
+		sprites.push_back(std::shared_ptr<Sprite>(new Bullet()));
+		b = (Bullet *)sprites.back().get();
+		b->setTexture("button_background.png",rndr);
+		tower->loadProjectile(tmpTower,5,b);
+		tower->shoot();
+		/*
+			SDL_Rect loc2 = {0,0,64,64};
+
+			sprites.push_back(std::shared_ptr<Sprite>(new Tower()));
+			sprites.back()->setLocation(tmpTower);
+			sprites.back()->setTexture("tower.png",rndr);
+			
+			sprites.back()->setSize(loc2);
+			tower = (Tower *)sprites.back().get();
+			tower->setLocation(tmpTower);
+			tower->setTowerRange(300);
+			tower->setTowerProjSpeed(4);
+			*/
+		mouseButtonUp(event.button.button, event.motion.x, event.motion.y);
 	}
-	if (b->collideTest(*t)) {
-		cout << "osuu " << b->getLocation().x << " " << b->getLocation().y << endl;
-		SDL_Point tmppoint;
-		b->setSpeed(0);
-	}
+
 	for(auto& a: sprites){
 		a->update();
+
+		if(typeid(*a).name()==typeid(*b).name()){
+			if (a->collideTest(*t)) {
+				cout << "osuu " << a->getLocation().x << " " << a->getLocation().y << endl;
+				((Bullet *)a.get())->setSpeed(0);
+			}
+		}
 	}
 }
