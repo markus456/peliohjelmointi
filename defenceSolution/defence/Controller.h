@@ -7,10 +7,11 @@ class System;
 #include "ui.h"
 class Controller{
 protected:
-	std::vector<std::shared_ptr<Sprite>> _render_targets_game;
-	std::vector<std::shared_ptr<Sprite>> _render_targets_others;
-	std::vector<std::shared_ptr<Sprite>> _update_targets;
-	std::vector<std::shared_ptr<Button>> _ui_targets;
+	std::vector<std::shared_ptr<Enemy>> _enemies;
+	std::vector<std::shared_ptr<Tower>> _towers;
+	std::vector<std::shared_ptr<Bullet>> _bullets;
+	std::vector<std::shared_ptr<ImageSprite>> _effects;
+	std::vector<std::shared_ptr<Button>> _buttons;
 	System* _parent;
 	unsigned int _game_state, _enemy_cap,_tower_cap;
 	std::unique_ptr<TileMap> _map;

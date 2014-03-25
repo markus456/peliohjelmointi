@@ -1,16 +1,31 @@
 #include "Controller.h"
 Controller::~Controller(){
-	_render_targets_game.clear();
-	_render_targets_others.clear();
-	_update_targets.clear();
-	_ui_targets.clear();
+	_enemies.clear();
+	_towers.clear();
+	_bullets.clear();
+	_buttons.clear();
 }
 void Controller::update(){
 	_menu->update();
 	if(_game_state!=Controller::GAME)return;
-	for(auto& a:_update_targets){
+	for(auto& a:_enemies){
 		a->update();
 	}
+	for(auto& a:_towers){
+		a->update();
+	}
+	for(auto& a:_bullets){
+		a->update();
+	}
+	for(auto& a:_towers){
+		if(a->needsBullet()){
+			std::shared_ptr<Bullet> bullet(new Bullet);
+			bullet->setTexture("bullet.png",_renderer);
+			a->loadProjectile(bullet);
+			_bullets.push_back(bullet);
+		}		
+	}
+	
 }
 void Controller::draw(){
 	switch(_game_state){
@@ -18,12 +33,18 @@ void Controller::draw(){
 		if(_map.get() != nullptr){
 			_map->drawMap();
 		}
-		for(const auto& a:_render_targets_game){
+		for(const auto& a:_enemies){
+			a->draw(_renderer);
+		}
+		for(const auto& a:_towers){
+			a->draw(_renderer);
+		}
+		for(const auto& a:_bullets){
 			a->draw(_renderer);
 		}
 		break;
 	case Controller::MAIN_MENU:
-		for(const auto& a:_render_targets_others){
+		for(const auto& a:_effects){
 			a->draw(_renderer);
 		}
 		if(_menu.get() != nullptr){
@@ -31,7 +52,7 @@ void Controller::draw(){
 		}
 		break;
 	case Controller::PAUSED:
-		for(const auto& a:_render_targets_others){
+		for(const auto& a:_effects){
 			a->draw(_renderer);
 		}
 		if(_menu.get() != nullptr){
@@ -41,40 +62,36 @@ void Controller::draw(){
 	}
 }
 void Controller::onClick(int x,int y){
-	
-	for(const auto& a:_ui_targets){
+	if(_game_state==Controller::MAIN_MENU||_game_state==Controller::PAUSED){
+	for(const auto& a:_buttons){
 		if(a->isInside(x,y)){
 			a->onClick(x,y);
 			return;
 		}
 	}
 	_menu->onClick(x,y);
+	}else if(_game_state==Controller::GAME){
+		_towers.push_back(std::shared_ptr<Tower>(new Tower(x,y,200,10)));		
+		_towers.back()->setTexture("tower1.png",_renderer);
+		_towers.back()->addEnemies(_enemies);
+	}
 }
 
 void Controller::add(Button* b){
 	std::shared_ptr<Button>shptr(b);
-	_ui_targets.push_back(shptr);
-	_render_targets_others.push_back(shptr);
+	_buttons.push_back(shptr);
 }
 void Controller::add(ImageSprite* b){
-	std::shared_ptr<Sprite>shptr(b);
-	_update_targets.push_back(shptr);
-	_render_targets_others.push_back(shptr);
+	_effects.push_back(std::shared_ptr<ImageSprite>(b));
 }
 void Controller::add(Bullet* b){
-	std::shared_ptr<Sprite>shptr(b);
-	_render_targets_game.push_back(shptr);
-	_update_targets.push_back(shptr);
+	_bullets.push_back(std::shared_ptr<Bullet>(b));
 }
 void Controller::add(Enemy* b){
-	std::shared_ptr<Sprite>shptr(b);
-	_render_targets_game.push_back(shptr);
-	_update_targets.push_back(shptr);
+	_enemies.push_back(std::shared_ptr<Enemy>(b));
 }
 void Controller::add(Tower* b){
-	std::shared_ptr<Sprite>shptr(b);
-	_render_targets_game.push_back(shptr);
-	_update_targets.push_back(shptr);
+	_towers.push_back(std::shared_ptr<Tower>(b));
 }
 void Controller::add(TileMap* b){
 	_map = std::unique_ptr<TileMap>(b);
@@ -182,21 +199,20 @@ void Controller::initGame(){
 		_map->setRenderer(_renderer);
 		_map->setTexture("terrain.png",_renderer);
 		for(int i = 0;i<_enemy_cap;i++){
-			SDL_Point epos = {System::SCREEN_WIDTH/10,System::SCREEN_HEIGHT/4};
-			_update_targets.push_back(std::shared_ptr<Sprite>(new Enemy));
+			SDL_Point epos = {System::SCREEN_WIDTH/10 + (rand() % 100),System::SCREEN_HEIGHT/4};
+			_enemies.push_back(std::shared_ptr<Enemy>(new Enemy));
 			switch(rand() % 3){
 			case 0:
-				_update_targets.back()->setTexture("enemy1.png",_renderer);
+				_enemies.back()->setTexture("enemy1.png",_renderer);
 				break;
 			case 1:
-				_update_targets.back()->setTexture("enemy2.png",_renderer);
+				_enemies.back()->setTexture("enemy2.png",_renderer);
 				break;
 			case 2:
-				_update_targets.back()->setTexture("enemy3.png",_renderer);
+				_enemies.back()->setTexture("enemy3.png",_renderer);
 				break;
 			}
-			_update_targets.back()->setLocation(epos);
-			_render_targets_game.push_back(_update_targets.back());
+			_enemies.back()->setLocation(epos);
 		}
 	
 	}else if(_game_state==Controller::MAIN_MENU||_game_state==Controller::PAUSED){
