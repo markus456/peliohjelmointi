@@ -14,18 +14,26 @@ void Controller::update(){
 	for(auto& a:_towers){
 		a->update();
 	}
-	for(auto& a:_bullets){
-		a->update();
+	auto a = _bullets.begin();
+	while(a!=_bullets.end()){
+		(*a)->update();
+		SDL_Rect tmp =  (*a)->getLocation();
+		if(tmp.x>System::SCREEN_WIDTH+100||tmp.x<-100||tmp.y<-100||tmp.y>System::SCREEN_HEIGHT+100){
+			a = _bullets.erase(a);
+		}else{
+			a++;
+		}
 	}
 	for(auto& a:_towers){
 		if(a->needsBullet()){
 			std::shared_ptr<Bullet> bullet(new Bullet);
 			bullet->setTexture("bullet.png",_renderer);
+			bullet->setSize(_tile_size);
 			a->loadProjectile(bullet);
 			_bullets.push_back(bullet);
 		}		
 	}
-	
+	_player->update();
 }
 void Controller::draw(){
 	switch(_game_state){
@@ -42,6 +50,7 @@ void Controller::draw(){
 		for(const auto& a:_bullets){
 			a->draw(_renderer);
 		}
+		_player->draw(_renderer);
 		break;
 	case Controller::MAIN_MENU:
 		for(const auto& a:_effects){
@@ -198,6 +207,10 @@ void Controller::initGame(){
 		_map->addTiles();
 		_map->setRenderer(_renderer);
 		_map->setTexture("terrain.png",_renderer);
+		_player = std::unique_ptr<Player>(new Player());
+		_player->setTexture("player.png",_renderer);
+		SDL_Point ppos = {9*System::SCREEN_WIDTH/10,System::SCREEN_HEIGHT/4};
+		_player->setLocation(ppos);
 		for(int i = 0;i<_enemy_cap;i++){
 			SDL_Point epos = {System::SCREEN_WIDTH/10 + (rand() % 100),System::SCREEN_HEIGHT/4};
 			_enemies.push_back(std::shared_ptr<Enemy>(new Enemy));
