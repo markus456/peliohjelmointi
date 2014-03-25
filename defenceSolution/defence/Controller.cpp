@@ -182,7 +182,7 @@ void Controller::initGame(){
 		_map->setRenderer(_renderer);
 		_map->setTexture("terrain.png",_renderer);
 		for(int i = 0;i<_enemy_cap;i++){
-			SDL_Point epos = {System::SCREEN_WIDTH/10,System::SCREEN_HEIGHT/4};
+			SDL_Point epos = {System::SCREEN_WIDTH/10,System::SCREEN_HEIGHT/6};
 			_update_targets.push_back(std::shared_ptr<Sprite>(new Enemy));
 			switch(rand() % 3){
 			case 0:

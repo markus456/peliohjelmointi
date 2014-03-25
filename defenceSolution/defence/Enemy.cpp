@@ -1,10 +1,11 @@
 #include "Enemy.h"
 
 
-Enemy::Enemy(void):HP(1),ATK(1),speed(1)
+Enemy::Enemy(void):HP(1),ATK(1),speed(1),angle(1)
 {
 	_location.x=0;
 	_location.y=0;
+	teePolku();
 }
 
 
@@ -16,6 +17,15 @@ void Enemy::attack()
 {
 }
 
+void Enemy::teePolku(){
+	std::ifstream read("polku.txt");
+	while(read>>n>>m){
+		tmp.x=n;
+		tmp.y=m;
+		polku.push_back(tmp);
+	}
+}
+
 void Enemy::draw(SDL_Renderer* rndr)
 {
 	SDL_Point p = {_location.w / 2, _location.h / 2};
@@ -24,16 +34,23 @@ void Enemy::draw(SDL_Renderer* rndr)
 
 void Enemy::update()
 {
-	if(_location.x<=180){
-		_location.x+=speed;
-	}
-	else if(_location.y<=215){
-		_location.y+=speed;
-	}
-	else if(_location.x<=660){
-		_location.x+=speed;
-	}
-	else if(_location.y<=500){
-		_location.y+=speed;
+	if(!polku.empty()){
+		if(_location.x<polku.front().x && _location.x!=polku.front().x){
+			_location.x++;
+		}
+		else if(_location.x>polku.front().x && _location.x!=polku.front().x){
+			_location.x--;
+		}
+		if(_location.y<polku.front().y && _location.y!=polku.front().y){
+			_location.y++;
+		}
+		else if(_location.y>polku.front().y && _location.x!=polku.front().y){
+			_location.y--;
+		}
+		if(_location.x==polku.front().x && _location.y==polku.front().y){
+			if(!polku.empty()){
+				polku.pop_front();
+			}
+		}
 	}
 }
