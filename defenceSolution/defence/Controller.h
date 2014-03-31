@@ -2,8 +2,10 @@
 #define CONTROLLER_HEADER_GUARD
 #include <vector>
 #include <memory>
+#include <sstream>
 class System;
 #include "System.h"
+#include "GameParameters.h"
 #include "ui.h"
 #include "Player.h"
 #include "Sprite.h"
@@ -13,15 +15,18 @@ protected:
 	std::vector<std::shared_ptr<Tower>> _towers;
 	std::vector<std::shared_ptr<Bullet>> _bullets;
 	std::vector<std::shared_ptr<ImageSprite>> _effects;
+	std::vector<std::shared_ptr<ImageSprite>> _floating_text;
 	std::vector<std::shared_ptr<Button>> _buttons;
 	System* _parent;
-	unsigned int _game_state, _enemy_cap,_tower_cap;
+	std::unique_ptr<GameParams> _params;
+	unsigned int _game_state,_enemies_got_through;
 	std::unique_ptr<TileMap> _map;
 	std::unique_ptr<Player> _player;
 	std::unique_ptr<Menu> _menu;
 	SDL_Renderer* _renderer;
 	Location _window_size,_tile_size;
 	void buildMenu();
+	void buildEnemies();
 public:
 	const static unsigned int MAIN_MENU = 1;
 	const static unsigned int GAME_ACTIVE = 2;
@@ -29,8 +34,11 @@ public:
 	const static unsigned int GAME_NEW = 32;
 	const static unsigned int GAME_OVER = 64;
 	const static unsigned int PAUSED = 128;
-	Controller(System* parent, SDL_Renderer* rndr, SDL_Rect wndw):_parent(parent),_game_state(MAIN_MENU),_map(nullptr),_renderer(rndr), _window_size(wndw),_enemy_cap(5),_tower_cap(5){
+	Controller(System* parent, SDL_Renderer* rndr, SDL_Rect wndw):_parent(parent),_game_state(MAIN_MENU),_map(nullptr),
+		_renderer(rndr), _window_size(wndw),_enemies_got_through(0)
+	{
 		_tile_size = Location(0,0,32,32);
+		_params = std::unique_ptr<GameParams>(new GameParams(GameParams::EASY));
 	}
 	~Controller();
 	void update();

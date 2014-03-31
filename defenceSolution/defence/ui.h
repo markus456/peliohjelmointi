@@ -8,6 +8,9 @@
 #include "include\SDL.h"
 #include "include\SDL_ttf.h"
 #include "Sprite.h"
+/*
+*Animoitu sprite.
+*/
 class ImageSprite:public Sprite{
 protected:
 	std::vector<Location> _frames;
@@ -19,6 +22,8 @@ public:
 	virtual void draw(SDL_Renderer* rndr){
 		if(_frame_iterator!=_frames.end()){
 			SDL_RenderCopy(rndr,_texture,&(*_frame_iterator).toSDL_Rect(),&_location.toSDL_Rect());
+		}else if(_frames.size()==0){
+			SDL_RenderCopy(rndr,_texture,nullptr,&_location.toSDL_Rect());
 		}
 	}
 	void setSpriteSheetSize(int columns, int rows){
@@ -48,14 +53,55 @@ public:
 		}
 	}
 };
+/*
+*Animoitu sprite päällä olevalla tekstillä
+*/
+class TextSprite:public ImageSprite{
+protected:
+	std::string _text;
+	SDL_Texture* _text_texture;
+	Location _text_location;
+	bool _tex_created,_transparent;
+	void genTextTex(SDL_Renderer* rndr){
+		TTF_Font* font = TTF_OpenFont("revalia.ttf", 20);
+		SDL_Color color = {255,255,255};
+		SDL_Surface* tmp = TTF_RenderText_Blended_Wrapped(font, _text.c_str(), color, _text.size()*20);
+		_text_location.w = tmp->w;
+		_text_location.h = tmp->h;
+		if(_transparent){
+			_location.w = tmp->w;
+			_location.h = tmp->h;
+		}
+		_text_texture = SDL_CreateTextureFromSurface(rndr, tmp);
+		SDL_FreeSurface(tmp);
+		TTF_CloseFont(font);
+	}
+public:
+	TextSprite(std::string text = "",bool transparent = true):_text(text),_tex_created(false),_transparent(transparent){
+	_location.w = text.size()*20;
+	}
+	virtual void draw(SDL_Renderer* rndr){
+		if(!_tex_created){
+			genTextTex(rndr);
+			_tex_created = true;
+		}
+		SDL_RenderCopy(rndr,_text_texture,nullptr,&_text_location.toSDL_Rect());
+		if(!_transparent){
+			ImageSprite::draw(rndr);
+		}
+	}
+	virtual void setLocation(Location l){
+		_text_location = l;
+		ImageSprite::setLocation(l);
+	}
+};
 class Button:public Sprite{
 public:
 	virtual void draw(SDL_Renderer* rndr){
 		SDL_RenderCopy(rndr,_texture,nullptr,&_location.toSDL_Rect());
 	}
 	virtual void update(){}
-	virtual void onClick(){}
-	virtual void onClick(int x, int y){}
+	virtual void onClick(int x = 0, int y = 0){}
 };
 
 class ImageButton :public Button{
@@ -63,7 +109,7 @@ protected:
 	std::function<void ()> _fnc;
 public:
 	ImageButton(std::function<void()> fnc):_fnc(fnc){}
-	virtual void onClick(){ if(_fnc!=nullptr)_fnc(); }
+	virtual void onClick(int,int){ if(_fnc!=nullptr)_fnc(); }
 	virtual void setCallback(std::function<void ()> f){_fnc = f;}
 };
 

@@ -28,7 +28,7 @@ public:
 	void placeAt(Location location);
 	void setTowerRange(double range);
 	void setTowerProjSpeed(double towerProjSpeed);
-	void scanAndShoot(std::vector<std::shared_ptr<Enemy>> spriteList);
+	//void scanAndShoot(std::vector<std::shared_ptr<Enemy>> spriteList);
 	bool needsBullet();
 	double getTargetDistance(Location enemyLocation);
 	virtual void draw(SDL_Renderer* rndr);

@@ -35,25 +35,49 @@ void Enemy::draw(SDL_Renderer* rndr)
 void Enemy::update()
 {
 	if(!polku.empty()){
-		if(_location.x<polku.front().x && _location.x!=polku.front().x){
-			_location.x+=speed;
-		}
-		else if(_location.x>polku.front().x && _location.x!=polku.front().x){
-			_location.x-=speed;
-		}
-		if(_location.y<polku.front().y && _location.y!=polku.front().y){
-			_location.y+=speed;
-		}
-		else if(_location.y>polku.front().y && _location.x!=polku.front().y){
-			_location.y-=speed;
-		}
-		if(_location.x==polku.front().x && _location.y==polku.front().y){
+		if(distance(_location,polku.front())<speed*2){
 			if(!polku.empty()){
 				polku.pop_front();
 			}
+		}else if(_location.x<polku.front().x){
+			_location.x+=speed;
 		}
+		else if(_location.x>polku.front().x){
+			_location.x-=speed;
+		}
+		if(_location.y<polku.front().y){
+			_location.y+=speed;
+		}
+		else if(_location.y>polku.front().y){
+			_location.y-=speed;
+		}
+		
 	}
 }
 bool Enemy::isEmpty(){
 	return polku.empty();
+}
+void Enemy::setSpeed(int i){
+	speed = i;
+}
+int Enemy::getSpeed(){
+	return speed;
+}
+void Enemy::setAttack(int i){
+	ATK = i;
+}
+int Enemy::getAttack(){
+	return ATK;
+}
+void Enemy::setHP(int i){
+	HP = i;
+}
+int Enemy::getHP(){
+	return HP;
+}
+float Enemy::distance(float x1,float y1,float x2,float y2){
+	return sqrt(pow(x2-x1,2)+pow(y2-y1,2));
+}
+float Enemy::distance(Location a,Location b){
+	return sqrt(pow(b.x-a.x,2)+pow(b.y-a.y,2));
 }

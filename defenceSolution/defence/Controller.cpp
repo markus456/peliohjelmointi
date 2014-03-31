@@ -10,12 +10,28 @@ void Controller::update(){
 	for(auto& a:_effects){
 		a->update();
 	}
+	
 	if(_game_state&(Controller::GAME_ACTIVE|Controller::GAME_WAIT)&&!(_game_state&Controller::PAUSED)){
-		for(auto& a:_enemies){
-			a->update();
-			if(a->isEmpty()){
-				setGameState(Controller::GAME_OVER);
-				buildMenu();
+		if(_enemies_got_through>=_params->enemiesAllowedThrough()){
+		_enemies_got_through = 0;
+		setGameState(Controller::GAME_OVER);
+		buildMenu();
+		}else if(_enemies.size()==0){
+			buildEnemies();
+		}
+		auto e_iterator =_enemies.begin();
+		while(e_iterator<_enemies.end()){
+			(*e_iterator)->update();
+			if((*e_iterator)->isEmpty()){
+				e_iterator = _enemies.erase(e_iterator);
+				_enemies_got_through++;
+				_floating_text.clear();
+				std::stringstream ss;
+				ss << "Castle walls will hold " << _params->enemiesAllowedThrough()-_enemies_got_through << " more enemies!";
+				_floating_text.push_back(std::shared_ptr<ImageSprite>(new TextSprite(ss.str(),true)));
+				_floating_text.back()->setLocation(Location(System::SCREEN_WIDTH/2-_floating_text.back()->getLocation().w/4,System::SCREEN_HEIGHT/10));
+			}else{
+				e_iterator++;
 			}
 		}
 		for(auto& a:_towers){
@@ -68,6 +84,9 @@ void Controller::draw(){
 			a->draw(_renderer);
 		}
 		_player->draw(_renderer);
+		for(const auto& a:_floating_text){
+			a->draw(_renderer);
+		}
 		if(_game_state&Controller::PAUSED){
 			if(_menu.get() != nullptr){
 				_menu->draw(_renderer);
@@ -86,9 +105,11 @@ void Controller::onClick(int x,int y){
 		}
 		_menu->onClick(x,y);
 	}else if(_game_state&Controller::GAME_ACTIVE){
-		_towers.push_back(std::shared_ptr<Tower>(new Tower(x,y,200,10)));		
-		_towers.back()->setTexture("tower1.png",_renderer);
-		_towers.back()->addEnemies(_enemies);
+		if(_towers.size()<_params->towerLimit()){
+			_towers.push_back(std::shared_ptr<Tower>(new Tower(x,y,200,10)));		
+			_towers.back()->setTexture("tower1.png",_renderer);
+			_towers.back()->addEnemies(_enemies);
+		}
 	}
 }
 
@@ -245,9 +266,22 @@ void Controller::initGame(){
 		_player->setTexture("player.png",_renderer);
 		SDL_Point ppos = {9*System::SCREEN_WIDTH/10,System::SCREEN_HEIGHT/4};
 		_player->setLocation(ppos);
-		for(int i = 0;i<_enemy_cap;i++){
-			SDL_Point epos = {System::SCREEN_WIDTH/10 + (rand() % 100),System::SCREEN_HEIGHT/4};
+		
+		_effects.push_back(std::shared_ptr<ImageSprite>(new ImageSprite()));
+		_effects.back()->setTexture("castle.png",_renderer);
+		_effects.back()->setSize(Location(0,0,200,150));
+		_effects.back()->setLocation(Location(6*System::SCREEN_WIDTH/8,8*System::SCREEN_HEIGHT/10));
+
+		buildEnemies();
+	}
+}
+void Controller::buildEnemies(){
+	for(int i = 0;i<_params->enemiesPerWave();i++){
+			SDL_Point epos = {System::SCREEN_WIDTH/10 + (rand() % 100),System::SCREEN_HEIGHT/6};
 			_enemies.push_back(std::shared_ptr<Enemy>(new Enemy));
+			_enemies.back()->setSpeed(_params->enemySpeed());
+			_enemies.back()->setHP(_params->enemyHP());
+			_enemies.back()->setAttack(_params->enemyAttack());
 			switch(rand() % 3){
 			case 0:
 				_enemies.back()->setTexture("enemy1.png",_renderer);
@@ -261,16 +295,10 @@ void Controller::initGame(){
 			}
 			_enemies.back()->setLocation(epos);
 		}
-
+	for(auto& a:_towers){
+		a->addEnemies(_enemies);
 	}
 }
-void Controller::setEnemyCap(int i){
-	_enemy_cap = i;
-}
-void Controller::setTowerCap(int i){
-	_tower_cap = i;
-}
-
 void Controller::playerMoveUp(bool move) {
 	_player->setMoveUp(move);
 }
