@@ -17,6 +17,7 @@ public:
 	~Enemy(void);
 	void attack();
 	void teePolku();
+	bool isEmpty();
 	virtual void draw(SDL_Renderer* rndr);
 	virtual void update();
 private:

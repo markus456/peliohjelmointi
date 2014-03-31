@@ -24,8 +24,11 @@ protected:
 	void buildMenu();
 public:
 	const static unsigned int MAIN_MENU = 1;
-	const static unsigned int GAME = 2;
-	const static unsigned int PAUSED = 3;
+	const static unsigned int GAME_ACTIVE = 2;
+	const static unsigned int GAME_WAIT = 4;
+	const static unsigned int GAME_NEW = 32;
+	const static unsigned int GAME_OVER = 64;
+	const static unsigned int PAUSED = 128;
 	Controller(System* parent, SDL_Renderer* rndr, SDL_Rect wndw):_parent(parent),_game_state(MAIN_MENU),_map(nullptr),_renderer(rndr), _window_size(wndw),_enemy_cap(5),_tower_cap(5){
 		_tile_size = Location(0,0,32,32);
 	}
