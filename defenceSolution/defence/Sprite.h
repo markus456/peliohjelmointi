@@ -61,6 +61,10 @@ public:
 		if(x<_location.x||x>_location.x+_location.w||y<_location.y||y>_location.y+_location.h)return false;
 		return true;
 	}
+	bool isInside(Location l){
+		if(l.x<_location.x||l.x>_location.x+_location.w||l.y<_location.y||l.y>_location.y+_location.h)return false;
+		return true;
+	}
 	bool collideTest(Sprite &other) {
 		Location other_loc = other.getLocation();
 		if(other_loc.x + other_loc.w < _location.x || other_loc.x > _location.x + _location.w ||

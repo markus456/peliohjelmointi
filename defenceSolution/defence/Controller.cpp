@@ -6,57 +6,92 @@ Controller::~Controller(){
 	_buttons.clear();
 }
 void Controller::update(){
+	_timer = SDL_GetTicks();
 	_menu->update();
-	for(auto& a:_effects){
+	auto eff_it = _effects.begin();
+	while(eff_it<_effects.end()){
+		(*eff_it)->update();
+		if((*eff_it)->done()){
+			eff_it = _effects.erase(eff_it);
+			continue;
+		}
+		eff_it++;
+	}
+	for(auto& a:_texts){
 		a->update();
 	}
-	
-	if(_game_state&(Controller::GAME_ACTIVE|Controller::GAME_WAIT)&&!(_game_state&Controller::PAUSED)){
-		if(_enemies_got_through>=_params->enemiesAllowedThrough()){
-		_enemies_got_through = 0;
-		setGameState(Controller::GAME_OVER);
-		buildMenu();
-		}else if(_enemies.size()==0){
-			buildEnemies();
-		}
-		auto e_iterator =_enemies.begin();
-		while(e_iterator<_enemies.end()){
-			(*e_iterator)->update();
-			if((*e_iterator)->isEmpty()){
-				e_iterator = _enemies.erase(e_iterator);
-				_enemies_got_through++;
-				_floating_text.clear();
-				std::stringstream ss;
-				ss << "Castle walls will hold " << _params->enemiesAllowedThrough()-_enemies_got_through << " more enemies!";
-				_floating_text.push_back(std::shared_ptr<ImageSprite>(new TextSprite(ss.str(),true)));
-				_floating_text.back()->setLocation(Location(System::SCREEN_WIDTH/2-_floating_text.back()->getLocation().w/4,System::SCREEN_HEIGHT/10));
-			}else{
-				e_iterator++;
+	if(!(_game_state&Controller::PAUSED)){
+		if(_game_state&Controller::GAME_WAIT){
+			if(_params->waveDelay()<(_timer-_wave_timer)){
+				setGameState(Controller::GAME_ACTIVE);
+				_generated_enemies = 0;
+				initGame();
 			}
-		}
-		for(auto& a:_towers){
-			a->update();
-		}
-		auto a = _bullets.begin();
-		while(a!=_bullets.end()){
-			(*a)->update();
-			Location tmp =  (*a)->getLocation();
-			if(tmp.x>System::SCREEN_WIDTH+100||tmp.x<-100||tmp.y<-100||tmp.y>System::SCREEN_HEIGHT+100){
-				a = _bullets.erase(a);
-			}else{
-				a++;
+		}else if(_game_state&Controller::GAME_ACTIVE){
+			if(_enemies_got_through>=_params->enemiesAllowedThrough()){
+				_enemies_got_through = 0;
+				setGameState(Controller::GAME_OVER);
+				buildMenu();
+			}else if(_enemies.size()<_params->enemiesPerWave()&&_timer-_spawn_delay>_params->spawnDelay()&&_generated_enemies<_params->totalEnemies()){
+				buildEnemy();
+				_spawn_delay = _timer;
+				_generated_enemies++;
+			}else if(_enemies.size()==0&&_generated_enemies>=_params->totalEnemies()){
+				_generated_enemies = 0;
+				setGameState(Controller::GAME_WAIT);
+				initGame();
 			}
+			auto e_iterator =_enemies.begin();
+			while(e_iterator<_enemies.end()){
+				(*e_iterator)->update();
+				auto p_it = _bullets.begin();
+				while(p_it<_bullets.end()){
+					if((*e_iterator)->isInside((*p_it)->getLocation())){
+						(*e_iterator)->setHP((*e_iterator)->getHP()-(*p_it)->getDamage());
+						_effects.push_back(std::shared_ptr<ImageSprite>(new ImageSprite()));
+						_effects.back()->setTexture("blood.png",_renderer);
+						_effects.back()->setLocation((*e_iterator)->getLocation());
+						_effects.back()->setSize(_tile_size);
+						_effects.back()->setAnimationDelay(90);
+						p_it = _bullets.erase(p_it);
+					}else{
+						p_it++;
+					}
+				}
+				if((*e_iterator)->isEmpty()){
+					e_iterator = _enemies.erase(e_iterator);
+					_enemies_got_through++;
+				}else if((*e_iterator)->getHP()<1){
+					e_iterator = _enemies.erase(e_iterator);
+					_player_score++;
+				}else{
+					e_iterator++;
+				}
+			}
+			for(auto& a:_towers){
+				a->update();
+			}
+			auto a = _bullets.begin();
+			while(a!=_bullets.end()){
+				(*a)->update();
+				Location tmp =  (*a)->getLocation();
+				if(tmp.x>System::SCREEN_WIDTH+100||tmp.x<-100||tmp.y<-100||tmp.y>System::SCREEN_HEIGHT+100){
+					a = _bullets.erase(a);
+				}else{
+					a++;
+				}
+			}
+			for(auto& a:_towers){
+				if(a->needsBullet()){
+					std::shared_ptr<Bullet> bullet(new Bullet);
+					bullet->setTexture("bullet.png",_renderer);
+					bullet->setSize(_tile_size);
+					a->loadProjectile(bullet);
+					_bullets.push_back(bullet);
+				}		
+			}
+			_player->update();
 		}
-		for(auto& a:_towers){
-			if(a->needsBullet()){
-				std::shared_ptr<Bullet> bullet(new Bullet);
-				bullet->setTexture("bullet.png",_renderer);
-				bullet->setSize(_tile_size);
-				a->loadProjectile(bullet);
-				_bullets.push_back(bullet);
-			}		
-		}
-		_player->update();
 	}
 }
 void Controller::draw(){
@@ -84,7 +119,7 @@ void Controller::draw(){
 			a->draw(_renderer);
 		}
 		_player->draw(_renderer);
-		for(const auto& a:_floating_text){
+		for(const auto& a:_texts){
 			a->draw(_renderer);
 		}
 		if(_game_state&Controller::PAUSED){
@@ -108,6 +143,7 @@ void Controller::onClick(int x,int y){
 		if(_towers.size()<_params->towerLimit()){
 			_towers.push_back(std::shared_ptr<Tower>(new Tower(x,y,200,10)));		
 			_towers.back()->setTexture("tower1.png",_renderer);
+			_towers.back()->setSize(_tile_size);
 			_towers.back()->addEnemies(_enemies);
 		}
 	}
@@ -253,10 +289,14 @@ void Controller::initGame(){
 		buildMenu();
 	}else if(_game_state&Controller::GAME_NEW){
 		setGameState(Controller::GAME_ACTIVE);
+		_texts.clear();
 		_effects.clear();
 		_enemies.clear();
 		_bullets.clear();
-		_towers.clear();
+		_texts.push_back(std::shared_ptr<Sprite>(new TextCounter([this]{return playerScore();},0,"Score: ")));
+		_texts.back()->setLocation(Location(0,0));
+		_texts.push_back(std::shared_ptr<Sprite>(new TextCounter([&]{return _params->enemiesAllowedThrough()-_enemies_got_through;},0,"The walls will hold "," more enemies!")));
+		_texts.back()->setLocation(Location(0,50));
 		_map.reset(new TileMap());
 		_map->setMap("Level1temp.txt");
 		_map->addTiles();
@@ -266,35 +306,48 @@ void Controller::initGame(){
 		_player->setTexture("player.png",_renderer);
 		SDL_Point ppos = {9*System::SCREEN_WIDTH/10,System::SCREEN_HEIGHT/4};
 		_player->setLocation(ppos);
-		
+
 		_effects.push_back(std::shared_ptr<ImageSprite>(new ImageSprite()));
 		_effects.back()->setTexture("castle.png",_renderer);
 		_effects.back()->setSize(Location(0,0,200,150));
 		_effects.back()->setLocation(Location(6*System::SCREEN_WIDTH/8,8*System::SCREEN_HEIGHT/10));
-
-		buildEnemies();
+		buildEnemy();
+	}else if(_game_state&Controller::GAME_WAIT){
+		_wave_timer = _timer;
+		_effects.clear();
+		_enemies.clear();
+		_bullets.clear();
+		_texts.clear();
+		_texts.push_back(std::shared_ptr<Sprite>(new TextCounter([&]{return (_params->waveDelay() - (_timer-_wave_timer))/1000;},0,"Next wave in ", " seconds!")));
+		_texts.back()->setLocation(Location(0,50));
+	}else if(_game_state&Controller::GAME_ACTIVE){
+		_texts.clear();
+		_texts.push_back(std::shared_ptr<Sprite>(new TextCounter([this]{return playerScore();},0,"Score: ")));
+		_texts.back()->setLocation(Location(0,0));
+		_texts.push_back(std::shared_ptr<Sprite>(new TextCounter([&]{return _params->enemiesAllowedThrough()-_enemies_got_through;},0,"The walls will hold "," more enemies!")));
+		_texts.back()->setLocation(Location(0,50));
 	}
 }
-void Controller::buildEnemies(){
-	for(int i = 0;i<_params->enemiesPerWave();i++){
-			SDL_Point epos = {System::SCREEN_WIDTH/10 + (rand() % 100),System::SCREEN_HEIGHT/6};
-			_enemies.push_back(std::shared_ptr<Enemy>(new Enemy));
-			_enemies.back()->setSpeed(_params->enemySpeed());
-			_enemies.back()->setHP(_params->enemyHP());
-			_enemies.back()->setAttack(_params->enemyAttack());
-			switch(rand() % 3){
-			case 0:
-				_enemies.back()->setTexture("enemy1.png",_renderer);
-				break;
-			case 1:
-				_enemies.back()->setTexture("enemy2.png",_renderer);
-				break;
-			case 2:
-				_enemies.back()->setTexture("enemy3.png",_renderer);
-				break;
-			}
-			_enemies.back()->setLocation(epos);
-		}
+void Controller::buildEnemy(){
+	_generated_enemies ++;
+	Location epos = Location(System::SCREEN_WIDTH/10 + (rand() % 100),System::SCREEN_HEIGHT/6);
+	_enemies.push_back(std::shared_ptr<Enemy>(new Enemy));
+	_enemies.back()->setSpeed(_params->enemySpeed());
+	_enemies.back()->setHP(_params->enemyHP());
+	_enemies.back()->setAttack(_params->enemyAttack());
+	switch(rand() % 3){
+	case 0:
+		_enemies.back()->setTexture("enemy1.png",_renderer);
+		break;
+	case 1:
+		_enemies.back()->setTexture("enemy2.png",_renderer);
+		break;
+	case 2:
+		_enemies.back()->setTexture("enemy3.png",_renderer);
+		break;
+	}
+	_enemies.back()->setLocation(epos.toSDL_Rect());
+	_enemies.back()->setSize(_tile_size);
 	for(auto& a:_towers){
 		a->addEnemies(_enemies);
 	}
@@ -313,4 +366,7 @@ void Controller::playerMoveLeft(bool move) {
 
 void Controller::playerMoveRight(bool move) {
 	_player->setMoveRight(move);
+}
+unsigned int Controller::playerScore(){
+	return _player_score;
 }

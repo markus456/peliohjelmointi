@@ -22,6 +22,8 @@ public:
 	int getAttack();
 	void setHP(int);
 	int getHP();
+	float distance(float x1,float y1,float x2,float y2);
+	float distance(Location a,Location b);
 	virtual void draw(SDL_Renderer* rndr);
 	virtual void update();
 private:
@@ -29,7 +31,6 @@ private:
 	double angle;
 	Location tmp;
 	std::deque<Location> polku;
-	float distance(float,float,float,float);
-	float distance(Location,Location);
+	
 };
 

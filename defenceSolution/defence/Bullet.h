@@ -8,6 +8,7 @@
 class Bullet : public Sprite {
 private:
 	double dir, speed;
+	unsigned int damage;
 public:
 	Bullet(void);
 	~Bullet(void);
@@ -17,5 +18,7 @@ public:
 	void dirTo(Location point, double speed);
 	void setStartLocation(Location point);
 	void setSpeed(double speed);
+	unsigned int getDamage();
+	void setDamage(unsigned int);
 };
 #endif

@@ -26,7 +26,12 @@ void Bullet::update(){
 	_location.x += cos(dir) * speed;
 	_location.y += sin(dir) * speed;
 }
-
+unsigned int Bullet::getDamage(){
+	return damage;
+}
+void Bullet::setDamage(unsigned int i){
+	damage = i;
+}
 void Bullet::setDirection(double dir, double speed) {
 	this->dir = dir;
 	this->speed = speed;
