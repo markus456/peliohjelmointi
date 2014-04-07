@@ -89,3 +89,8 @@ void TileMap::setMap(std::string filename)
     }
 	mappi.close();
 }
+
+vector <Tiili> TileMap::getMap()
+{
+	return this->map;
+}
