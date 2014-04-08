@@ -17,6 +17,7 @@ protected:
 	std::vector<std::shared_ptr<ImageSprite>> _effects;
 	std::vector<std::shared_ptr<Sprite>> _texts;
 	std::vector<std::shared_ptr<Button>> _buttons;
+	std::deque<Location> _enemy_path;
 	System* _parent;
 	std::unique_ptr<GameParams> _params;
 	unsigned int _timer,_game_state,_enemies_got_through,_generated_enemies,_player_score,_spawn_delay,_wave_timer;

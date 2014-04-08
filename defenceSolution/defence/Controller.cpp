@@ -95,14 +95,14 @@ void Controller::update(){
 	}
 }
 void Controller::draw(){
-	if(_game_state&(Controller::MAIN_MENU|Controller::GAME_OVER)){
+	if(_game_state&(Controller::MAIN_MENU|Controller::GAME_OVER)){/// Päävalikko tai loppuruutu
 		for(const auto& a:_effects){
 			a->draw(_renderer);
 		}
 		if(_menu.get() != nullptr){
 			_menu->draw(_renderer);
 		}
-	}else if(_game_state&(Controller::GAME_ACTIVE|Controller::GAME_WAIT)){
+	}else if(_game_state&(Controller::GAME_ACTIVE|Controller::GAME_WAIT)){///Pelin pelaaminen
 		if(_map.get() != nullptr){
 			_map->drawMap();
 		}
@@ -162,7 +162,7 @@ void Controller::onClick(int x,int y){
 				}
 			}
 			
-			if(newTowerTile.getType()==0 && !tileTaken){
+			if(newTowerTile.buildable() && !tileTaken){
 				_towers.push_back(std::shared_ptr<Tower>(new Tower(newTowerTile.getLocation().x,newTowerTile.getLocation().y,200,10)));
 				_towers.back()->setTexture("tower1.png",_renderer);
 				_towers.back()->setSize(Location(x,y,_tile_size.w,_tile_size.h));
@@ -321,10 +321,12 @@ void Controller::initGame(){
 		_texts.push_back(std::shared_ptr<Sprite>(new TextCounter([&]{return _params->enemiesAllowedThrough()-_enemies_got_through;},0,"The walls will hold "," more enemies!")));
 		_texts.back()->setLocation(Location(0,50));
 		_map.reset(new TileMap());
-		_map->setMap("Level1temp.txt");
-		_map->addTiles();
 		_map->setRenderer(_renderer);
 		_map->setTexture("terrain.png",_renderer);
+		auto tmp_path = _map->getMap();
+		for(auto& a: tmp_path){
+			_enemy_path.push_back(a.getLocation());
+		}
 		_player.reset(new Player());
 		_player->setTexture("player.png",_renderer);
 		SDL_Point ppos = {9*System::SCREEN_WIDTH/10,System::SCREEN_HEIGHT/4};
@@ -353,7 +355,7 @@ void Controller::initGame(){
 }
 void Controller::buildEnemy(){
 	_generated_enemies ++;
-	Location epos = Location(System::SCREEN_WIDTH/10 + (rand() % 100),System::SCREEN_HEIGHT/6);
+	Location epos = Location(System::SCREEN_WIDTH/10,4*System::SCREEN_HEIGHT/6 +  + (rand() % 100));
 	_enemies.push_back(std::shared_ptr<Enemy>(new Enemy));
 	_enemies.back()->setSpeed(_params->enemySpeed());
 	_enemies.back()->setHP(_params->enemyHP());
@@ -371,6 +373,7 @@ void Controller::buildEnemy(){
 	}
 	_enemies.back()->setLocation(epos.toSDL_Rect());
 	_enemies.back()->setSize(_tile_size);
+	_enemies.back()->setPath(_enemy_path);
 	for(auto& a:_towers){
 		a->addEnemies(_enemies);
 	}

@@ -26,6 +26,7 @@ public:
 	float distance(Location a,Location b);
 	virtual void draw(SDL_Renderer* rndr);
 	virtual void update();
+	void setPath(std::deque<Location>& roadmap);
 private:
 	int HP, ATK, speed,n,m;
 	double angle;

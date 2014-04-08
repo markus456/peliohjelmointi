@@ -28,6 +28,11 @@ void Tiili::update()
 void Tiili::setType(int type)
 {
 	tileType = type;
+	if(tileType<TILE_WATER){
+		isBuildable = true;
+	}else{
+		isBuildable = false;
+	}
 }
 
 void Tiili::setSourceRect(int w, int h, int x, int y)
@@ -41,4 +46,7 @@ void Tiili::setSourceRect(int w, int h, int x, int y)
 int Tiili::getType()
 {
 	return tileType;
+}
+bool Tiili::buildable(){
+	return isBuildable;
 }

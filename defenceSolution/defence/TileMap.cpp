@@ -105,11 +105,11 @@ void TileMap::addRoads(){
 
 void TileMap::drawMap()
 {
-	for(vector<Tiili>::iterator it = map.begin(); it != map.end(); ++it) {
-		it->draw(rndr, tileTexture);
+	for(auto& a: map) {
+		a.draw(rndr, tileTexture);
 	}
-	for(vector<Road>::iterator it = roadmap.begin(); it != roadmap.end(); ++it) {
-		it->draw(rndr, tileTexture);
+	for(auto& a:roadmap) {
+		a.draw(rndr, tileTexture);
 	}
 }
 
@@ -142,8 +142,15 @@ void TileMap::setMap(std::string filename)
     while(!mappi.eof())
     {
 		mappi >> temp;
+		std:: cout << temp;
 		typeMap.push_back(temp);		//lisäys vektoriin
     }
 	mappi.close();
 	std::cout << "Tiedosto suljettu";
+}
+std::vector<Tiili>& TileMap::getMap(){
+	return map;
+}
+std::vector<Road>& TileMap::getRoad(){
+	return roadmap;
 }
