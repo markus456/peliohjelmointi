@@ -101,6 +101,9 @@ void System::eventKeyDown(SDL_Keycode sym) {
 		controller->setGameState(controller->getGameState()^Controller::PAUSED);
 		controller->initGame();
 		break;
+	case SDLK_F2:
+		controller->cycleDifficulty();
+		break;
 	case SDLK_w:
 		controller->playerMoveUp(true);
 		break;

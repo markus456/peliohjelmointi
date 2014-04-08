@@ -205,7 +205,7 @@ void Controller::setGameState(unsigned int i){
 }
 void Controller::buildMenu(){
 	Location size;
-	Location first(0,0,200,200);
+	Location first(0,0,200,200);///Nämä on väliaikaisia
 	Location second(200,0,200,200);
 	Location third (0,200,200,200);
 	Location fourth (200,200,200,200);
@@ -267,6 +267,9 @@ void Controller::buildMenu(){
 		_menu->addButton(new TextButton("New Game","button_background.png",_renderer,[this]{
 			this->setGameState(Controller::GAME_NEW);
 			this->initGame();
+		}));
+		_menu->addButton(new TextButton("Difficulty: EASY","button_background.png",_renderer,[this]{
+			this->cycleDifficulty();
 		}));
 		_menu->addButton(new TextButton("Exit","button_background.png",_renderer,[=]{
 			_parent->exit();
@@ -363,12 +366,18 @@ void Controller::buildEnemy(){
 	switch(rand() % 3){
 	case 0:
 		_enemies.back()->setTexture("enemy1.png",_renderer);
+		_enemies.back()->setSpeed(_params->enemySpeed() + rand() % 2);
+		_enemies.back()->setHP(_params->enemyHP() + rand() % 6);
 		break;
 	case 1:
 		_enemies.back()->setTexture("enemy2.png",_renderer);
+		_enemies.back()->setSpeed(_params->enemySpeed() + rand() % 4);
+		_enemies.back()->setHP(_params->enemyHP() + rand() % 4);
 		break;
 	case 2:
 		_enemies.back()->setTexture("enemy3.png",_renderer);
+		_enemies.back()->setSpeed(_params->enemySpeed() + rand() % 6);
+		_enemies.back()->setHP(_params->enemyHP() + rand() % 2);
 		break;
 	}
 	_enemies.back()->setLocation(epos.toSDL_Rect());
@@ -395,4 +404,10 @@ void Controller::playerMoveRight(bool move) {
 }
 unsigned int Controller::playerScore(){
 	return _player_score;
+}
+void Controller::cycleDifficulty(){
+	if(++_difficulty>GameParams::HARD){
+		_difficulty = GameParams::EASY;
+	}
+	_params.reset(new GameParams(_difficulty));
 }

@@ -300,11 +300,19 @@ class Menu :public Button{
 protected:
 	bool _standardize, _resized;
 	std::vector<std::shared_ptr<Button>> _buttons;
-	Location largest;
+	Location largest, title_pos;
+	SDL_Texture* title;
 public:
 	Menu():_standardize(false), _resized(false){
 		largest = Location(0,0,0,0);
-	}
+	}/*
+	virtual void setTitle(std::string s){
+		TTF_Font* font = TTF_OpenFont("revalia.ttf", 20);
+		SDL_Color color = {255,255,255,255};
+		SDL_Surface* tmp = TTF_RenderText_Blended_Wrapped(font,s.c_str(),color,300);
+		title_pos = Location(50,50,tmp->w,tmp->h);
+		SDL_CreateTextureFromSurface(nullptr,tmp);
+	}*/
 	virtual void addButton(Button* b){
 		if (_buttons.size() > 0){
 			Location l = _buttons.back()->getLocation();
