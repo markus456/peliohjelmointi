@@ -2,16 +2,12 @@
 #include "SDL.h"
 #include <vector>
 #include "Tiili.h"
+#include "Road.h"
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
 #include <time.h>
 using std::vector;
-
-const int TILE_GRASS = 0;
-const int TILE_WATER = 1;
-const int TILE_ROAD = 2;
-const int TILE_TREE = 3;
 
 //const int TILE_COUNT = 4;
 const int MAP_HEIGHT = 19;		//kartan koko tiileiss‰
@@ -24,6 +20,7 @@ class TileMap
 {
 private:
 	vector <Tiili> map;				//sis‰lt‰‰ kaikki kartan tiilet
+	vector <Road> roadmap;
 	vector <int> typeMap;
 	SDL_Texture* tileTexture;		//spritesheet
 	//SDL_Rect clips[ TILE_COUNT ];	//pilkotut kuvat
@@ -33,6 +30,7 @@ public:
 	TileMap(void);
 	virtual ~TileMap(void);
 	void addTiles();
+	void addRoads();
 	void drawMap();
 	void setTexture(std::string filename, SDL_Renderer* rndr);
 	void setRenderer(SDL_Renderer* rndr);

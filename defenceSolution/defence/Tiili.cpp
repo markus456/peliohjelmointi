@@ -17,7 +17,7 @@ void Tiili::draw(SDL_Renderer* rndr)
 
 void Tiili::draw(SDL_Renderer* rndr, SDL_Texture* texture)
 {
-	SDL_RenderCopyEx(rndr, texture, &source.toSDL_Rect(), &_location.toSDL_Rect(), 0, NULL, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(rndr, texture, &source, &_location.toSDL_Rect(), 0, NULL, SDL_FLIP_NONE);
 }
 
 void Tiili::update()
