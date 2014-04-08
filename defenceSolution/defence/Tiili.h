@@ -32,5 +32,6 @@ public:
 	void setSourceRect(int w, int h, int x, int y);
 	int getType();
 	bool buildable();
+	bool passable();
 };
 

@@ -50,3 +50,6 @@ int Tiili::getType()
 bool Tiili::buildable(){
 	return isBuildable;
 }
+bool Tiili::passable(){
+	return isPassable;
+}
