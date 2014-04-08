@@ -14,5 +14,5 @@ public:
 	Tile(int x, int y, int tileType);
 	~Tile();
 
-	void Draw(int x, int y, SDL_Surface* dest);	// spriten piirtoon koordinaatit ja mihin piirret‰‰n
+	void draw(int x, int y, SDL_Surface* dest);	// spriten piirtoon koordinaatit ja mihin piirret‰‰n
 };

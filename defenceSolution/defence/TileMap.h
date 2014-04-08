@@ -36,6 +36,6 @@ public:
 	void setRenderer(SDL_Renderer* rndr);
 	void setClips();
 	void setMap(std::string filename);
-	vector <Tiili> getMap();
+	std::vector<Tiili>& getMap();
 };
 

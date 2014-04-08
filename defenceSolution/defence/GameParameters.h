@@ -22,7 +22,7 @@ public:
 			_enemy_attack = 1;
 			_enemy_hp = 2;
 			_tower_limit = 15;
-			_wave_delay = 45*1000;
+			_wave_delay = 15*1000;
 			break;
 		case GameParams::NORMAL:
 			_spawn_delay = 60;
@@ -33,7 +33,7 @@ public:
 			_enemy_hp = 4;
 			_enemy_attack = 2;
 			_tower_limit = 8;
-			_wave_delay = 30*1000;
+			_wave_delay = 10*1000;
 			break;
 		case GameParams::HARD:
 			_spawn_delay = 30;
@@ -44,7 +44,7 @@ public:
 			_enemy_hp = 8;
 			_enemy_attack = 4;
 			_tower_limit = 4;
-			_wave_delay = 15*1000;
+			_wave_delay = 5*1000;
 			break;
 		}
 	}

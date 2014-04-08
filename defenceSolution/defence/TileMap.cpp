@@ -128,7 +128,9 @@ void TileMap::setRenderer(SDL_Renderer* rendr)
 {
 	rndr = rendr;
 }
-
+std::vector<Tiili>& TileMap::getMap(){
+	return map;
+}
 void TileMap::setMap(std::string filename)
 {
 	std::ifstream mappi( filename.c_str() );
