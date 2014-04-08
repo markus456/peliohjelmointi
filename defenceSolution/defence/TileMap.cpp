@@ -15,8 +15,8 @@ TileMap::~TileMap(void)
 void TileMap::addTiles()
 {
 	Tiili tile;
-	Location location;
-	Location size;
+	SDL_Point location;
+	SDL_Rect size;
 	size.h = TILE_HEIGHT;
 	size.w = TILE_WIDTH;
 
@@ -88,4 +88,5 @@ void TileMap::setMap(std::string filename)
 		typeMap.push_back(temp);		//lisäys vektoriin
     }
 	mappi.close();
+	std::cout << "Tiedosto suljettu";
 }

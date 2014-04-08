@@ -14,8 +14,8 @@ const int TILE_ROAD = 2;
 const int TILE_TREE = 3;
 
 //const int TILE_COUNT = 4;
-const int MAP_HEIGHT = 19;		//kartan koko tiileissä
-const int MAP_WIDTH = 25;
+const int MAP_HEIGHT = 7;		//kartan koko tiileissä
+const int MAP_WIDTH = 18;
 const int TILE_HEIGHT = 32;
 const int TILE_WIDTH = 32;
 
