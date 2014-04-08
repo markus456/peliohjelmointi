@@ -131,6 +131,10 @@ void Controller::draw(){
 
 }
 void Controller::onClick(int x,int y){
+
+	Tiili newTowerTile;
+	bool tileTaken = false;
+
 	if(_game_state&(Controller::MAIN_MENU|Controller::PAUSED|Controller::GAME_WAIT|Controller::GAME_OVER)){
 		for(const auto& a:_buttons){
 			if(a->isInside(x,y)){
@@ -140,11 +144,30 @@ void Controller::onClick(int x,int y){
 		}
 		_menu->onClick(x,y);
 	}else if(_game_state&Controller::GAME_ACTIVE){
+
+
 		if(_towers.size()<_params->towerLimit()){
-			_towers.push_back(std::shared_ptr<Tower>(new Tower(x,y,200,10)));		
-			_towers.back()->setTexture("tower1.png",_renderer);
-			_towers.back()->setSize(_tile_size);
-			_towers.back()->addEnemies(_enemies);
+			
+			//tutkitaan tile johon ollaan rakentamassa tornia
+			for(auto tile:_map->getMap()){
+				if(tile.isInside(x,y)){
+					newTowerTile = tile;
+				}
+			}
+			
+			//katsotaan onko tile tyhjä
+			for(auto t:_towers){
+				if(t->isInside(x,y)){
+					tileTaken = true;
+				}
+			}
+			
+			if(newTowerTile.getType()==0 && !tileTaken){
+				_towers.push_back(std::shared_ptr<Tower>(new Tower(newTowerTile.getLocation().x,newTowerTile.getLocation().y,200,10)));
+				_towers.back()->setTexture("tower1.png",_renderer);
+				_towers.back()->setSize(Location(x,y,_tile_size.w,_tile_size.h));
+				_towers.back()->addEnemies(_enemies);
+			}
 		}
 	}
 }
