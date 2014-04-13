@@ -332,8 +332,9 @@ void Controller::initGame(){
 		}
 		_player.reset(new Player());
 		_player->setTexture("player.png",_renderer);
-		SDL_Point ppos = {9*System::SCREEN_WIDTH/10,System::SCREEN_HEIGHT/4};
+		SDL_Point ppos = {8*System::SCREEN_WIDTH/10,System::SCREEN_HEIGHT/4};
 		_player->setLocation(ppos);
+		_player->setMap(_map);
 
 		_effects.push_back(std::shared_ptr<ImageSprite>(new ImageSprite()));
 		_effects.back()->setTexture("castle.png",_renderer);

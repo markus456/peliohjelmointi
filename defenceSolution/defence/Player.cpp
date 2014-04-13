@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "System.h"
 
 
 Player::Player(void)
@@ -21,13 +22,42 @@ Player::~Player(void)
 void Player::draw(SDL_Renderer* rndr)
 {
 	Location p(_location.w / 2, _location.h / 2);
-	SDL_RenderCopyEx(rndr, _texture, nullptr, &_location.toSDL_Rect(), 0, &p.toSDL_Point(), SDL_FLIP_NONE);
+	SDL_Rect r = _location.toSDL_Rect();
+	SDL_Point po = p.toSDL_Point();
+	SDL_RenderCopyEx(rndr, _texture, nullptr, &r, 0, &po, SDL_FLIP_NONE);
 }
 
-void Player::update()
-{
-	_location.x += _speedx;
-	_location.y += _speedy;
+void Player::update() {
+	if (!move(_speedx, _speedy)) {
+		if (!move(_speedx, 0)) {
+			move(0, _speedy);
+		}
+	}
+}
+
+bool Player::move(double speedx, double speedy) {
+	_location.x += speedx;
+	_location.y += speedy;
+	
+	if (collideTestWorldBounds()) {
+		//return back to original place
+		_location.x -= speedx;
+		_location.y -= speedy;
+		return false;
+	}
+	
+	for (Tiili &tiili : _map->get()->getMap()) {
+		if (!tiili.passable()) {
+			if (collideTest(tiili)) {
+				//return back to original place
+				_location.x -= speedx;
+				_location.y -= speedy;
+				return false;
+			}
+		}
+	}
+	
+	return true;
 }
 
 void Player::updateSpeed() {
@@ -65,4 +95,13 @@ void Player::setMoveLeft(bool move) {
 void Player::setMoveRight(bool move) {
 	_move_right = move;
 	updateSpeed();
+}
+
+void Player::setMap(std::unique_ptr<TileMap>& map) {
+	_map = &map;
+}
+
+bool Player::collideTestWorldBounds() {
+	return !(_location.w + _location.x < System::SCREEN_WIDTH && _location.h + _location.y < System::SCREEN_HEIGHT &&
+		_location.x > 0 && _location.y > 0);
 }
