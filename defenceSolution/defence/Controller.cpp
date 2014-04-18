@@ -48,11 +48,7 @@ void Controller::update(){
 				while(p_it<_bullets.end()){
 					if((*e_iterator)->isInside((*p_it)->getLocation())){
 						(*e_iterator)->setHP((*e_iterator)->getHP()-(*p_it)->getDamage());
-						_effects.push_back(std::shared_ptr<ImageSprite>(new ImageSprite()));
-						_effects.back()->setTexture("blood.png",_renderer);
-						_effects.back()->setLocation((*e_iterator)->getLocation());
-						_effects.back()->setSize(_tile_size);
-						_effects.back()->setAnimationDelay(90);
+						createBlood((*e_iterator)->getLocation());
 						p_it = _bullets.erase(p_it);
 					}else{
 						p_it++;
@@ -411,4 +407,21 @@ void Controller::cycleDifficulty(){
 		_difficulty = GameParams::EASY;
 	}
 	_params.reset(new GameParams(_difficulty));
+}
+
+void Controller::playerDoDamage() {
+	for (const auto &a : _enemies) {
+		if (a->distance(*_player.get()) < 50) {
+			a->setHP(a->getHP() - _player->getDamage());
+			createBlood(a->getLocation());
+		}
+	}
+}
+
+void Controller::createBlood(Location &location) {
+	_effects.push_back(std::shared_ptr<ImageSprite>(new ImageSprite()));
+	_effects.back()->setTexture("blood.png", _renderer);
+	_effects.back()->setLocation(location);
+	_effects.back()->setSize(_tile_size);
+	_effects.back()->setAnimationDelay(90);
 }

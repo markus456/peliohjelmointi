@@ -22,8 +22,6 @@ public:
 	int getAttack();
 	void setHP(int);
 	int getHP();
-	float distance(float x1,float y1,float x2,float y2);
-	float distance(Location a,Location b);
 	virtual void draw(SDL_Renderer* rndr);
 	virtual void update();
 	void setPath(std::deque<Location>& roadmap);

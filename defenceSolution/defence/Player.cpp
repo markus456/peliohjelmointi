@@ -12,6 +12,7 @@ Player::Player(void)
 	_move_right = false;
 	_speedx = 0;
 	_speedy = 0;
+	_damage = 10;
 }
 
 
@@ -104,4 +105,8 @@ void Player::setMap(std::unique_ptr<TileMap>& map) {
 bool Player::collideTestWorldBounds() {
 	return !(_location.w + _location.x < System::SCREEN_WIDTH && _location.h + _location.y < System::SCREEN_HEIGHT &&
 		_location.x > 0 && _location.y > 0);
+}
+
+unsigned int Player::getDamage() {
+	return _damage;
 }

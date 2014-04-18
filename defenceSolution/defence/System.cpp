@@ -116,6 +116,8 @@ void System::eventKeyDown(SDL_Keycode sym) {
 	case SDLK_d:
 		controller->playerMoveRight(true);
 		break;
+	case SDLK_f:
+		controller->playerDoDamage();
 	}
 }
 

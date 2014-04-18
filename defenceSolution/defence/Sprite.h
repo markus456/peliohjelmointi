@@ -73,6 +73,20 @@ public:
 		}
 		return true;
 	}
+	float distance(Sprite &other) {
+		Location a, b;
+		a.x = other.getLocation().x + other.getLocation().w / 2;
+		a.y = other.getLocation().y + other.getLocation().h / 2;
+		b.x = _location.x + _location.w / 2;
+		b.y = _location.y + _location.h / 2;
+		return distance(a, b);
+	}
+	float distance(float x1, float y1, float x2, float y2){
+		return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+	}
+	float distance(Location a, Location b){
+		return sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2));
+	}
 	virtual ~Sprite(){
 		SDL_DestroyTexture(_texture);
 	}

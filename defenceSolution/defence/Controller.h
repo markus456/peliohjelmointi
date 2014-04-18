@@ -64,5 +64,7 @@ public:
 	void playerMoveRight(bool move);
 	unsigned int playerScore();
 	void cycleDifficulty();
+	void playerDoDamage();
+	void createBlood(Location &location);
 };
 #endif

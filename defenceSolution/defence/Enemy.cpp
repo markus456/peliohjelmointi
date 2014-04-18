@@ -78,9 +78,3 @@ int Enemy::getHP(){
 void Enemy::setPath(std::deque<Location>& path){
 	polku = path;
 }
-float Enemy::distance(float x1,float y1,float x2,float y2){
-	return sqrt(pow(x2-x1,2)+pow(y2-y1,2));
-}
-float Enemy::distance(Location a,Location b){
-	return sqrt(pow(b.x-a.x,2)+pow(b.y-a.y,2));
-}
