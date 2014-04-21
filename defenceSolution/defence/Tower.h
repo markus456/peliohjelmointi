@@ -17,10 +17,11 @@ private:
 	double towerProjectileSpeed;
 	bool readyToShoot;
 	int cooldown;
+	int cost;
 	std::vector<std::shared_ptr<Enemy>> enemies;
 public:
 	Tower(void);
-	Tower(int locationX, int locationY, int towerRange, int projSpeed);
+	Tower(int locationX, int locationY, int towerRange, int projSpeed, int cost);
 	~Tower(void);
 	void addEnemies(std::vector<std::shared_ptr<Enemy>>);
 	void loadProjectile(std::shared_ptr<Bullet> projectile);

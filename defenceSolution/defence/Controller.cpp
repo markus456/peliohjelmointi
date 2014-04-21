@@ -49,6 +49,7 @@ void Controller::update(){
 					if((*e_iterator)->isInside((*p_it)->getLocation())){
 						(*e_iterator)->setHP((*e_iterator)->getHP()-(*p_it)->getDamage());
 						createBlood((*e_iterator)->getLocation());
+
 						p_it = _bullets.erase(p_it);
 					}else{
 						p_it++;
@@ -59,7 +60,7 @@ void Controller::update(){
 					_enemies_got_through++;
 				}else if((*e_iterator)->getHP()<1){
 					e_iterator = _enemies.erase(e_iterator);
-					_player_score++;
+					_current_gold++;
 				}else{
 					e_iterator++;
 				}
@@ -128,9 +129,6 @@ void Controller::draw(){
 }
 void Controller::onClick(int x,int y){
 
-	Tiili newTowerTile;
-	bool tileTaken = false;
-
 	if(_game_state&(Controller::MAIN_MENU|Controller::PAUSED|Controller::GAME_WAIT|Controller::GAME_OVER)){
 		for(const auto& a:_buttons){
 			if(a->isInside(x,y)){
@@ -141,30 +139,8 @@ void Controller::onClick(int x,int y){
 		_menu->onClick(x,y);
 	}else if(_game_state&Controller::GAME_ACTIVE){
 
+		buildTower(x,y);
 
-		if(_towers.size()<_params->towerLimit()){
-			
-			//tutkitaan tile johon ollaan rakentamassa tornia
-			for(auto tile:_map->getMap()){
-				if(tile.isInside(x,y)){
-					newTowerTile = tile;
-				}
-			}
-			
-			//katsotaan onko tile tyhjä
-			for(auto t:_towers){
-				if(t->isInside(x,y)){
-					tileTaken = true;
-				}
-			}
-			
-			if(newTowerTile.buildable() && !tileTaken){
-				_towers.push_back(std::shared_ptr<Tower>(new Tower(newTowerTile.getLocation().x,newTowerTile.getLocation().y,200,10)));
-				_towers.back()->setTexture("tower1.png",_renderer);
-				_towers.back()->setSize(Location(x,y,_tile_size.w,_tile_size.h));
-				_towers.back()->addEnemies(_enemies);
-			}
-		}
 	}
 }
 
@@ -315,7 +291,7 @@ void Controller::initGame(){
 		_effects.clear();
 		_enemies.clear();
 		_bullets.clear();
-		_texts.push_back(std::shared_ptr<Sprite>(new TextCounter([this]{return playerScore();},0,"Score: ")));
+		_texts.push_back(std::shared_ptr<Sprite>(new TextCounter([this]{return currentGold();},0,"Gold: ")));
 		_texts.back()->setLocation(Location(0,0));
 		_texts.push_back(std::shared_ptr<Sprite>(new TextCounter([&]{return _params->enemiesAllowedThrough()-_enemies_got_through;},0,"The walls will hold "," more enemies!")));
 		_texts.back()->setLocation(Location(0,50));
@@ -347,7 +323,7 @@ void Controller::initGame(){
 		_texts.back()->setLocation(Location(0,50));
 	}else if(_game_state&Controller::GAME_ACTIVE){
 		_texts.clear();
-		_texts.push_back(std::shared_ptr<Sprite>(new TextCounter([this]{return playerScore();},0,"Score: ")));
+		_texts.push_back(std::shared_ptr<Sprite>(new TextCounter([this]{return currentGold();},0,"Score: ")));
 		_texts.back()->setLocation(Location(0,0));
 		_texts.push_back(std::shared_ptr<Sprite>(new TextCounter([&]{return _params->enemiesAllowedThrough()-_enemies_got_through;},0,"The walls will hold "," more enemies!")));
 		_texts.back()->setLocation(Location(0,50));
@@ -384,6 +360,42 @@ void Controller::buildEnemy(){
 		a->addEnemies(_enemies);
 	}
 }
+void Controller::buildTower(int x, int y){
+		
+	Tiili newTowerTile;
+	bool tileTaken = false;
+
+	if(_towers.size()<_params->towerLimit()){
+			
+		//tutkitaan tile johon ollaan rakentamassa tornia
+		for(auto tile:_map->getMap()){
+			if(tile.isInside(x,y)){
+				newTowerTile = tile;
+			}
+		}
+			
+		//katsotaan onko tile tyhjä
+		for(auto t:_towers){
+			if(t->isInside(x,y)){
+				tileTaken = true;
+			}
+		}
+		if(newTowerTile.buildable() && !tileTaken && towerCost<=_current_gold){
+			
+			_towers.push_back(std::shared_ptr<Tower>(new Tower(newTowerTile.getLocation().x,newTowerTile.getLocation().y,400,10,towerCost)));
+			_towers.back()->setTexture("tower1.png",_renderer);
+			_towers.back()->setSize(Location(x,y,_tile_size.w,_tile_size.h));
+			_towers.back()->addEnemies(_enemies);
+
+			_current_gold-=towerCost;
+		}
+	}
+}
+
+std::shared_ptr<Bullet> Controller::buildBullet(){
+
+	return std::shared_ptr<Bullet>();
+}
 void Controller::playerMoveUp(bool move) {
 	_player->setMoveUp(move);
 }
@@ -399,8 +411,8 @@ void Controller::playerMoveLeft(bool move) {
 void Controller::playerMoveRight(bool move) {
 	_player->setMoveRight(move);
 }
-unsigned int Controller::playerScore(){
-	return _player_score;
+unsigned int Controller::currentGold(){
+	return _current_gold;
 }
 void Controller::cycleDifficulty(){
 	if(++_difficulty>GameParams::HARD){
