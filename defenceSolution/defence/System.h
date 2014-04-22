@@ -1,12 +1,18 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
-#include "SDL.h"
-#include "include\SDL_image.h"
-#include "ui.h"
-#include "Sprite.h"
-#include "TileMap.h"
+class Controller;
 #include <memory>
 #include <vector>
+#include "SDL.h"
+#include "include\SDL_image.h"
+#include "Sprite.h"
+#include "ui.h"
+#include "Bullet.h"
+#include "Tower.h"
+#include "Tiili.h"
+#include "TileMap.h"
+#include "Enemy.h"
+#include "Controller.h"
 class System {
 private:
 	SDL_Event event;
@@ -14,8 +20,14 @@ private:
 	SDL_Renderer *rndr;
 	SDL_Texture *texture;
 	bool running,mousedown;
-	std::vector<std::unique_ptr<Sprite>> sprites;
-	TileMap map;
+	Sprite *t;
+	Bullet *b;
+	Controller* controller;
+	int enemyX, enemyY;
+	TileMap* map;
+	Tower *tower;
+	std::vector<std::shared_ptr<Sprite>> sprites;
+	std::vector<std::shared_ptr<Button>> uiElements;
 public:
 	static const int SCREEN_WIDTH = 800;
 	static const int SCREEN_HEIGHT = 600;

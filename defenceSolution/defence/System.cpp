@@ -15,6 +15,7 @@ bool System::init() {
 		cout << "SDL init failed." << endl;
 		return false;
 	}
+
 	if(IMG_Init(IMG_INIT_PNG)==0){
 		std::cout << "IMG_Init: " << IMG_GetError();
 	}
@@ -28,30 +29,19 @@ bool System::init() {
     if (rndr == NULL) {
             cout << "render creation failed." << endl;
     }
-
-
-	sprites.push_back(std::unique_ptr<Sprite>(new Tile()));
-	SDL_Point tmp = {50,50};
-	sprites.back()->setLocation(tmp);
-	sprites.back()->setTexture("test.png",rndr);
+	SDL_Rect wndw = {0,0,SCREEN_WIDTH,SCREEN_HEIGHT};
+	controller = new Controller(this,rndr,wndw);
+	controller->initGame();
 	mousedown = false;
-
-	map.setMap("Level1.txt");
-	map.setRenderer(rndr);
-	map.addTiles();
-	map.setTexture("terrain.png", rndr);
+	return true;
 }
 
 void System::exit() {
-	sprites.clear();
-	IMG_Quit();
-	SDL_DestroyTexture(texture);
-	SDL_DestroyRenderer(rndr);
-	SDL_DestroyWindow(wnd);
-	SDL_Quit();
+	running = false;
 }
 
 void System::enterMainLoop() {
+	
 	while (running)
 	{
 		while(SDL_PollEvent(&event)){
@@ -77,7 +67,6 @@ void System::enterMainLoop() {
 				break;
 			}
 		}
-
 		long frame_start = SDL_GetTicks();
 		update();
 		
@@ -91,41 +80,80 @@ void System::enterMainLoop() {
 			SDL_Delay(1000.f/FRAMERATE-(frame_end-frame_start));
 		}
 	}
+	delete controller;
+	SDL_DestroyTexture(texture);
+	SDL_DestroyRenderer(rndr);
+	SDL_DestroyWindow(wnd);
+	TTF_Quit();
+	IMG_Quit();
+	SDL_Quit();
 }
 
 void System::eventKeyDown(SDL_Keycode sym) {
-
+	SDL_Keymod modstate;
+	switch (sym){
+	case SDLK_F4:
+			if (SDL_GetModState() == KMOD_LALT){
+				running = false;
+			}
+		break;
+	case SDLK_F1:
+		if(controller->getGameState()!=Controller::PAUSED){
+			controller->setGameState(Controller::PAUSED);
+		}else{
+			controller->setGameState(Controller::GAME);
+		}
+		controller->initGame();
+		break;
+	case SDLK_w:
+		controller->playerMoveUp(true);
+		break;
+	case SDLK_s:
+		controller->playerMoveDown(true);
+		break;
+	case SDLK_a:
+		controller->playerMoveLeft(true);
+		break;
+	case SDLK_d:
+		controller->playerMoveRight(true);
+		break;
+	}
 }
 
 void System::eventKeyUp(SDL_Keycode sym) {
-
+	switch (sym) {
+	case SDLK_w:
+		controller->playerMoveUp(false);
+		break;
+	case SDLK_s:
+		controller->playerMoveDown(false);
+		break;
+	case SDLK_a:
+		controller->playerMoveLeft(false);
+		break;
+	case SDLK_d:
+		controller->playerMoveRight(false);
+		break;
+	}
 }
 
 void System::mouseButtonDown(Uint8 button, Sint32 x, Sint32 y) {
 	mousedown = true;
+
 }
 
 void System::mouseButtonUp(Uint8 button, Sint32 x, Sint32 y) {
+	controller->onClick(x,y);
 	mousedown = false;
 }
 
 void System::mouseMove(Sint32 x, Sint32 y) {
-		for(auto& a: sprites){
-			if(a->isInside(x,y)&&mousedown){
-				SDL_Point tmp = {x,y};
-				a->setLocation(tmp);
-			}
-		}
+		
 }
 
 void System::draw() {
-	for(auto& a: sprites){
-		a->draw(rndr);
-	}
-	map.drawMap();
+	controller->draw();
 }
 void System::update(){
-	for(auto& a: sprites){
-		a->update();
-	}
+	controller->update();
 }
