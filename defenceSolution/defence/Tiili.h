@@ -9,7 +9,6 @@ private:
 	bool isPassable;	//voiko t‰st‰ menn‰ vihulaiset ja/tai hero
 	bool isBuildable;	//voiko tornin rakentaa t‰h‰n
 	int tileType;
-	//int type;
 	SDL_Rect source;	//mik‰ osa sprite sheetist‰ piirret‰‰n
 	
 public:
@@ -21,5 +20,9 @@ public:
 	void setType(int type);
 	void setSourceRect(int w, int h, int x, int y);
 	int getType();
+	bool buildable();
+	bool passable();
+	void setBuildable(bool Buildable);
+	void setPassable(bool Passable);
 };
 
