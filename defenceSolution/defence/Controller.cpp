@@ -298,7 +298,7 @@ void Controller::initGame(){
 		_map.reset(new TileMap());
 		_map->setRenderer(_renderer);
 		_map->setTexture("terrain.png",_renderer);
-		auto tmp_path = _map->getMap();
+		auto tmp_path = _map->getRoad();
 		for(auto& a: tmp_path){
 			_enemy_path.push_back(a.getLocation());
 		}
@@ -339,18 +339,12 @@ void Controller::buildEnemy(){
 	switch(rand() % 3){
 	case 0:
 		_enemies.back()->setTexture("enemy1.png",_renderer);
-		_enemies.back()->setSpeed(_params->enemySpeed() + rand() % 2);
-		_enemies.back()->setHP(_params->enemyHP() + rand() % 6);
 		break;
 	case 1:
 		_enemies.back()->setTexture("enemy2.png",_renderer);
-		_enemies.back()->setSpeed(_params->enemySpeed() + rand() % 4);
-		_enemies.back()->setHP(_params->enemyHP() + rand() % 4);
 		break;
 	case 2:
 		_enemies.back()->setTexture("enemy3.png",_renderer);
-		_enemies.back()->setSpeed(_params->enemySpeed() + rand() % 6);
-		_enemies.back()->setHP(_params->enemyHP() + rand() % 2);
 		break;
 	}
 	_enemies.back()->setLocation(epos.toSDL_Rect());

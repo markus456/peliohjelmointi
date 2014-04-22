@@ -18,9 +18,9 @@ public:
 			_total_enemies = 80;
 			_enemies_per_wave = 20;
 			_enemies_allowed_through = 8;
-			_enemy_speed = 2;
+			_enemy_speed = 1;
 			_enemy_attack = 1;
-			_enemy_hp = 2;
+			_enemy_hp = 20;
 			_tower_limit = 15;
 			_wave_delay = 15*1000;
 			break;

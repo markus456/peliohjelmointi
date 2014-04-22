@@ -39,12 +39,12 @@ void TileMap::addTiles()
 				tile.setSize(size);			//tiilen koko
 				tile.setLocation(location);	//tiilen sijainti
 				tile.setType(typeMap[x+y*MAP_WIDTH]);
-				if(tile.getType() <= 10){			//ylimmät tiilet kuvassa
+				if(tile.getType() <= 9){			//ylimmät tiilet kuvassa
 					tile.setSourceRect(TILE_WIDTH -1, TILE_HEIGHT -1, tile.getType() * TILE_WIDTH, 0);
-				}else if(tile.getType() <= 20){		//seuraavan rivin tiilet
-					tile.setSourceRect(TILE_WIDTH -1, TILE_HEIGHT -1, (tile.getType()-11) * TILE_WIDTH, 32);
-				}else if(tile.getType() <= 30){		//seuraavan rivin tiilet
-					tile.setSourceRect(TILE_WIDTH -1, TILE_HEIGHT -1, (tile.getType()-21) * TILE_WIDTH, 64);
+				}else if(tile.getType() <= 19){		//seuraavan rivin tiilet
+					tile.setSourceRect(TILE_WIDTH -1, TILE_HEIGHT -1, (tile.getType()-10) * TILE_WIDTH, 32);
+				}else if(tile.getType() <= 29){		//seuraavan rivin tiilet
+					tile.setSourceRect(TILE_WIDTH -1, TILE_HEIGHT -1, (tile.getType()-20) * TILE_WIDTH, 64);
 				}
 				map.push_back(tile);		//lisäys vektoriin
 				w += TILE_WIDTH;			//seuraava tiili leveyden verran oikealle
@@ -82,22 +82,35 @@ void TileMap::addRoads(){
 				road.setLocation(location);	//tiilen sijainti
 				road.setType(typeMap[x+y*MAP_WIDTH]);
 
-				for(auto& a:map){			//laittaa maastokarttaan oikeat flagit, eli tielle ei voi rakentaa, mutta voi kulkea
-					if(&a.getLocation()==&road.getLocation()){
+				/*for(auto& a:map){			//laittaa maastokarttaan oikeat flagit, eli tielle ei voi rakentaa, mutta voi kulkea
+					//if(&a.getLocation()==&road.getLocation()){
+					if(a.getLocation().x==road.getLocation().x && a.getLocation().y==road.getLocation().y){
 						a.setBuildable(false);
+						std::cout << "Roadi";
+						a.setPassable(true);
+					}
+				}*/
+				
+				if(road.getType()>0){
+
+					for(auto& a:map){			//laittaa maastokarttaan oikeat flagit, eli tielle ei voi rakentaa, mutta voi kulkea
+					//if(&a.getLocation()==&road.getLocation()){
+					if(a.getLocation().x==road.getLocation().x && a.getLocation().y==road.getLocation().y){
+						a.setBuildable(false);
+						std::cout << "Roadi";
 						a.setPassable(true);
 					}
 				}
-				
-				if(road.getType() >=  8 && road.getType() <= 10){			//ylimmät tiilet kuvassa
-					road.setSourceRect(TILE_WIDTH -1, TILE_HEIGHT -1, road.getType() * TILE_WIDTH, 0);
-					roadmap.push_back(road);		//lisäys vektoriin
-				}else if(road.getType() >= 18 && road.getType() <= 20){		//seuraavan rivin tiilet
-					road.setSourceRect(TILE_WIDTH -1, TILE_HEIGHT -1, (road.getType()-11) * TILE_WIDTH, 32);
-					roadmap.push_back(road);		//lisäys vektoriin
-				}else if(road.getType() >= 28 && road.getType() <= 30){		//seuraavan rivin tiilet
-					road.setSourceRect(TILE_WIDTH -1, TILE_HEIGHT -1, (road.getType()-21) * TILE_WIDTH, 64);
-					roadmap.push_back(road);		//lisäys vektoriin
+					if(road.getType() >=  8 && road.getType() <= 10){			//ylimmät tiilet kuvassa
+						road.setSourceRect(TILE_WIDTH -1, TILE_HEIGHT -1, road.getType() * TILE_WIDTH, 0);
+						roadmap.push_back(road);		//lisäys vektoriin
+					}else if(road.getType() >= 18 && road.getType() <= 20){		//seuraavan rivin tiilet
+						road.setSourceRect(TILE_WIDTH -1, TILE_HEIGHT -1, (road.getType()-10) * TILE_WIDTH, 32);
+						roadmap.push_back(road);		//lisäys vektoriin
+					}else if(road.getType() >= 28 && road.getType() <= 30){		//seuraavan rivin tiilet
+						road.setSourceRect(TILE_WIDTH -1, TILE_HEIGHT -1, (road.getType()-20) * TILE_WIDTH, 64);
+						roadmap.push_back(road);		//lisäys vektoriin
+					}
 				}
 				w += TILE_WIDTH;			//seuraava tiili leveyden verran oikealle
 				//std::cout  << " x: " << x << " y: "<< y << "   taulussa on " << mapTemp[x][y] <<"\n";

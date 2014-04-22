@@ -28,6 +28,7 @@ void Tiili::update()
 void Tiili::setType(int type)
 {
 	tileType = type;	//tiilen tyyppi, esim. 0-2 on maata vesi rajalla
+	isBuildable=true;
 
 	//Tielle ja esim. veteen ei voi rakentaa, mutta tiellä voi kulkea
 	if(tileType>=4 && tileType<=9){
@@ -57,6 +58,9 @@ void Tiili::setType(int type)
 			isPassable=false;
 		}
 	}
+	else{
+		//isBuildable=true;
+	}
 }
 
 void Tiili::setSourceRect(int w, int h, int x, int y)
@@ -72,11 +76,9 @@ int Tiili::getType()
 	return tileType;
 }
 bool Tiili::buildable(){///Tilapäinen korjaus
-	return true;
 	return isBuildable;
 }
 bool Tiili::passable(){//Tilapäinen korjaus
-	return true;
 	return isPassable;
 }
 void Tiili::setBuildable(bool Buildable){
