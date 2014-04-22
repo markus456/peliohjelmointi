@@ -422,14 +422,31 @@ void Controller::cycleDifficulty(){
 }
 
 void Controller::playerDoDamage() {
+	std::vector<Location> effect_frames;
+	effect_frames.push_back(Location(0,0,64,64));
+	effect_frames.push_back(Location(64,0,64,64));
+	effect_frames.push_back(Location(0,64,64,64));
+	effect_frames.push_back(Location(64,64,64,64));
 	for (const auto &a : _enemies) {
 		if (a->distance(*_player.get()) < 50) {
 			a->setHP(a->getHP() - _player->getDamage());
 			createBlood(a->getLocation());
+			
 		}
 	}
+	createEffect(_player->getLocation(),"explosion.png",5,Location(0,0,128,128),effect_frames);
 }
 
+void Controller::createEffect(Location &location, std::string filename, unsigned int delay,Location effect_size, std::vector<Location> framelist) {
+	_effects.push_back(std::shared_ptr<ImageSprite>(new ImageSprite()));
+	_effects.back()->setTexture(filename, _renderer);
+	_effects.back()->setLocation(location);
+	_effects.back()->setSize(effect_size);
+	_effects.back()->setAnimationDelay(delay);
+	if(framelist.size()>0){
+		_effects.back()->addFrames(framelist);
+	}
+}
 void Controller::createBlood(Location &location) {
 	_effects.push_back(std::shared_ptr<ImageSprite>(new ImageSprite()));
 	_effects.back()->setTexture("blood.png", _renderer);

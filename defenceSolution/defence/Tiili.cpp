@@ -71,10 +71,12 @@ int Tiili::getType()
 {
 	return tileType;
 }
-bool Tiili::buildable(){
+bool Tiili::buildable(){///Tilapäinen korjaus
+	return true;
 	return isBuildable;
 }
-bool Tiili::passable(){
+bool Tiili::passable(){//Tilapäinen korjaus
+	return true;
 	return isPassable;
 }
 void Tiili::setBuildable(bool Buildable){
