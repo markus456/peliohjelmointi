@@ -81,6 +81,14 @@ void TileMap::addRoads(){
 				road.setSize(size);			//tiilen koko
 				road.setLocation(location);	//tiilen sijainti
 				road.setType(typeMap[x+y*MAP_WIDTH]);
+
+				for(auto& a:map){			//laittaa maastokarttaan oikeat flagit, eli tielle ei voi rakentaa, mutta voi kulkea
+					if(&a.getLocation()==&road.getLocation()){
+						a.setBuildable(false);
+						a.setPassable(true);
+					}
+				}
+				
 				if(road.getType() >=  8 && road.getType() <= 10){			//ylimmät tiilet kuvassa
 					road.setSourceRect(TILE_WIDTH -1, TILE_HEIGHT -1, road.getType() * TILE_WIDTH, 0);
 					roadmap.push_back(road);		//lisäys vektoriin
