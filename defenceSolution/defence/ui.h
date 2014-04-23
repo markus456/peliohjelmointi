@@ -5,21 +5,70 @@
 #include <memory>
 #include <utility>
 #include <functional>
+#include <sstream>
 #include "include\SDL.h"
 #include "include\SDL_ttf.h"
 #include "Sprite.h"
+class TextCounter:public Sprite{
+protected:
+	std::function<int ()> _funct;
+	int _value;
+	std::string _prefix,_suffix;
+	std::stringstream _strgen;
+	TTF_Font* _font;
+	SDL_Color _color;
+	SDL_Surface* _tmp;
+	SDL_Renderer* _rndr;
+
+public:
+	TextCounter(std::function<int ()> fnc = nullptr,int val = 0, std::string pref = "",std::string suff = ""):_funct(fnc),_value(val),_prefix(pref),_suffix(suff){
+		_font = TTF_OpenFont("revalia.ttf", 20);
+		_color.r = _color.g = _color.b = _color.a = 255;
+	}
+	void update(){
+		if(_rndr!=nullptr&&_funct&&_funct()!=_value){
+			_value = _funct();
+			_strgen.str("");
+			_strgen << _prefix << _value << _suffix;
+			std::string tstr = _strgen.str();
+			_tmp= TTF_RenderText_Blended_Wrapped(_font, tstr.c_str(), _color, 25*tstr.size());
+			setSize(Location(0,0,_tmp->w,_tmp->h));
+			_texture = SDL_CreateTextureFromSurface(_rndr, _tmp);	
+		}
+	}
+	void draw(SDL_Renderer* rndr){
+		if(_rndr==nullptr){
+			_rndr = rndr;
+		}else{
+			SDL_RenderCopy(rndr,_texture,nullptr,&_location.toSDL_Rect());
+		}
+	}
+	~TextCounter(){
+		SDL_FreeSurface(_tmp);
+		TTF_CloseFont(_font);
+	}
+};
+
+/*
+*Animoitu sprite.
+*/
 class ImageSprite:public Sprite{
 protected:
 	std::vector<Location> _frames;
 	std::vector<Location>::iterator _frame_iterator;
-	bool _loop;
+	bool _loop,_is_done;
 	unsigned int _columns, _rows,_animation_delay,_delay;
 public:
-	ImageSprite():_loop(false),_columns(0),_rows(0),_animation_delay(0),_delay(0){}
+	ImageSprite():_loop(false),_columns(0),_rows(0),_animation_delay(0),_delay(0),_is_done(false){}
 	virtual void draw(SDL_Renderer* rndr){
 		if(_frame_iterator!=_frames.end()){
 			SDL_RenderCopy(rndr,_texture,&(*_frame_iterator).toSDL_Rect(),&_location.toSDL_Rect());
+		}else if(_frames.size()==0){
+			SDL_RenderCopy(rndr,_texture,nullptr,&_location.toSDL_Rect());
 		}
+	}
+	bool done(){
+		return _is_done;
 	}
 	void setSpriteSheetSize(int columns, int rows){
 		_columns = columns;
@@ -31,7 +80,10 @@ public:
 	}
 
 	void setLoop(bool b){_loop = b;}
-	void setAnimationDelay(unsigned int i){_animation_delay = i;}
+	void setAnimationDelay(unsigned int i){
+		_animation_delay = i;
+		_delay = _animation_delay;
+	}
 	virtual void update(){
 		if(_delay>0){
 			_delay--;
@@ -42,10 +94,56 @@ public:
 				if(_frame_iterator==_frames.end()){
 					if(_loop){
 						_frame_iterator = _frames.begin();
+					}else{
+						_is_done = true;
 					}
 				}
+			}else{
+				_is_done = true;
 			}
 		}
+	}
+};
+/*
+*Animoitu sprite päällä olevalla tekstillä
+*/
+class TextSprite:public ImageSprite{
+protected:
+	std::string _text;
+	SDL_Texture* _text_texture;
+	Location _text_location;
+	bool _tex_created,_transparent;
+	void genTextTex(SDL_Renderer* rndr){
+		TTF_Font* font = TTF_OpenFont("revalia.ttf", 20);
+		SDL_Color color = {255,255,255};
+		SDL_Surface* tmp = TTF_RenderText_Blended_Wrapped(font, _text.c_str(), color, _text.size()*20);
+		_text_location.w = tmp->w;
+		_text_location.h = tmp->h;
+		if(_transparent){
+			_location.w = tmp->w;
+			_location.h = tmp->h;
+		}
+		_text_texture = SDL_CreateTextureFromSurface(rndr, tmp);
+		SDL_FreeSurface(tmp);
+		TTF_CloseFont(font);
+	}
+public:
+	TextSprite(std::string text = "",bool transparent = true):_text(text),_tex_created(false),_transparent(transparent){
+		_location.w = text.size()*20;
+	}
+	virtual void draw(SDL_Renderer* rndr){
+		if(!_tex_created){
+			genTextTex(rndr);
+			_tex_created = true;
+		}
+		SDL_RenderCopy(rndr,_text_texture,nullptr,&_text_location.toSDL_Rect());
+		if(!_transparent){
+			ImageSprite::draw(rndr);
+		}
+	}
+	virtual void setLocation(Location l){
+		_text_location = l;
+		ImageSprite::setLocation(l);
 	}
 };
 class Button:public Sprite{
@@ -54,8 +152,7 @@ public:
 		SDL_RenderCopy(rndr,_texture,nullptr,&_location.toSDL_Rect());
 	}
 	virtual void update(){}
-	virtual void onClick(){}
-	virtual void onClick(int x, int y){}
+	virtual void onClick(int x = 0, int y = 0){}
 };
 
 class ImageButton :public Button{
@@ -63,7 +160,7 @@ protected:
 	std::function<void ()> _fnc;
 public:
 	ImageButton(std::function<void()> fnc):_fnc(fnc){}
-	virtual void onClick(){ if(_fnc!=nullptr)_fnc(); }
+	virtual void onClick(int,int){ if(_fnc!=nullptr)_fnc(); }
 	virtual void setCallback(std::function<void ()> f){_fnc = f;}
 };
 
@@ -203,11 +300,19 @@ class Menu :public Button{
 protected:
 	bool _standardize, _resized;
 	std::vector<std::shared_ptr<Button>> _buttons;
-	Location largest;
+	Location largest, title_pos;
+	SDL_Texture* title;
 public:
 	Menu():_standardize(false), _resized(false){
 		largest = Location(0,0,0,0);
-	}
+	}/*
+	virtual void setTitle(std::string s){
+		TTF_Font* font = TTF_OpenFont("revalia.ttf", 20);
+		SDL_Color color = {255,255,255,255};
+		SDL_Surface* tmp = TTF_RenderText_Blended_Wrapped(font,s.c_str(),color,300);
+		title_pos = Location(50,50,tmp->w,tmp->h);
+		SDL_CreateTextureFromSurface(nullptr,tmp);
+	}*/
 	virtual void addButton(Button* b){
 		if (_buttons.size() > 0){
 			Location l = _buttons.back()->getLocation();

@@ -36,5 +36,7 @@ public:
 	void setRenderer(SDL_Renderer* rndr);
 	void setClips();
 	void setMap(std::string filename);
+	std::vector<Tiili>& getMap();
+	std::vector<Road>& getRoad();
 };
 

@@ -98,12 +98,11 @@ void System::eventKeyDown(SDL_Keycode sym) {
 			}
 		break;
 	case SDLK_F1:
-		if(controller->getGameState()!=Controller::PAUSED){
-			controller->setGameState(Controller::PAUSED);
-		}else{
-			controller->setGameState(Controller::GAME);
-		}
+		controller->setGameState(controller->getGameState()^Controller::PAUSED);
 		controller->initGame();
+		break;
+	case SDLK_F2:
+		controller->cycleDifficulty();
 		break;
 	case SDLK_w:
 		controller->playerMoveUp(true);
@@ -117,6 +116,8 @@ void System::eventKeyDown(SDL_Keycode sym) {
 	case SDLK_d:
 		controller->playerMoveRight(true);
 		break;
+	case SDLK_f:
+		controller->playerDoDamage();
 	}
 }
 

@@ -2,13 +2,11 @@
 
 #include "SDL.h"
 #include "Sprite.h"
-#include <vector>
 #include <deque>
 #include <cstdlib>
-#include <iostream>
+#include <cmath>
 #include <fstream>
 #include <string>
-#include <stdio.h>
 
 class Enemy : public Sprite
 {
@@ -17,12 +15,21 @@ public:
 	~Enemy(void);
 	void attack();
 	void teePolku();
+	bool isEmpty();
+	void setSpeed(int);
+	int getSpeed();
+	void setAttack(int);
+	int getAttack();
+	void setHP(int);
+	int getHP();
 	virtual void draw(SDL_Renderer* rndr);
 	virtual void update();
+	void setPath(std::deque<Location>& roadmap);
 private:
 	int HP, ATK, speed,n,m;
 	double angle;
-	SDL_Point tmp;
-	std::deque<SDL_Point> polku;
+	Location tmp;
+	std::deque<Location> polku;
+	
 };
 

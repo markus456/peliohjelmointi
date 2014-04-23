@@ -17,10 +17,11 @@ private:
 	double towerProjectileSpeed;
 	bool readyToShoot;
 	int cooldown;
+	int cost;
 	std::vector<std::shared_ptr<Enemy>> enemies;
 public:
 	Tower(void);
-	Tower(int locationX, int locationY, int towerRange, int projSpeed);
+	Tower(int locationX, int locationY, int towerRange, int projSpeed, int cost);
 	~Tower(void);
 	void addEnemies(std::vector<std::shared_ptr<Enemy>>);
 	void loadProjectile(std::shared_ptr<Bullet> projectile);
@@ -28,7 +29,7 @@ public:
 	void placeAt(Location location);
 	void setTowerRange(double range);
 	void setTowerProjSpeed(double towerProjSpeed);
-	void scanAndShoot(std::vector<std::shared_ptr<Enemy>> spriteList);
+	//void scanAndShoot(std::vector<std::shared_ptr<Enemy>> spriteList);
 	bool needsBullet();
 	double getTargetDistance(Location enemyLocation);
 	virtual void draw(SDL_Renderer* rndr);

@@ -6,17 +6,19 @@ Tower::Tower(void) {
 	this->towerRange=0;
 	this->towerProjectileSpeed=0;
 	cooldown = 0;
+	cost = 0;
 	readyToShoot = false;
 	//loadedProjectile = 0;
 }
 
-Tower::Tower(int locationX, int locationY, int towerRange, int projSpeed){
+Tower::Tower(int locationX, int locationY, int towerRange, int projSpeed, int cost){
 	_location.x = locationX;
 	_location.y = locationY;
 	cooldown = 0;
 	readyToShoot = false;
 	this->towerRange=towerRange;
 	this->towerProjectileSpeed = projSpeed;
+	this->cost = cost;
 	//loadedProjectile = 0;
 }
 
