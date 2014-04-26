@@ -84,6 +84,7 @@ void Controller::update(){
 					bullet->setTexture("bullet.png",_renderer);
 					bullet->setSize(_tile_size);
 					a->loadProjectile(bullet);
+					Mix_PlayChannel(-1,pew,0);
 					_bullets.push_back(bullet);
 				}		
 			}
@@ -136,6 +137,7 @@ void Controller::onClick(int x,int y){
 				return;
 			}
 		}
+		Mix_PlayChannel(-1,menuClick,0);
 		_menu->onClick(x,y);
 	}else if(_game_state&Controller::GAME_ACTIVE){
 
@@ -283,8 +285,8 @@ void Controller::buildMenu(){
 	}
 }
 void Controller::initGame(){
-	enemydeath = Mix_LoadWAV("\sfx\enemydeath1.wav");
 	if(_game_state&(Controller::MAIN_MENU|Controller::PAUSED|Controller::GAME_OVER)){
+		loadSounds();
 		buildMenu();
 	}else if(_game_state&Controller::GAME_NEW){
 		setGameState(Controller::GAME_ACTIVE);
@@ -455,4 +457,9 @@ void Controller::createBlood(Location &location) {
 	_effects.back()->setLocation(location);
 	_effects.back()->setSize(_tile_size);
 	_effects.back()->setAnimationDelay(90);
+}
+void Controller::loadSounds(){
+	enemydeath = Mix_LoadWAV("sfx/enemydeath.wav");
+	pew = Mix_LoadWAV("sfx/pew.wav");
+	menuClick = Mix_LoadWAV("sfx/menu.wav");
 }

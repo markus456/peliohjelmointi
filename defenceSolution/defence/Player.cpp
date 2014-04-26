@@ -13,6 +13,7 @@ Player::Player(void)
 	_speedx = 0;
 	_speedy = 0;
 	_damage = 10;
+	footstep = Mix_LoadWAV("sfx/footstep.wav");
 }
 
 
@@ -37,9 +38,11 @@ void Player::update() {
 }
 
 bool Player::move(double speedx, double speedy) {
+	if(speedx!=0||speedy!=0)
+		Mix_PlayChannel(-1,footstep,0);
 	_location.x += speedx;
 	_location.y += speedy;
-	
+
 	if (collideTestWorldBounds()) {
 		//return back to original place
 		_location.x -= speedx;

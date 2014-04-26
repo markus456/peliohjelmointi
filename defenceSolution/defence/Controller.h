@@ -31,6 +31,8 @@ protected:
 	void buildTower(int x, int y);
 	std::shared_ptr<Bullet> buildBullet();
 	Mix_Chunk* enemydeath;
+	Mix_Chunk* pew;
+	Mix_Chunk* menuClick;
 
 public:
 
@@ -74,5 +76,6 @@ public:
 	void playerDoDamage();
 	void createBlood(Location &location);
 	void createEffect(Location &location, std::string filename, unsigned int delay = 1,Location effect_size = Location(0,0,32,32), std::vector<Location> framelist = std::vector<Location>());
+	void loadSounds();
 };
 #endif

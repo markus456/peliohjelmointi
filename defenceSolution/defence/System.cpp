@@ -82,6 +82,7 @@ void System::enterMainLoop() {
 		}
 	}
 	delete controller;
+	Mix_CloseAudio();
 	SDL_DestroyTexture(texture);
 	SDL_DestroyRenderer(rndr);
 	SDL_DestroyWindow(wnd);
