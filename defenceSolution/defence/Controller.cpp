@@ -283,6 +283,7 @@ void Controller::buildMenu(){
 	}
 }
 void Controller::initGame(){
+	enemydeath = Mix_LoadWAV("\sfx\enemydeath1.wav");
 	if(_game_state&(Controller::MAIN_MENU|Controller::PAUSED|Controller::GAME_OVER)){
 		buildMenu();
 	}else if(_game_state&Controller::GAME_NEW){
@@ -449,6 +450,7 @@ void Controller::createEffect(Location &location, std::string filename, unsigned
 }
 void Controller::createBlood(Location &location) {
 	_effects.push_back(std::shared_ptr<ImageSprite>(new ImageSprite()));
+	Mix_PlayChannel(-1,enemydeath,0);
 	_effects.back()->setTexture("blood.png", _renderer);
 	_effects.back()->setLocation(location);
 	_effects.back()->setSize(_tile_size);

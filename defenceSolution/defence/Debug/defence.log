@@ -1,0 +1,22 @@
+﻿Build started 4/26/2014 1:11:10 PM.
+     1>Project "C:\Users\Risto\Documents\GitHub\peliohjelmointi\defenceSolution\defence\defence.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Risto\Documents\GitHub\peliohjelmointi\defenceSolution\Debug\defence.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\Risto\Documents\GitHub\peliohjelmointi\defenceSolution\defence\\lib SDL2.lib SDL2main.lib SDL2_image.lib SDL2_ttf.lib SDL2_mixer.lib SDL2.lib SDL2main.lib SDL2.lib SDL2main.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Risto\Documents\GitHub\peliohjelmointi\defenceSolution\Debug\defence.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Risto\Documents\GitHub\peliohjelmointi\defenceSolution\Debug\defence.lib" /MACHINE:X86 Debug\Bullet.obj
+         Debug\Controller.obj
+         Debug\Enemy.obj
+         Debug\main.obj
+         Debug\Player.obj
+         Debug\Road.obj
+         Debug\System.obj
+         Debug\Tiili.obj
+         Debug\TileMap.obj
+         Debug\Tower.obj
+     1>Controller.obj : error LNK2019: unresolved external symbol _Mix_LoadWAV_RW referenced in function "public: void __thiscall Controller::initGame(void)" (?initGame@Controller@@QAEXXZ)
+     1>Controller.obj : error LNK2019: unresolved external symbol _Mix_PlayChannelTimed referenced in function "public: void __thiscall Controller::createBlood(class Location &)" (?createBlood@Controller@@QAEXAAVLocation@@@Z)
+     1>System.obj : error LNK2019: unresolved external symbol _Mix_OpenAudio referenced in function "public: bool __thiscall System::init(void)" (?init@System@@QAE_NXZ)
+     1>C:\Users\Risto\Documents\GitHub\peliohjelmointi\defenceSolution\Debug\defence.exe : fatal error LNK1120: 3 unresolved externals
+     1>Done Building Project "C:\Users\Risto\Documents\GitHub\peliohjelmointi\defenceSolution\defence\defence.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.12

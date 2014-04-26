@@ -30,6 +30,7 @@ protected:
 	void buildEnemy();
 	void buildTower(int x, int y);
 	std::shared_ptr<Bullet> buildBullet();
+	Mix_Chunk* enemydeath;
 
 public:
 

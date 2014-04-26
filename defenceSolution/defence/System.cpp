@@ -30,6 +30,7 @@ bool System::init() {
             cout << "render creation failed." << endl;
     }
 	SDL_Rect wndw = {0,0,SCREEN_WIDTH,SCREEN_HEIGHT};
+	Mix_OpenAudio(22050,MIX_DEFAULT_FORMAT,2,4096);
 	controller = new Controller(this,rndr,wndw);
 	controller->initGame();
 	mousedown = false;
