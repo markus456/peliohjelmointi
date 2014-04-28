@@ -51,6 +51,7 @@ public:
 	~Controller();
 	void update();
 	void draw();
+	void resetGame();
 	void onClick(int,int);
 	void loadMap(std::string);
 	void add(Button* b);

@@ -6,6 +6,9 @@ Controller::~Controller(){
 	_buttons.clear();
 }
 void Controller::update(){
+
+	/// UI:n ja visuaalien päivitys
+
 	_timer = SDL_GetTicks();
 	_menu->update();
 	auto eff_it = _effects.begin();
@@ -20,14 +23,19 @@ void Controller::update(){
 	for(auto& a:_texts){
 		a->update();
 	}
+
+
 	if(!(_game_state&Controller::PAUSED)){
-		if(_game_state&Controller::GAME_WAIT){
+		if(_game_state&Controller::GAME_WAIT){ /// Aaltojen välinen tauko
 			if(_params->waveDelay()<(_timer-_wave_timer)){
 				setGameState(Controller::GAME_ACTIVE);
 				_generated_enemies = 0;
 				initGame();
 			}
-		}else if(_game_state&Controller::GAME_ACTIVE){
+		}else if(_game_state&Controller::GAME_ACTIVE){ /// Aalto meneillään
+
+			/// Pelin tila
+
 			if(_enemies_got_through>=_params->enemiesAllowedThrough()){
 				_enemies_got_through = 0;
 				setGameState(Controller::GAME_OVER);
@@ -38,9 +46,13 @@ void Controller::update(){
 				_generated_enemies++;
 			}else if(_enemies.size()==0&&_generated_enemies>=_params->totalEnemies()){
 				_generated_enemies = 0;
+				_params->advance();
 				setGameState(Controller::GAME_WAIT);
 				initGame();
 			}
+
+			/// Vihollisten päivitys
+
 			auto e_iterator =_enemies.begin();
 			while(e_iterator<_enemies.end()){
 				(*e_iterator)->update();
@@ -65,9 +77,15 @@ void Controller::update(){
 					e_iterator++;
 				}
 			}
+
+			/// Tornien päivitys
+			
 			for(auto& a:_towers){
 				a->update();
 			}
+			
+			/// Ammusten päivitys
+			
 			auto a = _bullets.begin();
 			while(a!=_bullets.end()){
 				(*a)->update();
@@ -78,6 +96,9 @@ void Controller::update(){
 					a++;
 				}
 			}
+			
+			/// Tornien ammusten tarve
+			
 			for(auto& a:_towers){
 				if(a->needsBullet()){
 					std::shared_ptr<Bullet> bullet(new Bullet);
@@ -87,6 +108,9 @@ void Controller::update(){
 					_bullets.push_back(bullet);
 				}		
 			}
+
+			/// Pelaajan päivitys
+
 			_player->update();
 		}
 	}
@@ -96,11 +120,11 @@ void Controller::draw(){
 		for(const auto& a:_effects){
 			a->draw(_renderer);
 		}
-		if(_menu.get() != nullptr){
+		if(_menu){
 			_menu->draw(_renderer);
 		}
-	}else if(_game_state&(Controller::GAME_ACTIVE|Controller::GAME_WAIT)){///Pelin pelaaminen
-		if(_map.get() != nullptr){
+	}else if(_game_state&(Controller::GAME_ACTIVE|Controller::GAME_WAIT)){/// Pelin pelaaminen
+		if(_map){
 			_map->drawMap();
 		}
 		for(const auto& a:_effects){
@@ -120,7 +144,7 @@ void Controller::draw(){
 			a->draw(_renderer);
 		}
 		if(_game_state&Controller::PAUSED){
-			if(_menu.get() != nullptr){
+			if(_menu){
 				_menu->draw(_renderer);
 			}
 		}
@@ -236,16 +260,33 @@ void Controller::buildMenu(){
 		_menu->setSize(size);
 		_menu->setLocation(position);
 		_menu->standardize(true);
-		_menu->addButton(new TextButton("New Game","button_background.png",_renderer,[this]{
+
+		TextButton* b = new TextButton("New Game","button_background.png",_renderer,[this]{
 			this->setGameState(Controller::GAME_NEW);
 			this->initGame();
-		}));
-		_menu->addButton(new TextButton("Difficulty: EASY","button_background.png",_renderer,[this]{
+		});
+
+		_menu->addButton(b);
+		unsigned int bpos = _menu->size();
+		b = new TextButton("Difficulty: EASY","button_background.png",_renderer,[=]{
 			this->cycleDifficulty();
-		}));
-		_menu->addButton(new TextButton("Exit","button_background.png",_renderer,[=]{
+			switch(_params->difficulty()){
+			case GameParams::EASY:
+				((TextButton*)_menu->getButton(bpos))->setText("Difficulty: EASY");
+				break;
+			case GameParams::NORMAL:
+				((TextButton*)_menu->getButton(bpos))->setText("Difficulty: NORMAL");
+				break;
+			case GameParams::HARD:
+				((TextButton*)_menu->getButton(bpos))->setText("Difficulty: HARD");
+				break;
+			}
+		});
+		_menu->addButton(b);
+		b = new TextButton("Exit","button_background.png",_renderer,[=]{
 			_parent->exit();
-		}));
+		});
+		_menu->addButton(b);
 	}else if(_game_state&Controller::GAME_OVER){
 		_effects.clear();
 		size.w = System::SCREEN_WIDTH;
@@ -276,21 +317,30 @@ void Controller::buildMenu(){
 		_menu->setSize(size);
 		_menu->setLocation(position);
 		_menu->standardize(true);
-		_menu->addButton(new TextButton("OK","button_background.png",_renderer,[this]{
-			this->setGameState(Controller::MAIN_MENU);
-			this->buildMenu();
+		_menu->addButton(new TextButton("OK","button_background.png",_renderer,[this]{			
+			resetGame();
+			buildMenu();
 		}));
 	}
+}
+void Controller::resetGame(){
+	_timer =  _enemies_got_through = _spawn_delay = _generated_enemies = 0;
+	_current_gold = towerCost;
+	setGameState(Controller::MAIN_MENU);
+	_enemies.clear();
+	_towers.clear();
+	_bullets.clear();
+	_effects.clear();
+	_texts.clear();
+	_buttons.clear();
+	_enemy_path.clear();
 }
 void Controller::initGame(){
 	if(_game_state&(Controller::MAIN_MENU|Controller::PAUSED|Controller::GAME_OVER)){
 		buildMenu();
 	}else if(_game_state&Controller::GAME_NEW){
+		resetGame();
 		setGameState(Controller::GAME_ACTIVE);
-		_texts.clear();
-		_effects.clear();
-		_enemies.clear();
-		_bullets.clear();
 		_texts.push_back(std::shared_ptr<Sprite>(new TextCounter([this]{return currentGold();},0,"Gold: ")));
 		_texts.back()->setLocation(Location(0,0));
 		_texts.push_back(std::shared_ptr<Sprite>(new TextCounter([&]{return _params->enemiesAllowedThrough()-_enemies_got_through;},0,"The walls will hold "," more enemies!")));
@@ -331,7 +381,7 @@ void Controller::initGame(){
 }
 void Controller::buildEnemy(){
 	_generated_enemies ++;
-	Location epos = Location(System::SCREEN_WIDTH/10,4*System::SCREEN_HEIGHT/6 +  + (rand() % 100));
+	Location epos = Location(20,rand() % System::SCREEN_HEIGHT);
 	_enemies.push_back(std::shared_ptr<Enemy>(new Enemy));
 	_enemies.back()->setSpeed(_params->enemySpeed());
 	_enemies.back()->setHP(_params->enemyHP());
@@ -355,19 +405,19 @@ void Controller::buildEnemy(){
 	}
 }
 void Controller::buildTower(int x, int y){
-		
+
 	Tiili newTowerTile;
 	bool tileTaken = false;
 
 	if(_towers.size()<_params->towerLimit()){
-			
+
 		//tutkitaan tile johon ollaan rakentamassa tornia
 		for(auto tile:_map->getMap()){
 			if(tile.isInside(x,y)){
 				newTowerTile = tile;
 			}
 		}
-			
+
 		//katsotaan onko tile tyhjä
 		for(auto t:_towers){
 			if(t->isInside(x,y)){
@@ -375,7 +425,7 @@ void Controller::buildTower(int x, int y){
 			}
 		}
 		if(newTowerTile.buildable() && !tileTaken && towerCost<=_current_gold){
-			
+
 			_towers.push_back(std::shared_ptr<Tower>(new Tower(newTowerTile.getLocation().x,newTowerTile.getLocation().y,400,10,towerCost)));
 			_towers.back()->setTexture("tower1.png",_renderer);
 			_towers.back()->setSize(Location(x,y,_tile_size.w,_tile_size.h));
@@ -425,7 +475,7 @@ void Controller::playerDoDamage() {
 		if (a->distance(*_player.get()) < 50) {
 			a->setHP(a->getHP() - _player->getDamage());
 			createBlood(a->getLocation());
-			
+
 		}
 	}
 	createEffect(_player->getLocation(),"explosion.png",5,Location(0,0,128,128),effect_frames);

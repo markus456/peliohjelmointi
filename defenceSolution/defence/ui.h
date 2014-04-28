@@ -9,6 +9,43 @@
 #include "include\SDL.h"
 #include "include\SDL_ttf.h"
 #include "Sprite.h"
+class ShapeCounter:public Sprite{
+protected:
+	int _initial, _current;
+	float _width,_height;
+	std::function<int ()> _fnc;
+public:
+	ShapeCounter(std::function<int ()> f = nullptr):_initial(0),_current(0),_fnc(f){
+		if(f){
+			_initial = f();
+			_current = _initial;
+		}
+	}
+	bool genTexture(SDL_Renderer* rndr){
+		SDL_Surface* s = nullptr;
+		s = SDL_CreateRGBSurface(0, 32, 32, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+		if(s==nullptr)return false;
+		if(SDL_FillRect(s,nullptr,SDL_MapRGB(s->format,0,255,0)) != 0){
+			SDL_FreeSurface(s);
+			return false;
+		}
+		auto tex = SDL_CreateTextureFromSurface(rndr, s);
+		if(tex == nullptr)return false;
+		_texture = tex;
+		return true;
+	}
+	virtual void draw(SDL_Renderer* rndr){
+		SDL_RenderCopy(rndr,_texture,nullptr,&_location.toSDL_Rect());
+	}
+	virtual void update(){
+		if(_fnc){
+			_current = _fnc();
+			auto size_before = getLocation();
+			size_before.w *= (float)(_current/_initial);
+			setSize(Location());
+		}
+	}
+};
 class TextCounter:public Sprite{
 protected:
 	std::function<int ()> _funct;
@@ -305,14 +342,10 @@ protected:
 public:
 	Menu():_standardize(false), _resized(false){
 		largest = Location(0,0,0,0);
-	}/*
-	virtual void setTitle(std::string s){
-		TTF_Font* font = TTF_OpenFont("revalia.ttf", 20);
-		SDL_Color color = {255,255,255,255};
-		SDL_Surface* tmp = TTF_RenderText_Blended_Wrapped(font,s.c_str(),color,300);
-		title_pos = Location(50,50,tmp->w,tmp->h);
-		SDL_CreateTextureFromSurface(nullptr,tmp);
-	}*/
+	}
+	unsigned int size(){
+		return _buttons.size();
+	}
 	virtual void addButton(Button* b){
 		if (_buttons.size() > 0){
 			Location l = _buttons.back()->getLocation();

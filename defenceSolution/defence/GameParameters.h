@@ -6,12 +6,13 @@
 */
 class GameParams{
 private:
-	unsigned int _enemies_per_wave, _enemies_allowed_through,_enemy_speed,_enemy_hp,_enemy_attack,_tower_limit,_total_enemies,_spawn_delay,_wave_delay;
+	unsigned int _enemies_per_wave, _enemies_allowed_through,_enemy_speed,_enemy_hp,_enemy_attack,_tower_limit,_total_enemies,_spawn_delay,_wave_delay,_difficulty;
 public:
 	static const unsigned int EASY = 1;
 	static const unsigned int NORMAL = 2;
 	static const unsigned int HARD = 3;
 	GameParams(unsigned int difficulty = GameParams::NORMAL){
+		_difficulty = difficulty;
 		switch(difficulty){
 		case GameParams::EASY:
 			_spawn_delay = 45;
@@ -57,5 +58,20 @@ public:
 	unsigned int totalEnemies(){return _total_enemies;}
 	unsigned int spawnDelay(){return _spawn_delay;}
 	unsigned int waveDelay(){return _wave_delay;}
+	unsigned int difficulty(){return _difficulty;}
+	void advance(){
+		_enemy_hp++;
+		_tower_limit++;
+		if(_enemy_hp % 2 == 0){
+			if(_wave_delay - 250>0){
+				_wave_delay -= 250;
+			}		
+			_enemy_speed++;
+			_enemies_per_wave += 5;
+			if(_spawn_delay>0){
+				_spawn_delay--;
+			}
+		}
+	}
 };
 #endif
