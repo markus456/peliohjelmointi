@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
@@ -21,4 +22,34 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Controller.h" />
   </ItemGroup>
+=======
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="System.cpp" />
+    <ClCompile Include="Tiili.cpp" />
+    <ClCompile Include="TileMap.cpp" />
+    <ClCompile Include="Tower.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Road.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="System.h" />
+    <ClInclude Include="Tiili.h" />
+    <ClInclude Include="TileMap.h" />
+    <ClInclude Include="Tower.h" />
+    <ClInclude Include="ui.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Controller.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Road.h" />
+    <ClInclude Include="GameParameters.h" />
+  </ItemGroup>
+>>>>>>> origin/Mappi2
 </Project>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include "System.h"
 
 int main(int argc, char** argv) {
@@ -6,4 +7,14 @@ int main(int argc, char** argv) {
 		sys.enterMainLoop();
 	}
 	return 0;
+=======
+#include "System.h"
+
+int main(int argc, char** argv) {
+	System sys;
+	if (sys.init()) {
+		sys.enterMainLoop();
+	}
+	return 0;
+>>>>>>> origin/Mappi2
 }
