@@ -2,7 +2,7 @@
 #pragma once
 #include "Sprite.h"
 #include "TileMap.h"
-
+#include "SDL_mixer.h"
 #include <memory>
 
 class Player : public Sprite {
@@ -26,6 +26,7 @@ private:
 	unsigned int _damage;
 	bool _move_up, _move_down, _move_left, _move_right;
 	std::unique_ptr<TileMap>* _map;
+	Mix_Chunk* footstep;
 };
 
 =======
