@@ -61,17 +61,12 @@ public:
 	unsigned int difficulty(){return _difficulty;}
 	void advance(){
 		_enemy_hp++;
-		_tower_limit++;
-		if(_enemy_hp % 2 == 0){
-			if(_wave_delay - 2000>0){
-				_wave_delay -= 2000;
-			}		
-			_enemy_speed++;
-			_enemies_per_wave += 5;
-			if(_spawn_delay>0){
-				_spawn_delay--;
-			}
+		_tower_limit += 5;
+		if(_wave_delay - 1000>0){
+			_wave_delay -= 1000;
 		}
+		_enemy_speed++;
+		_enemies_per_wave += 5;
 	}
 };
 #endif

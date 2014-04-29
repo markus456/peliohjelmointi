@@ -52,7 +52,9 @@ public:
 	virtual void update(){
 		if(_target!=nullptr){
 			auto loc = _target->getLocation();
+			if(loc.y - 32 > 0){
 			loc.y -= 32;
+			}
 			setLocation(loc);
 		}
 		if(_fnc){

@@ -79,6 +79,7 @@ bool Tiili::buildable(){///Tilapäinen korjaus
 	return isBuildable;
 }
 bool Tiili::passable(){//Tilapäinen korjaus
+	return true;
 	return isPassable;
 }
 void Tiili::setBuildable(bool Buildable){

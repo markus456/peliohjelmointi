@@ -13,6 +13,7 @@ Player::Player(void)
 	_speedx = 0;
 	_speedy = 0;
 	_damage = 10;
+	setSpriteSize();
 	footstep = Mix_LoadWAV("sfx/footstep.wav");
 }
 
@@ -24,19 +25,22 @@ Player::~Player(void)
 void Player::draw(SDL_Renderer* rndr)
 {
 	Location p(_location.w / 2, _location.h / 2);
-	SDL_Rect r = _location.toSDL_Rect();
-	SDL_Point po = p.toSDL_Point();
-	SDL_RenderCopyEx(rndr, _texture, nullptr, &r, 0, &po, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(rndr, _texture, nullptr, &render_size.toSDL_Rect(), 0, &p.toSDL_Point(), SDL_FLIP_NONE);
 }
 
 void Player::update() {
+	render_size.x = _location.x;
+	render_size.y = _location.y;
 	if (!move(_speedx, _speedy)) {
 		if (!move(_speedx, 0)) {
 			move(0, _speedy);
 		}
 	}
 }
-
+void Player::setSpriteSize(Location l){
+	render_size.w = l.w;
+	render_size.h = l.h;
+}
 bool Player::move(double speedx, double speedy) {
 	if(speedx!=0||speedy!=0)
 		Mix_PlayChannel(-1,footstep,0);
@@ -79,6 +83,7 @@ void Player::updateSpeed() {
 	if (_move_right) {
 		_speedx += 1;
 	}
+	
 }
 
 void Player::setMoveUp(bool move) {

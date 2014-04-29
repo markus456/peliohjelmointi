@@ -46,9 +46,9 @@ void TileMap::addTiles()
 				if(tile.getType() <= 9){			//ylimmät tiilet kuvassa
 					tile.setSourceRect(TILE_WIDTH -1, TILE_HEIGHT -1, tile.getType() * TILE_WIDTH, 0);
 				}else if(tile.getType() <= 19){		//seuraavan rivin tiilet
-					tile.setSourceRect(TILE_WIDTH -1, TILE_HEIGHT -1, (tile.getType()-10) * TILE_WIDTH, 32);
+					tile.setSourceRect(TILE_WIDTH -1, TILE_HEIGHT -1, (tile.getType()-11) * TILE_WIDTH, 32);
 				}else if(tile.getType() <= 29){		//seuraavan rivin tiilet
-					tile.setSourceRect(TILE_WIDTH -1, TILE_HEIGHT -1, (tile.getType()-20) * TILE_WIDTH, 64);
+					tile.setSourceRect(TILE_WIDTH -1, TILE_HEIGHT -1, (tile.getType()-21) * TILE_WIDTH, 64);
 				}
 				map.push_back(tile);		//lisäys vektoriin
 				w += TILE_WIDTH;			//seuraava tiili leveyden verran oikealle

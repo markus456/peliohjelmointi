@@ -59,7 +59,7 @@ void Controller::update(){
 				(*e_iterator)->update();
 				auto p_it = _bullets.begin();
 				while(p_it<_bullets.end()){
-					if((*e_iterator)->isInside((*p_it)->getLocation())){
+					if((*e_iterator)->collideTest(*(*p_it))){
 						(*e_iterator)->setHP((*e_iterator)->getHP()-(*p_it)->getDamage());
 						createBlood((*e_iterator)->getLocation());
 
@@ -365,9 +365,9 @@ void Controller::initGame(){
 		resetGame();
 		setGameState(Controller::GAME_ACTIVE);
 		_texts.push_back(std::shared_ptr<Sprite>(new TextCounter([this]{return currentGold();},0,"Gold: ")));
-		_texts.back()->setLocation(Location(0,0));
+		_texts.back()->setLocation(Location(30,0));
 		_texts.push_back(std::shared_ptr<Sprite>(new TextCounter([&]{return _params->enemiesAllowedThrough()-_enemies_got_through;},0,"The walls will hold "," more enemies!")));
-		_texts.back()->setLocation(Location(0,50));
+		_texts.back()->setLocation(Location(30,50));
 		_map.reset(new TileMap());
 		_map->setRenderer(_renderer);
 		_map->setTexture("terrain.png",_renderer);
@@ -375,10 +375,16 @@ void Controller::initGame(){
 		for(auto& a: tmp_path){
 			_enemy_path.push_back(a.getLocation());
 		}
+		std::sort(_enemy_path.begin(),_enemy_path.end(),[&](const Location& a,const Location& b){
+			if(a.x==b.x)return a.y<b.y;
+			return a.x<b.x;
+		});
 		_player.reset(new Player());
 		_player->setTexture("player.png",_renderer);
-		SDL_Point ppos = {8*System::SCREEN_WIDTH/10,System::SCREEN_HEIGHT/4};
-		_player->setLocation(ppos);
+		_player->setSize(Location(0,0,32,32));
+		auto player_start = _enemy_path.back();
+		player_start.x -= 50;
+		_player->setLocation(player_start);
 		_player->setMap(_map);
 
 		_effects.push_back(std::shared_ptr<ImageSprite>(new ImageSprite()));
