@@ -4,6 +4,7 @@ class Controller;
 #include <memory>
 #include <vector>
 #include "SDL.h"
+#include "SDL_mixer.h"
 #include "include\SDL_image.h"
 #include "Sprite.h"
 #include "ui.h"

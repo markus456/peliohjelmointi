@@ -339,6 +339,7 @@ protected:
 	std::vector<std::shared_ptr<Button>> _buttons;
 	Location largest, title_pos;
 	SDL_Texture* title;
+
 public:
 	Menu():_standardize(false), _resized(false){
 		largest = Location(0,0,0,0);
