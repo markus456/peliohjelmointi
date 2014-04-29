@@ -21,7 +21,7 @@ public:
 			_enemies_allowed_through = 8;
 			_enemy_speed = 1;
 			_enemy_attack = 1;
-			_enemy_hp = 20;
+			_enemy_hp = 100;
 			_tower_limit = 15;
 			_wave_delay = 15*1000;
 			break;
@@ -31,7 +31,7 @@ public:
 			_enemies_per_wave = 45;
 			_enemies_allowed_through = 4;
 			_enemy_speed = 3;
-			_enemy_hp = 4;
+			_enemy_hp = 140;
 			_enemy_attack = 2;
 			_tower_limit = 12;
 			_wave_delay = 10*1000;
@@ -42,7 +42,7 @@ public:
 			_enemies_per_wave = 60;
 			_enemies_allowed_through = 2;
 			_enemy_speed = 4;
-			_enemy_hp = 8;
+			_enemy_hp = 180;
 			_enemy_attack = 4;
 			_tower_limit = 8;
 			_wave_delay = 5*1000;
@@ -63,8 +63,8 @@ public:
 		_enemy_hp++;
 		_tower_limit++;
 		if(_enemy_hp % 2 == 0){
-			if(_wave_delay - 250>0){
-				_wave_delay -= 250;
+			if(_wave_delay - 2000>0){
+				_wave_delay -= 2000;
 			}		
 			_enemy_speed++;
 			_enemies_per_wave += 5;
