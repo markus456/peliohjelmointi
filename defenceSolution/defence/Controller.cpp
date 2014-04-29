@@ -38,6 +38,7 @@ void Controller::update(){
 
 			if(_enemies_got_through>=_params->enemiesAllowedThrough()){
 				_enemies_got_through = 0;
+				_effects.clear();
 				setGameState(Controller::GAME_OVER);
 				buildMenu();
 			}else if(_enemies.size()<_params->enemiesPerWave()&&_timer-_spawn_delay>_params->spawnDelay()&&_generated_enemies<_params->totalEnemies()){
@@ -70,9 +71,21 @@ void Controller::update(){
 				if((*e_iterator)->isEmpty()){
 					e_iterator = _enemies.erase(e_iterator);
 					_enemies_got_through++;
+					for(auto h_it = _healthbars.begin();h_it!=_healthbars.end();h_it++){
+						if((*h_it)->getTarget()==(*e_iterator).get()){
+							_healthbars.erase(h_it);
+							break;
+						}
+					}
 				}else if((*e_iterator)->getHP()<1){
 					e_iterator = _enemies.erase(e_iterator);
 					_current_gold++;
+					for(auto h_it = _healthbars.begin();h_it!=_healthbars.end();h_it++){
+						if((*h_it)->getTarget()==(*e_iterator).get()){
+							_healthbars.erase(h_it);
+							break;
+						}
+					}
 				}else{
 					e_iterator++;
 				}
@@ -82,7 +95,9 @@ void Controller::update(){
 			
 			for(auto& a:_towers){
 				a->update();
+				a->addEnemies(_enemies);
 			}
+	
 			
 			/// Ammusten päivitys
 			
@@ -111,7 +126,9 @@ void Controller::update(){
 			}
 
 			/// Pelaajan päivitys
-
+			for(auto& a:_healthbars){
+				a->update();
+			}
 			_player->update();
 		}
 	}
@@ -142,6 +159,9 @@ void Controller::draw(){
 		}
 		_player->draw(_renderer);
 		for(const auto& a:_texts){
+			a->draw(_renderer);
+		}
+		for(const auto& a:_healthbars){
 			a->draw(_renderer);
 		}
 		if(_game_state&Controller::PAUSED){
@@ -351,7 +371,7 @@ void Controller::initGame(){
 		_map.reset(new TileMap());
 		_map->setRenderer(_renderer);
 		_map->setTexture("terrain.png",_renderer);
-		auto tmp_path = _map->getRoad();
+		auto tmp_path = _map->getRoad(0);
 		for(auto& a: tmp_path){
 			_enemy_path.push_back(a.getLocation());
 		}
@@ -384,11 +404,22 @@ void Controller::initGame(){
 }
 void Controller::buildEnemy(){
 	_generated_enemies ++;
-	Location epos = Location(20,rand() % System::SCREEN_HEIGHT);
+	int enem = _enemies.size();
 	_enemies.push_back(std::shared_ptr<Enemy>(new Enemy));
 	_enemies.back()->setSpeed(_params->enemySpeed());
 	_enemies.back()->setHP(_params->enemyHP());
 	_enemies.back()->setAttack(_params->enemyAttack());
+	Enemy* en = _enemies.back().get();
+	ShapeCounter* s = new ShapeCounter([=]{
+		if(en!=nullptr){
+			return (float) en->getHP();
+		}else{
+			return 0.f;
+		}		
+	},_enemies.back().get());
+	s->genTexture(_renderer);
+	s->setSize(Location(0,0,32,10));
+	_healthbars.push_back(std::shared_ptr<ShapeCounter>(s));
 	switch(rand() % 3){
 	case 0:
 		_enemies.back()->setTexture("enemy1.png",_renderer);
@@ -400,9 +431,16 @@ void Controller::buildEnemy(){
 		_enemies.back()->setTexture("enemy3.png",_renderer);
 		break;
 	}
-	_enemies.back()->setLocation(epos.toSDL_Rect());
 	_enemies.back()->setSize(_tile_size);
+
+	auto tmp_path = _map->getRoad(rand() % 2);
+	_enemy_path.clear();
+		for(auto& a: tmp_path){
+			_enemy_path.push_back(a.getLocation());
+		}
 	_enemies.back()->setPath(_enemy_path);
+	Location epos = _enemy_path.front();
+	_enemies.back()->setLocation(epos.toSDL_Rect());
 	for(auto& a:_towers){
 		a->addEnemies(_enemies);
 	}
@@ -469,6 +507,7 @@ void Controller::cycleDifficulty(){
 }
 
 void Controller::playerDoDamage() {
+	if(getGameState()==Controller::GAME_OVER)return;
 	std::vector<Location> effect_frames;
 	effect_frames.push_back(Location(0,0,64,64));
 	effect_frames.push_back(Location(64,0,64,64));

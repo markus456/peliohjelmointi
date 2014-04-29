@@ -16,6 +16,7 @@ protected:
 	std::vector<std::shared_ptr<Bullet>> _bullets;
 	std::vector<std::shared_ptr<ImageSprite>> _effects;
 	std::vector<std::shared_ptr<Sprite>> _texts;
+	std::vector<std::shared_ptr<ShapeCounter>> _healthbars;
 	std::vector<std::shared_ptr<Button>> _buttons;
 	std::deque<Location> _enemy_path;
 	System* _parent;

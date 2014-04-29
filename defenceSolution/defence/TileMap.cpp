@@ -9,6 +9,10 @@ TileMap::TileMap(void)
 	typeMap.clear();
 	setMap("roadmap.txt");
 	addRoads();
+	typeMap.clear();
+	roadmap.clear();
+	setMap("roadmap2.txt");
+	addRoads();
 }
 
 
@@ -83,24 +87,24 @@ void TileMap::addRoads(){
 				road.setType(typeMap[x+y*MAP_WIDTH]);
 
 				/*for(auto& a:map){			//laittaa maastokarttaan oikeat flagit, eli tielle ei voi rakentaa, mutta voi kulkea
-					//if(&a.getLocation()==&road.getLocation()){
-					if(a.getLocation().x==road.getLocation().x && a.getLocation().y==road.getLocation().y){
-						a.setBuildable(false);
-						std::cout << "Roadi";
-						a.setPassable(true);
-					}
+				//if(&a.getLocation()==&road.getLocation()){
+				if(a.getLocation().x==road.getLocation().x && a.getLocation().y==road.getLocation().y){
+				a.setBuildable(false);
+				std::cout << "Roadi";
+				a.setPassable(true);
+				}
 				}*/
-				
+
 				if(road.getType()>0){
 
 					for(auto& a:map){			//laittaa maastokarttaan oikeat flagit, eli tielle ei voi rakentaa, mutta voi kulkea
-					//if(&a.getLocation()==&road.getLocation()){
-					if(a.getLocation().x==road.getLocation().x && a.getLocation().y==road.getLocation().y){
-						a.setBuildable(false);
-						std::cout << "Roadi";
-						a.setPassable(true);
+						//if(&a.getLocation()==&road.getLocation()){
+						if(a.getLocation().x==road.getLocation().x && a.getLocation().y==road.getLocation().y){
+							a.setBuildable(false);
+							std::cout << "Roadi";
+							a.setPassable(true);
+						}
 					}
-				}
 					if(road.getType() >=  8 && road.getType() <= 10){			//ylimmät tiilet kuvassa
 						road.setSourceRect(TILE_WIDTH -1, TILE_HEIGHT -1, road.getType() * TILE_WIDTH, 0);
 						roadmap.push_back(road);		//lisäys vektoriin
@@ -122,6 +126,8 @@ void TileMap::addRoads(){
 			}//if
 		}//for x
 	}//for y
+
+	allroads.push_row(roadmap);
 }
 
 void TileMap::drawMap()
@@ -129,8 +135,8 @@ void TileMap::drawMap()
 	for(auto& a: map) {
 		a.draw(rndr, tileTexture);
 	}
-	for(auto& a:roadmap) {
-		a.draw(rndr, tileTexture);
+	for(int i = 0;i<allroads.totalSize();i++) {
+		allroads.iterate(i).draw(rndr, tileTexture);
 	}
 }
 
@@ -138,8 +144,8 @@ void TileMap::setTexture(std::string filename, SDL_Renderer* rndr)
 {
 	SDL_Surface* tmp = IMG_Load(filename.c_str());
 	if(tmp==0){
-			//std::cout << "Error loading file: " << filename << std::endl;
-			return;
+		//std::cout << "Error loading file: " << filename << std::endl;
+		return;
 	}
 	tileTexture = SDL_CreateTextureFromSurface(rndr, tmp);
 	SDL_FreeSurface(tmp);
@@ -156,22 +162,24 @@ void TileMap::setMap(std::string filename)
 
 	int temp = 0;
 
-    if(!mappi)
-    {
+	if(!mappi)
+	{
 		std::cout<<"Tiedosto ei avautunut \n";
-    }
-    while(!mappi.eof())
-    {
+	}
+	while(!mappi.eof())
+	{
 		mappi >> temp;
 		std:: cout << temp;
 		typeMap.push_back(temp);		//lisäys vektoriin
-    }
+	}
 	mappi.close();
 	std::cout << "Tiedosto suljettu";
 }
 std::vector<Tiili>& TileMap::getMap(){
 	return map;
 }
-std::vector<Road>& TileMap::getRoad(){
+std::vector<Road>& TileMap::getRoad(unsigned int i){
+	auto tmp = allroads.at(i);
+	roadmap.assign(tmp.begin(),tmp.end());
 	return roadmap;
 }
