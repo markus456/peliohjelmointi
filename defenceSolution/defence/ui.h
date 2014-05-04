@@ -9,6 +9,65 @@
 #include "include\SDL.h"
 #include "include\SDL_ttf.h"
 #include "Sprite.h"
+#include "Enemy.h"
+class ShapeCounter:public Sprite{
+protected:
+	float _initial, _current;
+	float _width,_height;
+	Enemy* _target;
+	Location _original_size;
+	std::function<float ()> _fnc;
+public:
+	ShapeCounter(std::function<float ()> f = nullptr, Enemy* trgt = nullptr):_initial(0),_current(0),_fnc(f),_target(trgt){
+		if(f){
+			_initial = f();
+			_current = _initial;
+		}
+	}
+	void setSize(Location l){
+		_original_size = l;
+		Sprite::setSize(l);
+	}
+	bool genTexture(SDL_Renderer* rndr){
+		SDL_Surface* s = nullptr;
+		s = SDL_CreateRGBSurface(0, 32, 32, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+		if(s==nullptr)return false;
+		if(SDL_FillRect(s,nullptr,SDL_MapRGB(s->format,0,255,0)) != 0){
+			SDL_FreeSurface(s);
+			return false;
+		}
+		auto tex = SDL_CreateTextureFromSurface(rndr, s);
+		if(tex == nullptr)return false;
+		_texture = tex;
+		return true;
+	}
+	virtual void draw(SDL_Renderer* rndr){
+		if(_target!=nullptr){
+		SDL_RenderCopy(rndr,_texture,nullptr,&_location.toSDL_Rect());
+		}
+	}
+	Enemy* getTarget(){
+		return _target;
+	}
+	virtual void update(){
+		if(_target!=nullptr){
+			auto loc = _target->getLocation();
+			if(loc.y - 32 > 0){
+			loc.y -= 32;
+			}
+			setLocation(loc);
+		}
+		if(_fnc){
+			_current = _fnc();
+			auto size_before = getLocation();
+			size_before.w = (_current/_initial)*_original_size.w;
+			if(size_before.w>_original_size.w){
+				size_before = _original_size;
+			}
+			Sprite::setSize(size_before);
+		}
+	}
+};
 class TextCounter:public Sprite{
 protected:
 	std::function<int ()> _funct;
@@ -302,17 +361,14 @@ protected:
 	std::vector<std::shared_ptr<Button>> _buttons;
 	Location largest, title_pos;
 	SDL_Texture* title;
+
 public:
 	Menu():_standardize(false), _resized(false){
 		largest = Location(0,0,0,0);
-	}/*
-	virtual void setTitle(std::string s){
-		TTF_Font* font = TTF_OpenFont("revalia.ttf", 20);
-		SDL_Color color = {255,255,255,255};
-		SDL_Surface* tmp = TTF_RenderText_Blended_Wrapped(font,s.c_str(),color,300);
-		title_pos = Location(50,50,tmp->w,tmp->h);
-		SDL_CreateTextureFromSurface(nullptr,tmp);
-	}*/
+	}
+	unsigned int size(){
+		return _buttons.size();
+	}
 	virtual void addButton(Button* b){
 		if (_buttons.size() > 0){
 			Location l = _buttons.back()->getLocation();

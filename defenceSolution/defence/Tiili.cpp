@@ -29,6 +29,7 @@ void Tiili::setType(int type)
 {
 	tileType = type;	//tiilen tyyppi, esim. 0-2 on maata vesi rajalla
 	isBuildable=true;
+	isPassable=true;
 
 	//Tielle ja esim. veteen ei voi rakentaa, mutta tiellä voi kulkea
 	if(tileType>=4 && tileType<=9){
@@ -50,9 +51,9 @@ void Tiili::setType(int type)
 			isPassable=false;
 		}
 	}
-	else if(tileType>=25 && tileType<=29){ //nämä ovat tie tiiliä
+	else if(tileType>=24 && tileType<=29){ //nämä ovat tie tiiliä
 		isBuildable=false;
-		if(tileType==28 || tileType==29){
+		if(tileType==28 || tileType==29 || tileType==24){
 			isPassable=true;
 		}else{
 			isPassable=false;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SDL.h"
+#include "SDL_mixer.h"
 #include "Sprite.h"
 #include <deque>
 #include <cstdlib>
@@ -14,7 +15,7 @@ public:
 	Enemy(void);
 	~Enemy(void);
 	void attack();
-	void teePolku();
+	void teePolku(int pathnumber);
 	bool isEmpty();
 	void setSpeed(int);
 	int getSpeed();

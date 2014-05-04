@@ -67,8 +67,10 @@ public:
 	}
 	bool collideTest(Sprite &other) {
 		Location other_loc = other.getLocation();
-		if(other_loc.x + other_loc.w < _location.x || other_loc.x > _location.x + _location.w ||
-			other_loc.y + other_loc.h < _location.y || other_loc.y > _location.y + _location.h) {
+		//if(other_loc.x + other_loc.w/2 < _location.x || other_loc.x - other_loc.w/2 > _location.x + _location.w ||
+		//	other_loc.y + other_loc.h/2 < _location.y || other_loc.y - other_loc.h/2 > _location.y + _location.h) {
+		if(other_loc.x + other_loc.w < _location.x || other_loc.x  > _location.x + _location.w ||
+			other_loc.y + other_loc.h < _location.y || other_loc.y  > _location.y + _location.h) {
 			return false;
 		}
 		return true;

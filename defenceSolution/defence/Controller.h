@@ -16,6 +16,7 @@ protected:
 	std::vector<std::shared_ptr<Bullet>> _bullets;
 	std::vector<std::shared_ptr<ImageSprite>> _effects;
 	std::vector<std::shared_ptr<Sprite>> _texts;
+	std::vector<std::shared_ptr<ShapeCounter>> _healthbars;
 	std::vector<std::shared_ptr<Button>> _buttons;
 	std::deque<Location> _enemy_path;
 	System* _parent;
@@ -30,6 +31,9 @@ protected:
 	void buildEnemy();
 	void buildTower(int x, int y);
 	std::shared_ptr<Bullet> buildBullet();
+	Mix_Chunk* enemydeath;
+	Mix_Chunk* pew;
+	Mix_Chunk* menuClick;
 
 public:
 
@@ -51,6 +55,7 @@ public:
 	~Controller();
 	void update();
 	void draw();
+	void resetGame();
 	void onClick(int,int);
 	void loadMap(std::string);
 	void add(Button* b);
@@ -73,5 +78,6 @@ public:
 	void playerDoDamage();
 	void createBlood(Location &location);
 	void createEffect(Location &location, std::string filename, unsigned int delay = 1,Location effect_size = Location(0,0,32,32), std::vector<Location> framelist = std::vector<Location>());
+	void loadSounds();
 };
 #endif

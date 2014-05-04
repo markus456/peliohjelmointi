@@ -5,7 +5,7 @@ Enemy::Enemy(void):HP(1),ATK(1),speed(1),angle(1)
 {
 	_location.x=0;
 	_location.y=0;
-	teePolku();
+	//teePolku();
 }
 
 
@@ -17,12 +17,28 @@ void Enemy::attack()
 {
 }
 
-void Enemy::teePolku(){
-	std::ifstream read("polku.txt");
-	while(read>>n>>m){
-		tmp.x=n;
-		tmp.y=m;
-		polku.push_back(tmp);
+void Enemy::teePolku(int pathnumber){
+	if(pathnumber == 0){
+		std::ifstream read("polku.txt");
+		while(read>>n>>m){
+			tmp.x=n * 32;
+			tmp.y=m * 32;
+				if(tmp.x==0){
+					setLocation(Location(tmp.x, tmp.y));
+				}
+			polku.push_back(tmp);
+		}
+	}
+		if(pathnumber == 1){
+		std::ifstream read("polku2.txt");
+		while(read>>n>>m){
+			tmp.x=n * 32;
+			tmp.y=m * 32;
+				if(tmp.x==0){
+					setLocation(Location(tmp.x, tmp.y));
+				}
+			polku.push_back(tmp);
+		}
 	}
 }
 
