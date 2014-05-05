@@ -6,8 +6,13 @@
 #include <utility>
 #include <functional>
 #include <sstream>
+#ifdef SYSTEM_LIBS
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#else
 #include "include\SDL.h"
 #include "include\SDL_ttf.h"
+#endif
 #include "Sprite.h"
 class ShapeCounter:public Sprite{
 protected:
@@ -35,7 +40,8 @@ public:
 		return true;
 	}
 	virtual void draw(SDL_Renderer* rndr){
-		SDL_RenderCopy(rndr,_texture,nullptr,&_location.toSDL_Rect());
+		SDL_Rect r = _location.toSDL_Rect();
+		SDL_RenderCopy(rndr,_texture,nullptr,&r);
 	}
 	virtual void update(){
 		if(_fnc){
@@ -77,7 +83,8 @@ public:
 		if(_rndr==nullptr){
 			_rndr = rndr;
 		}else{
-			SDL_RenderCopy(rndr,_texture,nullptr,&_location.toSDL_Rect());
+			SDL_Rect r = _location.toSDL_Rect();
+			SDL_RenderCopy(rndr,_texture,nullptr,&r);
 		}
 	}
 	~TextCounter(){
@@ -99,9 +106,12 @@ public:
 	ImageSprite():_loop(false),_columns(0),_rows(0),_animation_delay(0),_delay(0),_is_done(false){}
 	virtual void draw(SDL_Renderer* rndr){
 		if(_frame_iterator!=_frames.end()){
-			SDL_RenderCopy(rndr,_texture,&(*_frame_iterator).toSDL_Rect(),&_location.toSDL_Rect());
+			SDL_Rect r = _location.toSDL_Rect();
+			SDL_Rect r2 = (*_frame_iterator).toSDL_Rect();
+			SDL_RenderCopy(rndr,_texture,&r2,&r);
 		}else if(_frames.size()==0){
-			SDL_RenderCopy(rndr,_texture,nullptr,&_location.toSDL_Rect());
+			SDL_Rect r = _location.toSDL_Rect();
+			SDL_RenderCopy(rndr,_texture,nullptr,&r);
 		}
 	}
 	bool done(){
@@ -173,7 +183,8 @@ public:
 			genTextTex(rndr);
 			_tex_created = true;
 		}
-		SDL_RenderCopy(rndr,_text_texture,nullptr,&_text_location.toSDL_Rect());
+		SDL_Rect r = _text_location.toSDL_Rect();
+		SDL_RenderCopy(rndr,_text_texture,nullptr,&r);
 		if(!_transparent){
 			ImageSprite::draw(rndr);
 		}
@@ -186,7 +197,8 @@ public:
 class Button:public Sprite{
 public:
 	virtual void draw(SDL_Renderer* rndr){
-		SDL_RenderCopy(rndr,_texture,nullptr,&_location.toSDL_Rect());
+		SDL_Rect r = _location.toSDL_Rect();
+		SDL_RenderCopy(rndr,_texture,nullptr,&r);
 	}
 	virtual void update(){}
 	virtual void onClick(int x = 0, int y = 0){}
@@ -210,7 +222,7 @@ protected:
 	bool _centered, _center;
 	SDL_Texture* _text_texture;
 	SDL_Renderer* renderer;
-	TTF_Font* font;
+	TTF_Font* font = 0;
 	void alignText(){
 		_text_location.x = _location.x + (_location.w-_text_location.w)/2;
 		_text_location.y = _location.y + (_location.h - _text_location.h) / 2;
@@ -313,8 +325,10 @@ public:
 		if (_center&&!_centered){
 			alignText();
 		}
-		SDL_RenderCopy(rndr, _texture, nullptr, &_location.toSDL_Rect());
-		SDL_RenderCopy(rndr, _text_texture, nullptr, &_text_location.toSDL_Rect());
+		SDL_Rect r = _location.toSDL_Rect();
+		SDL_RenderCopy(rndr, _texture, nullptr, &r);
+		SDL_Rect r2 = _text_location.toSDL_Rect();
+		SDL_RenderCopy(rndr, _text_texture, nullptr, &r2);
 	}
 	virtual ~TextButton(){
 		SDL_DestroyTexture(_text_texture);
@@ -376,7 +390,8 @@ public:
 		return nullptr;
 	}
 	virtual void draw(SDL_Renderer* rndr){
-		SDL_RenderCopy(rndr, _texture, nullptr, &_location.toSDL_Rect());
+		SDL_Rect r = _location.toSDL_Rect();
+		SDL_RenderCopy(rndr, _texture, nullptr, &r);
 		for (auto& a : _buttons){
 			a->draw(rndr);
 		}

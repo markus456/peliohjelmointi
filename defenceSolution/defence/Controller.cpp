@@ -60,7 +60,8 @@ void Controller::update(){
 				while(p_it<_bullets.end()){
 					if((*e_iterator)->isInside((*p_it)->getLocation())){
 						(*e_iterator)->setHP((*e_iterator)->getHP()-(*p_it)->getDamage());
-						createBlood((*e_iterator)->getLocation());
+						Location l = (*e_iterator)->getLocation();
+						createBlood(l);
 
 						p_it = _bullets.erase(p_it);
 					}else{
@@ -474,11 +475,13 @@ void Controller::playerDoDamage() {
 	for (const auto &a : _enemies) {
 		if (a->distance(*_player.get()) < 50) {
 			a->setHP(a->getHP() - _player->getDamage());
-			createBlood(a->getLocation());
+			Location l = a->getLocation();
+			createBlood(l);
 
 		}
 	}
-	createEffect(_player->getLocation(),"explosion.png",5,Location(0,0,128,128),effect_frames);
+	Location l = _player->getLocation();
+	createEffect(l,"explosion.png",5,Location(0,0,128,128),effect_frames);
 }
 
 void Controller::createEffect(Location &location, std::string filename, unsigned int delay,Location effect_size, std::vector<Location> framelist) {

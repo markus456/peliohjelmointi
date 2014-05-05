@@ -1,7 +1,12 @@
 #ifndef SPRITE_HEADER_GUARD
 #define SPRITE_HEADER_GUARD
+#ifdef SYSTEM_LIBS
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#else
 #include "SDL.h"
 #include "include\SDL_image.h"
+#endif
 #include <iostream>
 #include <string>
 class Location{
@@ -95,7 +100,8 @@ class TestTile:public Sprite{
 protected:
 public:
 	virtual void draw(SDL_Renderer* rndr){
-		SDL_RenderCopy(rndr,_texture,nullptr,&_location.toSDL_Rect());
+		SDL_Rect r = _location.toSDL_Rect();
+		SDL_RenderCopy(rndr,_texture,nullptr,&r);
 	}
 	virtual void update(){
 

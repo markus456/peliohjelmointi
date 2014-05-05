@@ -19,7 +19,9 @@ Bullet::~Bullet(void) {
 
 void Bullet::draw(SDL_Renderer* rndr){
 	Location p (_location.w / 2, _location.h / 2);
-	SDL_RenderCopyEx(rndr, _texture, nullptr, &_location.toSDL_Rect(), dir / M_PI * 180, &p.toSDL_Point(), SDL_FLIP_NONE);
+	SDL_Rect r = _location.toSDL_Rect();
+	SDL_Point po = p.toSDL_Point();
+	SDL_RenderCopyEx(rndr, _texture, nullptr, &r, dir / M_PI * 180, &po, SDL_FLIP_NONE);
 }
 
 void Bullet::update(){

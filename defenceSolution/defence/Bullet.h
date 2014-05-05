@@ -1,7 +1,11 @@
 #ifndef BULLET_H
 #define BULLET_H
 
+#ifdef SYSTEM_LIBS
+#include <SDL2/SDL.h>
+#else
 #include "SDL.h"
+#endif
 
 #include "Sprite.h"
 

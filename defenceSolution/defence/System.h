@@ -3,8 +3,13 @@
 class Controller;
 #include <memory>
 #include <vector>
+#ifdef SYSTEM_LIBS
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#else
 #include "SDL.h"
 #include "include\SDL_image.h"
+#endif
 #include "Sprite.h"
 #include "ui.h"
 #include "Bullet.h"

@@ -1,5 +1,9 @@
 #include <fstream>
+#ifdef SYSTEM_LIBS
+#include <SDL2/SDL.h>
+#else
 #include <SDL.h>
+#endif
 
 const int TILE_GRASS = 0;
 const int TILE_WATER = 1;

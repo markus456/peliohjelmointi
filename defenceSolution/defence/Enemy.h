@@ -1,6 +1,10 @@
 #pragma once
 
+#ifdef SYSTEM_LIBS
+#include <SDL2/SDL.h>
+#else
 #include "SDL.h"
+#endif
 #include "Sprite.h"
 #include <deque>
 #include <cstdlib>
