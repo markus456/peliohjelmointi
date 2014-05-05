@@ -24,5 +24,6 @@
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Road.h" />
+    <ClInclude Include="GameParameters.h" />
   </ItemGroup>
 </Project>

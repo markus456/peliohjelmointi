@@ -59,7 +59,7 @@ void Controller::update(){
 				(*e_iterator)->update();
 				auto p_it = _bullets.begin();
 				while(p_it<_bullets.end()){
-					if((*e_iterator)->isInside((*p_it)->getLocation())){
+					if((*e_iterator)->collideTest(*(*p_it))){
 						(*e_iterator)->setHP((*e_iterator)->getHP()-(*p_it)->getDamage());
 						createBlood((*e_iterator)->getLocation());
 
@@ -365,9 +365,9 @@ void Controller::initGame(){
 		resetGame();
 		setGameState(Controller::GAME_ACTIVE);
 		_texts.push_back(std::shared_ptr<Sprite>(new TextCounter([this]{return currentGold();},0,"Gold: ")));
-		_texts.back()->setLocation(Location(0,0));
+		_texts.back()->setLocation(Location(30,0));
 		_texts.push_back(std::shared_ptr<Sprite>(new TextCounter([&]{return _params->enemiesAllowedThrough()-_enemies_got_through;},0,"The walls will hold "," more enemies!")));
-		_texts.back()->setLocation(Location(0,50));
+		_texts.back()->setLocation(Location(30,50));
 		_map.reset(new TileMap());
 		_map->setRenderer(_renderer);
 		_map->setTexture("terrain.png",_renderer);
@@ -375,10 +375,18 @@ void Controller::initGame(){
 		for(auto& a: tmp_path){
 			_enemy_path.push_back(a.getLocation());
 		}
+		std::sort(_enemy_path.begin(),_enemy_path.end(),[&](const Location& a,const Location& b){
+			if(a.x==b.x)return a.y<b.y;
+			return a.x<b.x;
+		});
 		_player.reset(new Player());
 		_player->setTexture("player.png",_renderer);
-		SDL_Point ppos = {8*System::SCREEN_WIDTH/10,System::SCREEN_HEIGHT/4};
-		_player->setLocation(ppos);
+		_player->setSpriteSize(Location(0,0,32,32));
+		_player->setSize(Location(0,0,32,32));
+		auto player_start = _enemy_path.back();
+		player_start.x = 256;
+		player_start.y = 256;
+		_player->setLocation(player_start);
 		_player->setMap(_map);
 
 		_effects.push_back(std::shared_ptr<ImageSprite>(new ImageSprite()));
@@ -407,6 +415,7 @@ void Controller::buildEnemy(){
 	int enem = _enemies.size();
 	_enemies.push_back(std::shared_ptr<Enemy>(new Enemy));
 	_enemies.back()->setSpeed(_params->enemySpeed());
+	//_enemies.back()->setSpeed(0); //väliaikainen testiä varten
 	_enemies.back()->setHP(_params->enemyHP());
 	_enemies.back()->setAttack(_params->enemyAttack());
 	Enemy* en = _enemies.back().get();
@@ -433,14 +442,15 @@ void Controller::buildEnemy(){
 	}
 	_enemies.back()->setSize(_tile_size);
 
-	auto tmp_path = _map->getRoad(rand() % 2);
-	_enemy_path.clear();
-		for(auto& a: tmp_path){
-			_enemy_path.push_back(a.getLocation());
-		}
-	_enemies.back()->setPath(_enemy_path);
-	Location epos = _enemy_path.front();
-	_enemies.back()->setLocation(epos.toSDL_Rect());
+	_enemies.back()->teePolku(rand() % 2);	// tekee polun randomina tiestä 1 tai 2
+	//auto tmp_path = _map->getRoad(rand() % 2);
+	//_enemy_path.clear();
+	//	for(auto& a: tmp_path){
+	//		_enemy_path.push_back(a.getLocation());
+	//	}
+	//_enemies.back()->setPath(_enemy_path);
+	//Location epos = _enemy_path.front();
+	//_enemies.back()->setLocation(epos.toSDL_Rect());
 	for(auto& a:_towers){
 		a->addEnemies(_enemies);
 	}
@@ -520,13 +530,14 @@ void Controller::playerDoDamage() {
 
 		}
 	}
-	createEffect(_player->getLocation(),"explosion.png",5,Location(0,0,128,128),effect_frames);
+	createEffect(_player->getLocation(),"explosion.png",5,Location(0,0,64,64),effect_frames);
 }
 
 void Controller::createEffect(Location &location, std::string filename, unsigned int delay,Location effect_size, std::vector<Location> framelist) {
 	_effects.push_back(std::shared_ptr<ImageSprite>(new ImageSprite()));
 	_effects.back()->setTexture(filename, _renderer);
-	_effects.back()->setLocation(location);
+	//_effects.back()->setLocation(location);
+	_effects.back()->setLocation(Location(location.x-16,location.y-16,0,0));
 	_effects.back()->setSize(effect_size);
 	_effects.back()->setAnimationDelay(delay);
 	if(framelist.size()>0){

@@ -9,7 +9,6 @@
 #include <time.h>
 using std::vector;
 
-//const int TILE_COUNT = 4;
 const int MAP_HEIGHT = 19;		//kartan koko tiileissä
 const int MAP_WIDTH = 25;
 const int TILE_HEIGHT = 32;

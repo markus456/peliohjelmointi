@@ -15,7 +15,7 @@ public:
 	Enemy(void);
 	~Enemy(void);
 	void attack();
-	void teePolku();
+	void teePolku(int pathnumber);
 	bool isEmpty();
 	void setSpeed(int);
 	int getSpeed();

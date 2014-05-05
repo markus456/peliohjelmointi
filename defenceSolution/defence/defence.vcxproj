@@ -86,6 +86,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="GameParameters.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Road.h" />
     <ClInclude Include="Sprite.h" />

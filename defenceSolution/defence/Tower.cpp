@@ -94,8 +94,10 @@ void Tower::update(){
 			std::sort(enemies.begin(),enemies.end(),[=](const std::shared_ptr<Enemy>& a,const std::shared_ptr<Enemy>& b){
 				return this->getTargetDistance(a->getLocation())<this->getTargetDistance(b->getLocation());
 			});
-			if(getTargetDistance(enemies.front()->getLocation())<towerRange){
-				shoot(enemies.front()->getLocation(),towerProjectileSpeed);
+			if(!enemies.empty()){
+				if(getTargetDistance(enemies.front()->getLocation())<towerRange){
+					shoot(enemies.front()->getLocation(),towerProjectileSpeed);
+				}
 			}
 		}
 	}
