@@ -45,7 +45,8 @@ void Enemy::teePolku(int pathnumber){
 void Enemy::draw(SDL_Renderer* rndr)
 {
 	SDL_Point p = {_location.w / 2, _location.h / 2};
-	SDL_RenderCopyEx(rndr, _texture, nullptr, &_location.toSDL_Rect(), 0, &p, SDL_FLIP_NONE);
+	SDL_Rect r = _location.toSDL_Rect();
+	SDL_RenderCopyEx(rndr, _texture, nullptr, &r, 0, &p, SDL_FLIP_NONE);
 }
 
 void Enemy::update()

@@ -1,6 +1,10 @@
 #pragma once
-#include "sprite.h"
+#include "Sprite.h"
+#ifdef SYSTEM_LIBS
+#include <SDL2/SDL.h>
+#else
 #include "SDL.h"
+#endif
 
 class Road :
 	public Sprite

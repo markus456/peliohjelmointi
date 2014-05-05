@@ -4,7 +4,7 @@
 TileMap::TileMap(void)
 {
 	srand (time(NULL));
-	setMap("level1temp.txt");
+	setMap("Level1temp.txt");
 	addTiles();
 	typeMap.clear();
 	setMap("roadmap.txt");

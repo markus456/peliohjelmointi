@@ -25,7 +25,9 @@ Player::~Player(void)
 void Player::draw(SDL_Renderer* rndr)
 {
 	Location p(_location.w /2, _location.h /2);
-	SDL_RenderCopyEx(rndr, _texture, nullptr, &render_size.toSDL_Rect(), 0, &p.toSDL_Point(), SDL_FLIP_NONE);
+	SDL_Rect r = render_size.toSDL_Rect();
+	SDL_Point po = p.toSDL_Point();
+	SDL_RenderCopyEx(rndr, _texture, nullptr, &r, 0, &po, SDL_FLIP_NONE);
 }
 
 void Player::update() {

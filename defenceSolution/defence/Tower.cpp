@@ -84,7 +84,9 @@ double Tower::getTargetDistance(Location enemyLocation){
 
 void Tower::draw(SDL_Renderer* rndr){
 	Location p(_location.w / 2, _location.h / 2);
-	SDL_RenderCopyEx(rndr, _texture, nullptr, &_location.toSDL_Rect(), 0, &p.toSDL_Point(), SDL_FLIP_NONE);
+	SDL_Rect r = _location.toSDL_Rect();
+	SDL_Point po = p.toSDL_Point();
+	SDL_RenderCopyEx(rndr, _texture, nullptr, &r, 0, &po, SDL_FLIP_NONE);
 }
 void Tower::update(){
 	if(cooldown>0){

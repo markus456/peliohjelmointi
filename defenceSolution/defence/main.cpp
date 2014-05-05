@@ -1,6 +1,6 @@
 #include "System.h"
 
-int wmain(void) {
+int main(void) {
 	System sys;
 	if (sys.init()) {
 		sys.enterMainLoop();

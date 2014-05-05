@@ -61,7 +61,8 @@ void Controller::update(){
 				while(p_it<_bullets.end()){
 					if((*e_iterator)->collideTest(*(*p_it))){
 						(*e_iterator)->setHP((*e_iterator)->getHP()-(*p_it)->getDamage());
-						createBlood((*e_iterator)->getLocation());
+						Location l = (*e_iterator)->getLocation();
+						createBlood(l);
 
 						p_it = _bullets.erase(p_it);
 					}else{
@@ -526,11 +527,13 @@ void Controller::playerDoDamage() {
 	for (const auto &a : _enemies) {
 		if (a->distance(*_player.get()) < 50) {
 			a->setHP(a->getHP() - _player->getDamage());
-			createBlood(a->getLocation());
+			Location l = a->getLocation();
+			createBlood(l);
 
 		}
 	}
-	createEffect(_player->getLocation(),"explosion.png",5,Location(0,0,64,64),effect_frames);
+	Location l = _player->getLocation();
+	createEffect(l,"explosion.png",5,Location(0,0,64,64),effect_frames);
 }
 
 void Controller::createEffect(Location &location, std::string filename, unsigned int delay,Location effect_size, std::vector<Location> framelist) {
@@ -552,6 +555,7 @@ void Controller::createBlood(Location &location) {
 	_effects.back()->setSize(_tile_size);
 	_effects.back()->setAnimationDelay(90);
 }
+
 void Controller::loadSounds(){
 	enemydeath = Mix_LoadWAV("sfx/enemydeath.wav");
 	pew = Mix_LoadWAV("sfx/pew.wav");

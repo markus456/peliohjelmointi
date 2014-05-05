@@ -3,9 +3,13 @@
 
 #include <vector>
 #include <memory>
-#include <Math.h>
+#include <cmath>
 #include <algorithm>
+#ifdef SYSTEM_LIBS
+#include <SDL2/SDL.h>
+#else
 #include "SDL.h"
+#endif
 #include "Enemy.h"
 #include "Bullet.h"
 #include "Sprite.h"

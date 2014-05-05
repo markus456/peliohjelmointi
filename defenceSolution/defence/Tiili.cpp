@@ -12,12 +12,14 @@ Tiili::~Tiili(void)
 
 void Tiili::draw(SDL_Renderer* rndr)
 {
-	SDL_RenderCopy(rndr,_texture,nullptr,&_location.toSDL_Rect());
+	SDL_Rect r = _location.toSDL_Rect();
+	SDL_RenderCopy(rndr,_texture,nullptr,&r);
 }
 
 void Tiili::draw(SDL_Renderer* rndr, SDL_Texture* texture)
 {
-	SDL_RenderCopyEx(rndr, texture, &source, &_location.toSDL_Rect(), 0, NULL, SDL_FLIP_NONE);
+	SDL_Rect r = _location.toSDL_Rect();
+	SDL_RenderCopyEx(rndr, texture, &source, &r, 0, NULL, SDL_FLIP_NONE);
 }
 
 void Tiili::update()

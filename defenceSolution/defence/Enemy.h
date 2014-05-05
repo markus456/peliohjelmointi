@@ -1,7 +1,12 @@
 #pragma once
 
+#ifdef SYSTEM_LIBS
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
+#else
 #include "SDL.h"
 #include "SDL_mixer.h"
+#endif
 #include "Sprite.h"
 #include <deque>
 #include <cstdlib>

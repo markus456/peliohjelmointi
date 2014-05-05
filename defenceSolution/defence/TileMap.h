@@ -1,5 +1,9 @@
 #pragma once
+#ifdef SYSTEM_LIBS
+#include <SDL2/SDL.h>
+#else
 #include "SDL.h"
+#endif
 #include <vector>
 #include "Tiili.h"
 #include "Road.h"
