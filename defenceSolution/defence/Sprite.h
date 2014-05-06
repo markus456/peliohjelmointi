@@ -17,11 +17,11 @@ public:
 	Location(double x_, double y_):x(x_),y(y_),w(0),h(0){}
 	Location(double x_, double y_,double w_, double h_):x(x_),y(y_),w(w_),h(h_){}
 	SDL_Rect toSDL_Rect(){
-		SDL_Rect tmp = {x,y,w,h};
+		SDL_Rect tmp = {(int)x,(int)y,(int)w,(int)h};
 		return tmp;
 	}
 	SDL_Point toSDL_Point(){
-		SDL_Point tmp = {x,y};
+		SDL_Point tmp = {(int)x,(int)y};
 		return tmp;
 	}
 };

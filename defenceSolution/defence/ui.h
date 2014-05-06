@@ -245,11 +245,12 @@ protected:
 	bool _centered, _center;
 	SDL_Texture* _text_texture;
 	SDL_Renderer* renderer;
-	TTF_Font* font = 0;
+	TTF_Font* font;
 	void alignText(){
 		_text_location.x = _location.x + (_location.w-_text_location.w)/2;
 		_text_location.y = _location.y + (_location.h - _text_location.h) / 2;
 		_centered = true;
+		font = 0;
 	}
 public:
 	/**
